@@ -3,5 +3,5 @@ FROM bioconductor/release_core
 MAINTAINER Peter Humburg <peter.humburg@gmail.com>
 
 ## Additional R packages
-RUN Rscript -e "biocLite('MatrixEQTL')"
-RUN Rscript -e "devtools::install_github('Rsge', user='humburg');devtools::install_github('mePipe', user='jknightlab');"
+RUN Rscript -e "biocLite(c('MatrixEQTL', 'devtools', 'trio'))"
+RUN Rscript -e "devtools::install_github('humburg/Rsge');devtools::install_github('jknightlab/mePipe');"
