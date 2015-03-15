@@ -1,0 +1,72 @@
+# Solution for *Associations between SNPs and gene expression - A simple example*
+We start by loading the data. This can be done using RStudio's data import
+functionality or manually through the command-line. 
+ 
+```{r simple_dataImport}
+geno <- readr::read_tsv("/data/simulated/sim_genotypes.tab")
+expr <- readr::read_tsv("/data/simulated/sim_expression1.tab")
+```
+Note that the first column contains the sample names.
+
+## Computing minor allele frequencies
+The genotypes are encoded as the number of copies of the second allele
+carried by each individual. For eQTL analyses it is useful to ensure the
+second allele corresponds to the minor allele. This helps with the interpretation
+of genotype effects obtained from the analysis. In this case alleles have already
+been arranged in a suitable manner^[at least for the most part, see below].
+
+With the given encoding it is straightforward to obtain the frequency of
+the second allele.
+
+```{r simple_maf}
+maf <- colMeans(geno[-1])/2
+maf
+```
+As it turns out the second allele for *snp_10* is actually the major allele.
+To ensure we actually get the MAF this needs to be inverted.
+
+```{r simple_maf2}
+maf <- pmin(maf, 1-maf)
+maf
+```
+
+## Estimating SNP effects
+To obtain estimates of the genotypic contribution to gene expression
+we fit a simple linear regression model of the form $E_i = \beta_0 + \beta G_i + \vareps$,
+where $E_i$ is the vector of gene expression values for gene $i$ and 
+$G_i$ is the genotype vector for SNP $i$. We are interested in the estimate for
+$\beta$ which indicates the change in gene expression for each copy of the second
+allele.
+
+```{r simple_modelFit}
+fit <- mapply(function(e, g) lm(e ~ g), expr[-1], geno[-1], SIMPLIFY=FALSE)
+betaHat <- sapply(fit, coef)[2,]
+betaHat 
+```
+We use the function `confint` to obtain 95% confidence intervals of the estimated
+SNP effects.
+
+```{r simple_ci}
+ci <- sapply(fit, confint, "g")
+rownames(ci) <- c("lower", "upper")
+ci
+```
+
+## Plotting results
+
+```{r simple_plot}
+library(ggplot2)
+estimates <- data.frame(estimate=betaHat, t(ci), maf=maf)
+ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) + 
+		geom_hline(yintercept=0, linetype="longdash") + 
+		geom_errorbar(aes(ymin=lower, ymax=upper)) +
+		geom_point(aes(y=estimate))  + theme_bw()
+```
+
+In this example all resulting confidence intervals include the true value^[although 
+sometimes only just] but intervals for small minor allele frequencies are 
+large (and in one case this means that 0 is included in the CI). As one would expect
+the uncertainty in the estimate, as measured by the length of the confidence interval,
+decreases with increasing minor allele frequency. However, even at high MAF considerable
+uncertainty remains and point estimates are somewhat lacking in accuracy, overestimating
+the true effect.
