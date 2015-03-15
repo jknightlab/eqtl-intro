@@ -1,3 +1,5 @@
+export UNAME=humburg
+export GNAME=$(UNAME)
 BUILD_DIR=docker
 SIM_DIR=simulation
 SIM_DATA=$(SIM_DIR)/output
@@ -23,3 +25,4 @@ $(SIM_DATA)/%:
 $(SIM_OUT)/%:
 	$(MKDIR) $(SIM_OUT)
 	cp -f $< $@
+	chown -R $(UNAME):$(GNAME) $(SIM_OUT)
