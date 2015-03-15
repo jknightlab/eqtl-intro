@@ -1,7 +1,5 @@
 WD:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 vpath %.tab output
-UNAME=humburg
-GNAME=$(UNAME)
 RSCRIPT=docker run -v  $(WD):/simulation -w /simulation humburg/eqtl-intro Rscript
 
 all: sim_genotypes.tab sim_expression1.tab sim_covariates.tab sim_expression2.tab
