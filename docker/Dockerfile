@@ -4,7 +4,8 @@ MAINTAINER Peter Humburg <peter.humburg@gmail.com>
 
 ## Additional R packages
 RUN Rscript -e "biocLite(c('MatrixEQTL', 'devtools', 'trio'))"
-RUN Rscript -e "devtools::install_github('humburg/Rsge');devtools::install_github('jknightlab/mePipe');"
+RUN Rscript -e "devtools::install_github('humburg/Rsge');devtools::install_github('jknightlab/mePipe');devtools::install_github('hadley/readr')"
 
 ## Data for exercises
 ADD data /data
+
