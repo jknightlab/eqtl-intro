@@ -1,0 +1,103 @@
+# Solution for *Associations between SNPs and gene expression - Confounding variation*
+We start by loading and plotting the data. 
+
+```{r covar_dataImport}
+geno <- readr::read_tsv("/data/simulated/sim_genotypes.tab")
+expr <- readr::read_tsv("/data/simulated/sim_expression2.tab")
+```
+Note that the first column contains the sample names.
+
+```{r covar_exprPlot}
+library(ggplot2)
+genoLong <- tidyr::gather(geno, snp, genotype, -sample)
+exprLong <- tidyr::gather(expr, gene, expression, -sample)
+dataLong <- cbind(genoLong, exprLong["expression"])
+dataLong$genotype <- as.factor(dataLong$genotype) 
+ggplot(dataLong, aes(genotype, expression)) +
+		geom_jitter(colour="darkgrey", position=position_jitter(width=0.25)) +
+		geom_boxplot(outlier.size=0, alpha=0.6, fill="grey") + 
+		facet_wrap(~snp) + theme_bw()
+```
+These data show very little evidence of a SNP effect on gene expression.
+
+## Simple linear regression
+We fit a simple linear regression and compute confidence intervals for the
+SNP effects as before.
+
+```{r covar_modelFit}
+simpleFit <- mapply(function(e, g) lm(e ~ g), expr[-1], geno[-1], SIMPLIFY=FALSE)
+simpleBetaHat <- sapply(simpleFit, coef)[2,]
+simpleBetaHat
+simpleCI <- sapply(simpleFit, confint, "g")
+rownames(simpleCI) <- c("lower", "upper")
+simpleCI
+```
+
+```{r covar_plot_simple}
+maf <- colMeans(geno)/2
+estimates <- data.frame(estimate=simpleBetaHat, t(simpleCI), maf=maf)
+ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) + 
+		geom_hline(yintercept=0, linetype="longdash") + 
+		geom_errorbar(aes(ymin=lower, ymax=upper)) +
+		geom_point(aes(y=estimate))  + theme_bw()
+```
+The confidence intervals obtained from this analysis are much wider than
+previously. Unlike before they frequently contain 0 and although most of them
+still contain the true value this is not always the case. Also note that the 
+most pronounced estimate is a clear over estimation of the real effect.
+
+## Incorporating covariates
+We first load the additional variables:
+
+```{r covar_dataImport2}
+covar <- readr::read_tsv("/data/simulated/sim_covariates.tab")
+```
+and then proceed to fit the extended model.
+
+```{r covar_modelCovarFit}
+covarFit <- mapply(function(e, g, var) lm(e ~ g + var), expr[-1], geno[-1], 
+			MoreArgs=list(as.matrix(covar[2:6])), SIMPLIFY=FALSE)
+covarBetaHat <- sapply(covarFit, coef)[2,]
+covarCI <- sapply(covarFit, confint, "g")
+rownames(covarCI) <- c("lower", "upper")
+covarBetaHat
+covarCI
+```
+
+```{r covar_plot_5cv}
+estimates <- data.frame(estimate=covarBetaHat, t(covarCI), maf=maf)
+ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) + 
+		geom_hline(yintercept=0, linetype="longdash") + 
+		geom_errorbar(aes(ymin=lower, ymax=upper)) +
+		geom_point(aes(y=estimate))  + theme_bw()
+```
+The inclusion of the covariates leads to a tighter set of confidence intervals.
+While it remains difficult to detect any meaningful genotypic effect
+at low minor allele frequencies the estimates appear to be more reliable
+at higher frequencies. 
+
+## Full model
+The computations for this are essentially the same as before with several
+additional variables in the model.
+
+```{r covar_fullModelFit}
+fullFit <- mapply(function(e, g, var) lm(e ~ g + var), expr[-1], geno[-1], 
+			MoreArgs=list(as.matrix(covar[-1])), SIMPLIFY=FALSE)
+fullBetaHat <- sapply(fullFit, coef)[2,]
+fullCI <- sapply(fullFit, confint, "g")
+rownames(fullCI) <- c("lower", "upper")
+fullBetaHat
+fullCI
+```
+
+```{r covar_plot_full}
+estimates <- data.frame(estimate=fullBetaHat, t(fullCI), maf=maf)
+ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) + 
+		geom_hline(yintercept=0, linetype="longdash") + 
+		geom_errorbar(aes(ymin=lower, ymax=upper)) +
+		geom_point(aes(y=estimate))  + theme_bw()
+```
+
+Including the full set of covariates in the model produces results similar to
+the ones from the initial, simple example. This shows that genotypic effects
+can be recovered if all confounders are accounted for. 
