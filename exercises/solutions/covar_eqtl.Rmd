@@ -101,3 +101,24 @@ ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) +
 Including the full set of covariates in the model produces results similar to
 the ones from the initial, simple example. This shows that genotypic effects
 can be recovered if all confounders are accounted for. 
+
+## Visualising SNP effects on gene expression in the presence of other covariates
+When the effect of a SNP on gene expression is obscured by confounding variation
+this can be accounted for during the analysis by including appropriate variables
+in the model (assuming that they are known or can be otherwise captured). 
+However, when plotting the gene expression values by genotype the effect still
+appears diminished, if it is visible at all. To obtain a plot that matches the result
+of the analysis the gene expression data has to be corrected for the effects
+attributed to the other covariates used in the model.
+
+```{r covar_plot_corrected}
+corrected <- mapply(function(f, x, var) x - colSums(coef(f)[-(1:2)]*t(var)), 
+		fullFit, expr[-1], MoreArgs=list(covar[-1]))
+correctedLong <- tidyr::gather(data.frame(corrected), gene, expression)
+combLong <- cbind(genoLong, correctedLong["expression"])
+combLong$genotype <- as.factor(dataLong$genotype)
+ggplot(combLong, aes(genotype, expression)) +
+		geom_jitter(colour="darkgrey", position=position_jitter(width=0.25)) +
+		geom_boxplot(outlier.size=0, alpha=0.6, fill="grey") + 
+		facet_wrap(~snp) + theme_bw()
+```

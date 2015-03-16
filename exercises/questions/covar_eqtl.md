@@ -27,3 +27,4 @@ the exercise also requires a number of covariates located in
     ii. Create the same plot of effect size estimates as before for this 
        extended model. How do they compare?
     iii. Repeat the above analysis with all covariates included in the model.
+    iv. Create a plot of gene expression by genotype illustrating the effect.
