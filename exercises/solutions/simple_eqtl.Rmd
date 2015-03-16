@@ -30,6 +30,25 @@ maf <- pmin(maf, 1-maf)
 maf
 ```
 
+## Plotting gene expression by genotype
+A convenient way to display gene expression values by genotype is as box plots.
+These provide a good, non-parametric, indication of the distributions.
+To convey a sense of the frequency of each genotype in the sample it
+is useful to also add points for each individual to the plot. 
+Below is an example of how this might look for each of the ten SNP/gene pairs.
+
+```{r simple_exprPlot}
+library(ggplot2)
+genoLong <- tidyr::gather(geno, snp, genotype, -sample)
+exprLong <- tidyr::gather(expr, gene, expression, -sample)
+dataLong <- cbind(genoLong, exprLong["expression"])
+dataLong$genotype <- as.factor(dataLong$genotype) 
+ggplot(dataLong, aes(genotype, expression)) +
+		geom_jitter(colour="darkgrey", position=position_jitter(width=0.25)) +
+		geom_boxplot(outlier.size=0, alpha=0.6, fill="grey") + 
+		facet_wrap(~snp) + theme_bw()
+```
+
 ## Estimating SNP effects
 To obtain estimates of the genotypic contribution to gene expression
 we fit a simple linear regression model of the form $E_i = \beta_0 + \beta G_i + \vareps$,
@@ -55,7 +74,6 @@ ci
 ## Plotting results
 
 ```{r simple_plot}
-library(ggplot2)
 estimates <- data.frame(estimate=betaHat, t(ci), maf=maf)
 ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) + 
 		geom_hline(yintercept=0, linetype="longdash") + 
