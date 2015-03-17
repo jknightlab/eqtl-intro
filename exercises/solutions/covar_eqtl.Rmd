@@ -34,7 +34,7 @@ simpleCI
 ```
 
 ```{r covar_plot_simple}
-maf <- colMeans(geno)/2
+maf <- colMeans(geno[-1])/2
 estimates <- data.frame(estimate=simpleBetaHat, t(simpleCI), maf=maf)
 ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) + 
 		geom_hline(yintercept=0, linetype="longdash") + 
