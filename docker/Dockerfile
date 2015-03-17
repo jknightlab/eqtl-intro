@@ -2,6 +2,16 @@
 FROM bioconductor/release_core
 MAINTAINER Peter Humburg <peter.humburg@gmail.com>
 
+## Install additional software packages
+RUN apt-get update -y && apt-get install -y haskell-platform && apt-get install -y texlive-full
+
+## Install pandoc
+RUN cabal update && cabal install pandoc
+
 ## Additional R packages
-RUN Rscript -e "biocLite(c('MatrixEQTL', 'devtools', 'trio'))"
-RUN Rscript -e "devtools::install_github('humburg/Rsge');devtools::install_github('jknightlab/mePipe');"
+RUN Rscript -e "biocLite(c('MatrixEQTL', 'devtools', 'trio', 'dplyr', 'ggplot2', 'tidyr', 'knitr', 'optparse'))"
+RUN Rscript -e "devtools::install_github('humburg/Rsge');devtools::install_github('jknightlab/mePipe');devtools::install_github('hadley/readr')"
+
+## Data for exercises
+ADD data /data
+

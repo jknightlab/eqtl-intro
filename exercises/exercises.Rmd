@@ -1,0 +1,25 @@
+---
+title: Exercises for *Introduction to eQTL Analysis*
+author: Peter Humburg
+---
+
+```{r setup}
+library(knitr)
+
+opts_chunk$set(dpi=300)
+```
+
+```{r intro, child="prerequisites.md"}
+```
+
+```{r ex1, child="questions/simple_eqtl.md"}
+```
+
+```{r ans1, child="solutions/simple_eqtl.Rmd", include=solution, eval=solution}
+```
+
+```{r ex2, child="questions/covar_eqtl.md"}
+```
+
+```{r ans2, child="solutions/covar_eqtl.Rmd", include=solution, eval=solution}
+```
