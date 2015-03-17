@@ -18,7 +18,7 @@ EX_FILES=$(EX_DIR)/exercises.md $(EX_DIR)/exercises_and_solutions.md \
          $(EX_DIR)/exercises.html $(EX_DIR)/exercises_and_solutions.html \
          $(EX_DIR)/exercises.pdf $(EX_DIR)/exercises_and_solutions.pdf
 
-all: $(SIM_FILES) $(EX_FILES)
+all: simulation exercises
 
 $(SIM_OUT)/sim_genotypes.tab: $(SIM_DATA)/sim_genotypes.tab
 $(SIM_OUT)/sim_covariates.tab: $(SIM_DATA)/sim_covariates.tab
@@ -35,3 +35,7 @@ $(SIM_OUT)/%:
 $(EX_DIR)/%:
 	$(MAKE) -C $(EX_DIR)
 	chown $(UNAME):$(GNAME) $(EX_FILES)
+	
+.PHONY: exercises simulation
+exercises: $(EX_FILES)
+simulation: $(SIM_FILES)
