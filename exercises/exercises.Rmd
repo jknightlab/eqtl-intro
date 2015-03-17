@@ -3,7 +3,7 @@ title: Exercises for *Introduction to eQTL Analysis*
 author: Peter Humburg
 ---
 
-```{r setup}
+```{r setup, echo=FALSE}
 library(knitr)
 
 opts_chunk$set(dpi=300)
