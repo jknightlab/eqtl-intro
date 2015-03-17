@@ -4,11 +4,6 @@ author: Peter Humburg
 ---
 
 
-```r
-library(knitr)
-
-opts_chunk$set(dpi=300)
-```
 
 
 # Prerequisites {-}
@@ -142,7 +137,7 @@ ggplot(dataLong, aes(genotype, expression)) +
 
 ## Estimating SNP effects
 To obtain estimates of the genotypic contribution to gene expression
-we fit a simple linear regression model of the form $E_i = \beta_0 + \beta G_i + \vareps$,
+we fit a simple linear regression model of the form $E_i = \beta_0 + \beta G_i + \varepsilon$,
 where $E_i$ is the vector of gene expression values for gene $i$ and 
 $G_i$ is the genotype vector for SNP $i$. We are interested in the estimate for
 $\beta$ which indicates the change in gene expression for each copy of the second
@@ -258,6 +253,7 @@ ggplot(dataLong, aes(genotype, expression)) +
 ```
 
 ![plot of chunk covar_exprPlot](figure/covar_exprPlot-1.png) 
+
 These data show very little evidence of a SNP effect on gene expression.
 
 ## Simple linear regression
@@ -295,14 +291,7 @@ simpleCI
 
 
 ```r
-maf <- colMeans(geno)/2
-```
-
-```
-## Error in colMeans(geno): 'x' must be numeric
-```
-
-```r
+maf <- colMeans(geno[-1])/2
 estimates <- data.frame(estimate=simpleBetaHat, t(simpleCI), maf=maf)
 ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) + 
 		geom_hline(yintercept=0, linetype="longdash") + 
@@ -311,6 +300,7 @@ ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) +
 ```
 
 ![plot of chunk covar_plot_simple](figure/covar_plot_simple-1.png) 
+
 The confidence intervals obtained from this analysis are much wider than
 previously. Unlike before they frequently contain 0 and although most of them
 still contain the true value this is not always the case. Also note that the 
@@ -365,6 +355,7 @@ ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) +
 ```
 
 ![plot of chunk covar_plot_5cv](figure/covar_plot_5cv-1.png) 
+
 The inclusion of the covariates leads to a tighter set of confidence intervals.
 While it remains difficult to detect any meaningful genotypic effect
 at low minor allele frequencies the estimates appear to be more reliable

@@ -4,11 +4,6 @@ author: Peter Humburg
 ---
 
 
-```r
-library(knitr)
-
-opts_chunk$set(dpi=300)
-```
 
 
 # Prerequisites {-}
