@@ -1,4 +1,4 @@
-# Associations between SNPs and gene expression - A simple example
+# Associations between SNPs and gene expression - A simple example {.exercise}
 We will investigate the properties of a small simulated data set 
 consisting of genotypes for 10 SNPs and expression values for 10 genes
 from 300 individuals. Genotypes are encoded as 0, 1, and 2, indicating 

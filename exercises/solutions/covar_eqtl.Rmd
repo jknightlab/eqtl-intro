@@ -1,4 +1,4 @@
-# Solution for *Associations between SNPs and gene expression - Confounding variation*
+# Solution for *Associations between SNPs and gene expression - Confounding variation* {.solution}
 We start by loading and plotting the data. 
 
 ```{r covar_dataImport}

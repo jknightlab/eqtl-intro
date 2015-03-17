@@ -1,4 +1,4 @@
-# Solution for *Associations between SNPs and gene expression - A simple example*
+# Solution for *Associations between SNPs and gene expression - A simple example* {.solution}
 We start by loading the data. This can be done using RStudio's data import
 functionality or manually through the command-line. 
  

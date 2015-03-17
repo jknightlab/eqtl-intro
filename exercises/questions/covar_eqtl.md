@@ -1,4 +1,4 @@
-# Associations between SNPs and gene expression - Confounding variation
+# Associations between SNPs and gene expression - Confounding variation {.exercise}
 In this example we investigate the effect that the presence of
 other sources of variation has on our ability to detect the
 genotypic effects of interest.
