@@ -1,3 +1,4 @@
+export TOP_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 export UNAME=humburg
 export GNAME=$(UNAME)
 BUILD_DIR=docker
@@ -13,7 +14,9 @@ SIM_FILES=$(SIM_OUT)/sim_genotypes.tab \
           $(SIM_OUT)/sim_covariates.tab \
           $(SIM_OUT)/sim_expression1.tab \
           $(SIM_OUT)/sim_expression2.tab
-EX_FILES=$(EX_DIR)/exercises.md $(EX_DIR)/exercises_and_solutions.md
+EX_FILES=$(EX_DIR)/exercises.md $(EX_DIR)/exercises_and_solutions.md \
+         $(EX_DIR)/exercises.html $(EX_DIR)/exercises_and_solutions.html \
+         $(EX_DIR)/exercises.pdf $(EX_DIR)/exercises_and_solutions.pdf
 
 all: $(SIM_FILES) $(EX_FILES)
 
@@ -29,6 +32,6 @@ $(SIM_OUT)/%:
 	cp -f $< $@
 	chown -R $(UNAME):$(GNAME) $(SIM_OUT)
 
-$(EX_FILES):
+$(EX_DIR)/%:
 	$(MAKE) -C $(EX_DIR)
 	chown $(UNAME):$(GNAME) $(EX_FILES)
