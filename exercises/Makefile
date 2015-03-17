@@ -29,6 +29,10 @@ exercises_and_solutions.html: exercises_and_solutions.md ../include/buttondown.c
 exercises.pdf: exercises.md ../include/report.latex ../include/captions.tex ../include/references.bib
 	$(PANDOC) $(PANDOC_COMMON) $(PANDOC_PDF) -s exercises.md -o exercises.pdf
 	chown $(UNAME):$(GNAME) exercises.pdf
+exercises_and_solutions.pdf: exercises_and_solutions.md ../include/report.latex ../include/captions.tex ../include/references.bib
+	$(PANDOC) $(PANDOC_COMMON) $(PANDOC_PDF) -s exercises_and_solutions.md -o exercises_and_solutions.pdf
+	chown $(UNAME):$(GNAME) exercises_and_solutions.pdf
+
 
 .PHONY: pdf html all
 pdf: exercises.pdf exercises_and_solutions.pdf
