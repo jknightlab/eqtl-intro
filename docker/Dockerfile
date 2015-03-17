@@ -3,7 +3,8 @@ FROM bioconductor/release_core
 MAINTAINER Peter Humburg <peter.humburg@gmail.com>
 
 ## Install additional software packages
-RUN apt-get update -y && apt-get install -y haskell-platform && apt-get install -y texlive
+RUN apt-get update -y && apt-get install -y haskell-platform 
+RUN apt-get install -y texlive && apt-get install -y texlive-latex-extra
 
 ## Install pandoc
 RUN cabal update && cabal install pandoc
