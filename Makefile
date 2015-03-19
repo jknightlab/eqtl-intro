@@ -48,4 +48,6 @@ exercises: $(EX_FILES)
 slides: $(SLIDE_FILES)
 deploy: 
 	cp $(SLIDE_FILES) $(WEB_DIR)/
+	cp -r $(SLIDE_DIR)/figure $(WEB_DIR)/
+	cp $(TOP_DIR)/include/slides.css $(WEB_DIR)/include/
 	mv $(WEB_DIR)/eqtl-analysis.html $(WEB_DIR)/index.html

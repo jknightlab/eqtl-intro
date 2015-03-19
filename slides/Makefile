@@ -5,7 +5,7 @@ PANDOC=docker run -v  $(WD):/slides -v $(TOP_DIR)include/:/slides/include \
 PANDOC_COMMON = --standalone --smart --normalize --toc --highlight-style=tango \
              --bibliography=include/references.bib
 PANDOC_SLIDES = -t revealjs --css include/slides.css --toc-depth=1 -V toc-header="Overview" \
-                --template=include/default.revealjs --slide-level=2 --self-contained
+                --template=include/default.revealjs --slide-level=2 --mathjax
 
 all: slides              
 eqtl-analysis.html: eqtl-analysis.md $(TOP_DIR)include/slides.css $(TOP_DIR)include/default.revealjs figure/*
