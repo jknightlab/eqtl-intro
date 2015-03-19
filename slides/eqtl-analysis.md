@@ -4,6 +4,55 @@ author: Peter Humburg
 ---
 
 # What are eQTL?
+## Quantitative trait loci
+QTL are regions of the genome associated with quantitative traits
+
+* height
+* BMI
+* lung capacity
+* ...
+
+## Expression quantitative trait loci {data-transition="none"}
+<div class="multicolumn">
+<div>
+If the trait of interest is the expression of a gene, we talk about eQTL.
+
+* **Associations can be local (*cis*)**
+* or distant (*trans*)
+
+</div>
+<div>
+![](figure/cis_eqtl.png)
+</div>
+</div> 
+
+## Expression quantitative trait loci {data-transition="none"}
+<div class="multicolumn">
+<div>
+If the trait of interest is the expression of a gene, we talk about eQTL.
+
+* Associations can be local (*cis*)
+* **or distant (*trans*)**
+
+</div>
+<div>
+![](figure/trans_eqtl.png)
+</div>
+</div> 
+
+## Expression quantitative trait loci {data-transition="none"}
+<div class="multicolumn">
+<div>
+If the trait of interest is the expression of a gene, we talk about eQTL.
+
+* Associations can be local (*cis*)
+* **or distant (*trans*)**
+
+</div>
+<div>
+![](figure/trans_network.png)
+</div>
+</div> 
 
 
 # Detecting eQTL -- A simple model
@@ -274,3 +323,15 @@ fig <- ggplot(estimates, aes(x=maf)) +
 fig <- fig + geom_hline(yintercept=1.5)
 ```
 </div>
+
+# Detecting eQTL -- Not *that* simple
+
+# Hands-on: Covariates
+
+# If only we knew -- Covariates for real data
+
+# Hands-on: Dealing with real data
+
+# Hands-on: Scaling it up
+ 
+

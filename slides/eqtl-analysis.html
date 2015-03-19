@@ -61,10 +61,66 @@ code > span.er { font-weight: bold; }
 <li><a href="#/what-are-eqtl">What are eQTL?</a></li>
 <li><a href="#/detecting-eqtl-a-simple-model">Detecting eQTL – A simple model</a></li>
 <li><a href="#/hands-on-simple-linear-regression">Hands-on: Simple linear regression</a></li>
+<li><a href="#/detecting-eqtl-not-that-simple">Detecting eQTL – Not <em>that</em> simple</a></li>
+<li><a href="#/hands-on-covariates">Hands-on: Covariates</a></li>
+<li><a href="#/if-only-we-knew-covariates-for-real-data">If only we knew – Covariates for real data</a></li>
+<li><a href="#/hands-on-dealing-with-real-data">Hands-on: Dealing with real data</a></li>
+<li><a href="#/hands-on-scaling-it-up">Hands-on: Scaling it up</a></li>
 </ul>
 </section>
 
-<section><section id="what-are-eqtl" class="titleslide slide level1"><h1>What are eQTL?</h1></section></section>
+<section><section id="what-are-eqtl" class="titleslide slide level1"><h1>What are eQTL?</h1></section><section id="quantitative-trait-loci" class="slide level2">
+<h1>Quantitative trait loci</h1>
+<p>QTL are regions of the genome associated with quantitative traits</p>
+<ul>
+<li>height</li>
+<li>BMI</li>
+<li>lung capacity</li>
+<li>…</li>
+</ul>
+</section><section id="expression-quantitative-trait-loci" class="slide level2" data-transition="none">
+<h1>Expression quantitative trait loci</h1>
+<div class="multicolumn">
+<div>
+<p>If the trait of interest is the expression of a gene, we talk about eQTL.</p>
+<ul>
+<li><strong>Associations can be local (<em>cis</em>)</strong></li>
+<li>or distant (<em>trans</em>)</li>
+</ul>
+</div>
+<div>
+<img src="figure/cis_eqtl.png" />
+</div>
+</div>
+</section><section id="expression-quantitative-trait-loci-1" class="slide level2" data-transition="none">
+<h1>Expression quantitative trait loci</h1>
+<div class="multicolumn">
+<div>
+<p>If the trait of interest is the expression of a gene, we talk about eQTL.</p>
+<ul>
+<li>Associations can be local (<em>cis</em>)</li>
+<li><strong>or distant (<em>trans</em>)</strong></li>
+</ul>
+</div>
+<div>
+<img src="figure/trans_eqtl.png" />
+</div>
+</div>
+</section><section id="expression-quantitative-trait-loci-2" class="slide level2" data-transition="none">
+<h1>Expression quantitative trait loci</h1>
+<div class="multicolumn">
+<div>
+<p>If the trait of interest is the expression of a gene, we talk about eQTL.</p>
+<ul>
+<li>Associations can be local (<em>cis</em>)</li>
+<li><strong>or distant (<em>trans</em>)</strong></li>
+</ul>
+</div>
+<div>
+<img src="figure/trans_network.png" />
+</div>
+</div>
+</section></section>
 <section><section id="detecting-eqtl-a-simple-model" class="titleslide slide level1"><h1>Detecting eQTL – A simple model</h1></section><section id="how-do-we-know-whether-a-locus-is-associated-with-the-expression-of-a-gene" class="slide level2" data-transition="none">
 <h1>How do we know whether a locus is associated with the expression of a gene?</h1>
 <div class="multicolumn">
@@ -275,6 +331,7 @@ code > span.er { font-weight: bold; }
 <h3 id="normality">Normality</h3>
 <ul>
 <li>Estimates and their confidence intervals and p-values are fairly robust.</li>
+<li>But beware of long tailed distributions.</li>
 <li>Prediction can become problematic (but we are not interested in that here).</li>
 </ul>
 </section><section id="linear-regression-robustness-3" class="slide level2" data-transition="none">
@@ -339,6 +396,7 @@ maf &lt;-<span class="st"> </span><span class="kw">colMeans</span>(geno[-<span c
 <li>Create a plot showing gene expression by genotype for this pair.</li>
 </ul>
 <aside class="notes">
+<p>Assign SNP/gene pairs to participants to ensure each is handled at least once.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 genoLong &lt;-<span class="st"> </span>tidyr::<span class="kw">gather</span>(geno, snp, genotype, -sample)
 exprLong &lt;-<span class="st"> </span>tidyr::<span class="kw">gather</span>(expr, gene, expression, -sample)
@@ -350,10 +408,44 @@ dataLong$genotype &lt;-<span class="st"> </span><span class="kw">as.factor</span
 <span class="st">        </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.size=</span><span class="dv">0</span>, <span class="dt">alpha=</span><span class="fl">0.6</span>, <span class="dt">fill=</span><span class="st">&quot;grey&quot;</span>) +<span class="st"> </span>
 <span class="st">        </span><span class="kw">facet_wrap</span>(~snp) +<span class="st"> </span><span class="kw">theme_bw</span>()</code></pre>
 </aside>
-<div class="references">
+</section><section id="fitting-a-simple-linear-regression" class="slide level2">
+<h1>Fitting a simple linear regression</h1>
+<ol>
+<li>Fit a simple linear regression for the SNP/gene pair of your choice.</li>
+<li>Compute the 95% confidence interval for the genotype effect.</li>
+</ol>
+<aside class="notes">
+<p>Collect results from participants into a file and load into R.</p>
+<p>Code fit all models is below.</p>
+<pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">mapply</span>(function(e, g) <span class="kw">lm</span>(e ~<span class="st"> </span>g), 
+        expr[-<span class="dv">1</span>], geno[-<span class="dv">1</span>], <span class="dt">SIMPLIFY=</span><span class="ot">FALSE</span>)
+betaHat &lt;-<span class="st"> </span><span class="kw">sapply</span>(fit, coef)[<span class="dv">2</span>,]
 
-</div>
+ci &lt;-<span class="st"> </span><span class="kw">sapply</span>(fit, confint, <span class="st">&quot;g&quot;</span>)
+<span class="kw">rownames</span>(ci) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>)</code></pre>
+</aside>
+</section><section id="examining-the-results" class="slide level2">
+<h1>Examining the results</h1>
+<ol>
+<li>Create diagnostic plots.</li>
+<li>Plot estimated genotype effects by minor allele frequency.</li>
+</ol>
+<aside class="notes">
+<p>Display R’s build-in diagnostics by plotting the <code>fit</code> object.</p>
+<p>The true SNP effect is 1.5</p>
+<pre class="sourceCode r"><code class="sourceCode r">estimates &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">estimate=</span>betaHat, <span class="kw">t</span>(ci), <span class="dt">maf=</span>maf)
+fig &lt;-<span class="st"> </span><span class="kw">ggplot</span>(estimates, <span class="kw">aes</span>(<span class="dt">x=</span>maf)) +<span class="st">  </span>
+<span class="st">        </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="dv">0</span>, <span class="dt">linetype=</span><span class="st">&quot;longdash&quot;</span>) +<span class="st"> </span>
+<span class="st">        </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin=</span>lower, <span class="dt">ymax=</span>upper)) +
+<span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>estimate))  +<span class="st"> </span><span class="kw">theme_bw</span>()
+fig &lt;-<span class="st"> </span>fig +<span class="st"> </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="fl">1.5</span>)</code></pre>
+</aside>
 </section></section>
+<section><section id="detecting-eqtl-not-that-simple" class="titleslide slide level1"><h1>Detecting eQTL – Not <em>that</em> simple</h1></section></section>
+<section><section id="hands-on-covariates" class="titleslide slide level1"><h1>Hands-on: Covariates</h1></section></section>
+<section><section id="if-only-we-knew-covariates-for-real-data" class="titleslide slide level1"><h1>If only we knew – Covariates for real data</h1></section></section>
+<section><section id="hands-on-dealing-with-real-data" class="titleslide slide level1"><h1>Hands-on: Dealing with real data</h1></section></section>
+<section><section id="hands-on-scaling-it-up" class="titleslide slide level1 unnumbered"><h1>Hands-on: Scaling it up</h1></section></section>
     </div>
   </div>
 
