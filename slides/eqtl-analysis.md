@@ -147,6 +147,7 @@ Violation of this assumption will lead to incorrect p-values and confidence inte
 ## Linear regression -- Robustness {data-transition="none"}
 ### Normality
 * Estimates and their confidence intervals and p-values are fairly robust.
+* But beware of long tailed distributions.
 * Prediction can become problematic (but we are not interested in that here).
 
 ## Linear regression -- Robustness {data-transition="none"}
@@ -170,4 +171,106 @@ When might this occur with eQTL data?
 ![](figure/dominant.png)
 </div>
 
-# Practical: Simple linear regression
+# Hands-on: Simple linear regression
+## Setup
+
+* Make sure you have the latest version of the Docker image
+    
+    ```sh
+    docker pull humburg/eqtl-intro
+    ```
+* Start the RStudio server
+
+    ```sh
+    docker run -p 8787:8787 humburg/eqtl-intro
+    ```
+* On **Mac** and **Windows** determine the servers IP address with `boot2docker ip`.
+  On **Linux** use *localhost*.
+* Access the RStudio interface at *http://yourip:8787*. 
+    * Username: rstudio
+    * Password: rstudio
+    
+## Data
+
+Genotypes
+  : */data/simulated/sim_genotypes.tab*
+
+Gene expression
+  : */data/simulated/expression1.tab*
+    
+## Warm-up
+
+> #. Load the data into R.
+> #. How is the data formatted?
+> #. Determine minor allele frequencies.
+
+<div class="notes">
+
+```r
+geno <- readr::read_tsv("/data/simulated/sim_genotypes.tab")
+expr <- readr::read_tsv("/data/simulated/sim_expression1.tab")
+
+maf <- colMeans(geno[-1])/2
+```
+</div>
+
+##  Plotting the data
+* Choose a SNP/gene pair (snp_1 / gene_1, snp_2 / gene_2, ...)
+* Create a plot showing gene expression by genotype for this pair.
+
+<div class="notes">
+Assign SNP/gene pairs to participants to ensure each is handled at least once.
+
+```r
+library(ggplot2)
+genoLong <- tidyr::gather(geno, snp, genotype, -sample)
+exprLong <- tidyr::gather(expr, gene, expression, -sample)
+dataLong <- cbind(genoLong, exprLong["expression"])
+dataLong$genotype <- as.factor(dataLong$genotype) 
+ggplot(dataLong, aes(genotype, expression)) +
+		geom_jitter(colour="darkgrey", 
+				position=position_jitter(width=0.25)) +
+		geom_boxplot(outlier.size=0, alpha=0.6, fill="grey") + 
+		facet_wrap(~snp) + theme_bw()
+```
+</div>
+
+## Fitting a simple linear regression
+
+#. Fit a simple linear regression for the SNP/gene pair of your choice.
+#. Compute the 95% confidence interval for the genotype effect.
+
+<div class="notes">
+Collect results from participants into a file and load into R.
+
+Code fit all models is below.
+
+```r
+fit <- mapply(function(e, g) lm(e ~ g), 
+		expr[-1], geno[-1], SIMPLIFY=FALSE)
+betaHat <- sapply(fit, coef)[2,]
+
+ci <- sapply(fit, confint, "g")
+rownames(ci) <- c("lower", "upper")
+```
+</div>
+
+## Examining the results
+
+#. Create diagnostic plots.
+#. Plot estimated genotype effects by minor allele frequency.
+
+<div class="notes">
+Display R's build-in diagnostics by plotting the `fit` object.
+
+The true SNP effect is 1.5
+
+```r
+estimates <- data.frame(estimate=betaHat, t(ci), maf=maf)
+fig <- ggplot(estimates, aes(x=maf)) +  
+		geom_hline(yintercept=0, linetype="longdash") + 
+		geom_errorbar(aes(ymin=lower, ymax=upper)) +
+		geom_point(aes(y=estimate))  + theme_bw()
+fig <- fig + geom_hline(yintercept=1.5)
+```
+</div>

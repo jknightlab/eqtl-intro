@@ -10,6 +10,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="stylesheet" href="reveal.js/css/reveal.min.css"/>
     <style type="text/css">code{white-space: pre;}</style>
+    <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; }
+code > span.dt { color: #204a87; }
+code > span.dv { color: #0000cf; }
+code > span.bn { color: #0000cf; }
+code > span.fl { color: #0000cf; }
+code > span.ch { color: #4e9a06; }
+code > span.st { color: #4e9a06; }
+code > span.co { color: #8f5902; font-style: italic; }
+code > span.ot { color: #8f5902; }
+code > span.al { color: #ef2929; }
+code > span.fu { color: #000000; }
+code > span.er { font-weight: bold; }
+    </style>
     <link rel="stylesheet" href="include/slides.css"/>
     <!-- If the query includes 'print-pdf', include the PDF print sheet -->
     <script>
@@ -39,12 +59,13 @@
 <h1>Overview</h1>
 <ul>
 <li><a href="#/what-are-eqtl">What are eQTL?</a></li>
-<li><a href="#/detecting-eqtl">Detecting eQTL</a></li>
+<li><a href="#/detecting-eqtl-a-simple-model">Detecting eQTL – A simple model</a></li>
+<li><a href="#/hands-on-simple-linear-regression">Hands-on: Simple linear regression</a></li>
 </ul>
 </section>
 
 <section><section id="what-are-eqtl" class="titleslide slide level1"><h1>What are eQTL?</h1></section></section>
-<section><section id="detecting-eqtl" class="titleslide slide level1"><h1>Detecting eQTL</h1></section><section id="how-do-we-know-whether-a-locus-is-associated-with-the-expression-of-a-gene" class="slide level2" data-transition="none">
+<section><section id="detecting-eqtl-a-simple-model" class="titleslide slide level1"><h1>Detecting eQTL – A simple model</h1></section><section id="how-do-we-know-whether-a-locus-is-associated-with-the-expression-of-a-gene" class="slide level2" data-transition="none">
 <h1>How do we know whether a locus is associated with the expression of a gene?</h1>
 <div class="multicolumn">
 <div>
@@ -266,15 +287,69 @@ When might this occur with eQTL data?
 </section><section id="linear-regression-robustness-4" class="slide level2" data-transition="none">
 <h1>Linear regression – Robustness</h1>
 <h3 id="linearity-1">Linearity</h3>
-<div class="multicolumn">
-<div>
+<div class="left">
 <p>If the true relationship between <span class="math">\(Y\)</span> and <span class="math">\(X\)</span> is non-linear conclusions may be misleading.</p>
 When might this occur with eQTL data?
 </div>
-<div>
+<div class="right">
 <img src="figure/dominant.png" />
 </div>
-</div>
+</section></section>
+<section><section id="hands-on-simple-linear-regression" class="titleslide slide level1"><h1>Hands-on: Simple linear regression</h1></section><section id="setup" class="slide level2">
+<h1>Setup</h1>
+<ul>
+<li><p>Make sure you have the latest version of the Docker image</p>
+<pre class="sh"><code>docker pull humburg/eqtl-intro</code></pre></li>
+<li><p>Start the RStudio server</p>
+<pre class="sh"><code>docker run -p 8787:8787 humburg/eqtl-intro</code></pre></li>
+<li>On <strong>Mac</strong> and <strong>Windows</strong> determine the servers IP address with <code>boot2docker ip</code>. On <strong>Linux</strong> use <em>localhost</em>.</li>
+<li>Access the RStudio interface at <em>http://yourip:8787</em>.
+<ul>
+<li>Username: rstudio</li>
+<li>Password: rstudio</li>
+</ul></li>
+</ul>
+</section><section id="data" class="slide level2">
+<h1>Data</h1>
+<dl>
+<dt>Genotypes</dt>
+<dd><em>/data/simulated/sim_genotypes.tab</em>
+</dd>
+<dt>Gene expression</dt>
+<dd><em>/data/simulated/expression1.tab</em>
+</dd>
+</dl>
+</section><section id="warm-up" class="slide level2">
+<h1>Warm-up</h1>
+<ol>
+<li class="fragment">Load the data into R.</li>
+<li class="fragment">How is the data formatted?</li>
+<li class="fragment">Determine minor allele frequencies.</li>
+</ol>
+<aside class="notes">
+<pre class="sourceCode r"><code class="sourceCode r">geno &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="st">&quot;/data/simulated/sim_genotypes.tab&quot;</span>)
+expr &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="st">&quot;/data/simulated/sim_expression1.tab&quot;</span>)
+
+maf &lt;-<span class="st"> </span><span class="kw">colMeans</span>(geno[-<span class="dv">1</span>])/<span class="dv">2</span></code></pre>
+</aside>
+</section><section id="plotting-the-data" class="slide level2">
+<h1>Plotting the data</h1>
+<ul>
+<li>Choose a SNP/gene pair (snp_1 / gene_1, snp_2 / gene_2, …)</li>
+<li>Create a plot showing gene expression by genotype for this pair.</li>
+</ul>
+<aside class="notes">
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+genoLong &lt;-<span class="st"> </span>tidyr::<span class="kw">gather</span>(geno, snp, genotype, -sample)
+exprLong &lt;-<span class="st"> </span>tidyr::<span class="kw">gather</span>(expr, gene, expression, -sample)
+dataLong &lt;-<span class="st"> </span><span class="kw">cbind</span>(genoLong, exprLong[<span class="st">&quot;expression&quot;</span>])
+dataLong$genotype &lt;-<span class="st"> </span><span class="kw">as.factor</span>(dataLong$genotype) 
+<span class="kw">ggplot</span>(dataLong, <span class="kw">aes</span>(genotype, expression)) +
+<span class="st">        </span><span class="kw">geom_jitter</span>(<span class="dt">colour=</span><span class="st">&quot;darkgrey&quot;</span>, 
+                <span class="dt">position=</span><span class="kw">position_jitter</span>(<span class="dt">width=</span><span class="fl">0.25</span>)) +
+<span class="st">        </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.size=</span><span class="dv">0</span>, <span class="dt">alpha=</span><span class="fl">0.6</span>, <span class="dt">fill=</span><span class="st">&quot;grey&quot;</span>) +<span class="st"> </span>
+<span class="st">        </span><span class="kw">facet_wrap</span>(~snp) +<span class="st"> </span><span class="kw">theme_bw</span>()</code></pre>
+</aside>
 <div class="references">
 
 </div>
