@@ -52,3 +52,11 @@ div.multicolumn{
 div.references {
 	font-size: 0.5em;
 }
+
+#snp-expr > img {
+	width: 60%;
+}
+
+div.multicolumn table{
+	font-size: 0.5em;
+}

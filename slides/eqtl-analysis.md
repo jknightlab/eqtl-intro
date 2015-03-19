@@ -7,7 +7,7 @@ author: Peter Humburg
 
 
 # Detecting eQTL
-## How do we know whether a locus is associated with the expression of a gene?
+## How do we know whether a locus is associated with the expression of a gene? {data-transition="none"}
 
 <div class="multicolumn">
 <div>
@@ -18,11 +18,11 @@ author: Peter Humburg
 * **Any given locus contains multiple SNPs.**
 * Can determine genotypes for these SNPs in a (large) number of individuals.
 * Measure gene expression for genes of interest.
-* For each SNP/gene pair, assess the evidence that expression varies with genotype.
+* Assess the evidence that expression varies with genotype.
 </div> 
 </div>
 
-## How do we know whether a locus is associated with the expression of a gene?
+## How do we know whether a locus is associated with the expression of a gene? {data-transition="none"}
 
 <div class="multicolumn">
 <div>
@@ -39,11 +39,11 @@ sample 3    AB      BB      AB     ...
 * Any given locus contains multiple SNPs.
 * **Can determine genotypes for these SNPs in a (large) number of individuals.**
 * Measure gene expression for genes of interest.
-* For each SNP/gene pair, assess the evidence that expression varies with genotype.
+* Assess the evidence that expression varies with genotype.
 </div> 
 </div>
 
-## How do we know whether a locus is associated with the expression of a gene?
+## How do we know whether a locus is associated with the expression of a gene? {data-transition="none"}
 
 <div class="multicolumn">
 <div>
@@ -60,21 +60,21 @@ sample 3    9.5     10.7      15.1    ...
 * Any given locus contains multiple SNPs.
 * Can determine genotypes for these SNPs in a (large) number of individuals.
 * **Measure gene expression for genes of interest.**
-* For each SNP/gene pair, assess the evidence that expression varies with genotype.
+* Assess the evidence that expression varies with genotype.
 </div> 
 </div>
 
-## How do we know whether a locus is associated with the expression of a gene?
+## How do we know whether a locus is associated with the expression of a gene? {data-transition="none"}
 
 <div class="multicolumn">
-<div>
+<div id="snp-expr">
 ![](figure/snp_expression.png)
 </div>
 <div>
 * Any given locus contains multiple SNPs.
 * Can determine genotypes for these SNPs in a (large) number of individuals.
 * Measure gene expression for genes of interest.
-* **For each SNP/gene pair, assess the evidence that expression varies with genotype.**
+* **Assess the evidence that expression varies with genotype.**
 </div> 
 </div>
 
