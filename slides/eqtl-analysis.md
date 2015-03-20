@@ -3,6 +3,87 @@ title: Introduction to eQTL analysis
 author: Peter Humburg
 ---
 
+# *Hands-on* : Setup
+## Docker image
+Make sure you have the latest version of the docker image.
+
+```sh
+docker pull humburg/eqtl-intro
+```
+
+## Directory structure
+* Create a working directory for this course. (`eqtl_course`)
+* Within that directory, create two sub-directories
+    * `genotypes`
+    * `analysis`
+* *Mac*: create directories under `/Users/`
+* *Windows*: create directories under `C:\Users\`
+
+## Additional data
+The docker image contains most of the data. Further genotyping data is available from
+
+```sh
+ftp://galahad.well.ox.ac.uk
+```
+Username: eqtl_course
+
+Download the data and save it into `genotypes`
+
+<div class="notes">
+Need to provide password separately.
+</div>
+
+## Start the RStudio server    
+
+Windows
+  :
+  
+    docker run -p 8787:8787 
+      -v /c/Users/user/eqtl_course/genotpes:/data/genotypes
+      -v /c/Users/user/eqtl_course/analysis:/data/analysis 
+      humburg/eqtl-intro
+    
+
+IP address of the server usually is 192.168.59.103.
+
+Use `boot2docker ip` to check if necessary. 
+
+## Start the RStudio server
+
+Mac
+  :
+  
+    
+    docker run -p 8787:8787 
+       -v /Users/user/eqtl_course/genotpes:/data/genotypes 
+       -v /Users/user/eqtl_course/analysis:/data/analysis 
+       humburg/eqtl-intro
+
+IP address of the server usually is 192.168.59.103.
+
+Use `boot2docker ip` to check if necessary. 
+
+## Start the RStudio server    
+
+Linux
+  :
+  
+    docker run -p 8787:8787 
+      -v /home/user/eqtl_course/genotpes:/data/genotypes
+      -v /home/user/eqtl_course/analysis:/data/analysis
+      -e USER=$USER  -e USERID = $UID 
+      humburg/eqtl-intro
+    
+
+IP address of the server usually is 127.0.0.1 (or *localhost*).
+    
+## Using RStudio
+
+Access the RStudio interface at *http://yourip:8787*. 
+
+    * Username: rstudio
+    * Password: rstudio
+
 # What are eQTL?
 ## Quantitative trait loci
 QTL are regions of the genome associated with quantitative traits
@@ -180,12 +261,14 @@ Residuals are
 
 It is implied that
 
-* Values of $Y$ for each value of $X$ are normally distributed.
 * There is a linear relationship between $X$ and $Y$.
+* Values of $Y$ for each value of $X$ are normally distributed.
+* There is only one source of variation not explained by $X$.
+
 
 ## Linear regression -- Robustness {data-transition="none"}
 ### Independence of residuals
-Can produce misleading results.
+Lack of independence can produce misleading results.
 
 What could cause this?
 
@@ -220,32 +303,14 @@ When might this occur with eQTL data?
 ![](figure/dominant.png)
 </div>
 
-# Hands-on: Simple linear regression
-## Setup
-
-* Make sure you have the latest version of the Docker image
-    
-    ```sh
-    docker pull humburg/eqtl-intro
-    ```
-* Start the RStudio server
-
-    ```sh
-    docker run -p 8787:8787 humburg/eqtl-intro
-    ```
-* On **Mac** and **Windows** determine the servers IP address with `boot2docker ip`.
-  On **Linux** use *localhost*.
-* Access the RStudio interface at *http://yourip:8787*. 
-    * Username: rstudio
-    * Password: rstudio
-    
+# *Hands-on* : Simple linear regression    
 ## Data
 
 Genotypes
   : */data/simulated/sim_genotypes.tab*
 
 Gene expression
-  : */data/simulated/expression1.tab*
+  : */data/simulated/sim_expression1.tab*
     
 ## Warm-up
 
@@ -325,13 +390,146 @@ fig <- fig + geom_hline(yintercept=1.5)
 </div>
 
 # Detecting eQTL -- Not *that* simple
+## Additional sources of variation
 
-# Hands-on: Covariates
+* Gene expression is subject to many sources of variation.
+* A model with a single SNP as explanatory variable is unlikely to be sufficient.
+
+. . .
+
+Use multiple regression to obtain better estimates of SNP effects.
+
+## Multiple regression
+$$Y = \beta_0 + \sum_{i=1}^n \beta_i X_i + \varepsilon$$ 
+
+* Similar to simple linear regression but incorporates multiple 
+  explanatory variables.
+* $\beta_i$ are interpreted as "change of $Y$ due to a unit change in $X_i$ when
+  *all other explanatory variables are held constant*".
+  
+> * Explanatory variables are assumed to be uncorrelated with each other.
+
+# *Hands-on* : Covariates
+## Data
+
+Genotypes
+  : */data/simulated/sim_genotypes.tab*
+
+Gene expression
+  : */data/simulated/sim_expression2.tab*
+  
+Covariates
+  : */data/simulated/sim_covariates.tab*
+  
+<div class="notes">
+geno <- readr::read_tsv("/data/simulated/sim_genotypes.tab")
+expr <- readr::read_tsv("/data/simulated/sim_expression2.tab")
+covar <- readr::read_tsv("/data/simulated/sim_covariates.tab")
+</div>
+
+## Plotting the data
+Create a plot of gene expression by genotype for you SNP/gene pair of choice.
+
+How does this compare to the plot from the previous exercise.
+
+<div class="notes">
+
+```r
+library(ggplot2)
+genoLong <- tidyr::gather(geno, snp, genotype, -sample)
+exprLong <- tidyr::gather(expr, gene, expression, -sample)
+dataLong <- cbind(genoLong, exprLong["expression"])
+dataLong$genotype <- as.factor(dataLong$genotype) 
+ggplot(dataLong, aes(genotype, expression)) +
+		geom_jitter(colour="darkgrey", 
+				position=position_jitter(width=0.25)) +
+		geom_boxplot(outlier.size=0, alpha=0.6, fill="grey") + 
+		facet_wrap(~snp) + theme_bw()
+```
+
+There is very little evidence of a SNP effect in these plots.
+</div>
+    
+## Simple linear regression
+Repeat the simple linear regession analysis with these data.
+
+#. Fit a model for one of the SNP/gene pairs
+#. Create diagnostic plots
+#. Compute the confidence interval for the coefficient
+
+How does this compare to the result from the previous analysis?
+
+<div class="notes">
+
+```r
+simpleFit <- mapply(function(e, g) lm(e ~ g), 
+		expr[-1], geno[-1], SIMPLIFY=FALSE)
+simpleBetaHat <- sapply(simpleFit, coef)[2,]
+simpleCI <- sapply(simpleFit, confint, "g")
+rownames(simpleCI) <- c("lower", "upper")
+```
+
+Plot all results:
+
+```r
+maf <- colMeans(geno)/2
+estimates <- data.frame(estimate=simpleBetaHat, t(simpleCI), maf=maf)
+ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) + 
+		geom_hline(yintercept=0, linetype="longdash") + 
+		geom_errorbar(aes(ymin=lower, ymax=upper)) +
+		geom_point(aes(y=estimate))  + theme_bw()
+```
+Note that the true SNP coefficient is still 1.5 but estimates are
+considerably worse.
+</div>
+
+## Multiple linear regression
+#. Use the first five variables contained in the covariates file as 
+  covariates in your model.
+#. Create diagnostic plots
+#. Compute the confidence interval for the coefficient
+
+<div class="notes">
+
+```r
+covarFit <- mapply(function(e, g, var) lm(e ~ g + var), 
+		expr[-1], geno[-1], 
+		MoreArgs=list(as.matrix(covar[2:6])), SIMPLIFY=FALSE)
+covarBetaHat <- sapply(covarFit, coef)[2,]
+covarCI <- sapply(covarFit, confint, "g")
+rownames(covarCI) <- c("lower", "upper")
+```
+
+May also want to try including all 20 variables.
+</div>
+
+# Covariates -- Choose wisely
+## (Multi)-colinearity
+If $X_i$ and $X_j$ are correlated the estimates of $\beta_i$ and
+$\beta_j$ will be biased. Several issues may occur:
+
+* All the variance in $Y$ due to $X_i$ and $X_j$ is wholly attributed to
+  one of the variables (say, $X_i$). 
+    
+    * Results in over estimation of $\beta_i$ and under estimation of $\beta_j$
+* Estimates for both $\beta_i$ and $\beta_j$ are too low because all of the variance
+  is explained by the other variable that is *held constant*.
+* No sensible interpretation for $\beta_i$ and $\beta_j$.
+* Model fitting may fail.
+
+## Dealing with colinearity
+
+* Check correlation between explanatory variables.
+* Check variance inflation factor (VIF).
+* Choose only one from each group of correlated variables.
+
+Only really need to worry about variables of interest for
+downstream analysis.
 
 # If only we knew -- Covariates for real data
 
-# Hands-on: Dealing with real data
+# *Hands-on* : Dealing with real data
 
-# Hands-on: Scaling it up
+# *Hands-on* : Scaling it up
  
 

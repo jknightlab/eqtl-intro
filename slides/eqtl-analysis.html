@@ -58,17 +58,77 @@ code > span.er { font-weight: bold; }
 <section id="TOC">
 <h1>Overview</h1>
 <ul>
+<li><a href="#/hands-on-setup"><em>Hands-on</em> : Setup</a></li>
 <li><a href="#/what-are-eqtl">What are eQTL?</a></li>
 <li><a href="#/detecting-eqtl-a-simple-model">Detecting eQTL – A simple model</a></li>
-<li><a href="#/hands-on-simple-linear-regression">Hands-on: Simple linear regression</a></li>
+<li><a href="#/hands-on-simple-linear-regression"><em>Hands-on</em> : Simple linear regression</a></li>
 <li><a href="#/detecting-eqtl-not-that-simple">Detecting eQTL – Not <em>that</em> simple</a></li>
-<li><a href="#/hands-on-covariates">Hands-on: Covariates</a></li>
+<li><a href="#/hands-on-covariates"><em>Hands-on</em> : Covariates</a></li>
+<li><a href="#/covariates-choose-wisely">Covariates – Choose wisely</a></li>
 <li><a href="#/if-only-we-knew-covariates-for-real-data">If only we knew – Covariates for real data</a></li>
-<li><a href="#/hands-on-dealing-with-real-data">Hands-on: Dealing with real data</a></li>
-<li><a href="#/hands-on-scaling-it-up">Hands-on: Scaling it up</a></li>
+<li><a href="#/hands-on-dealing-with-real-data"><em>Hands-on</em> : Dealing with real data</a></li>
+<li><a href="#/hands-on-scaling-it-up"><em>Hands-on</em> : Scaling it up</a></li>
 </ul>
 </section>
 
+<section><section id="hands-on-setup" class="titleslide slide level1"><h1><em>Hands-on</em> : Setup</h1></section><section id="docker-image" class="slide level2">
+<h1>Docker image</h1>
+<p>Make sure you have the latest version of the docker image.</p>
+<pre class="sh"><code>docker pull humburg/eqtl-intro</code></pre>
+</section><section id="directory-structure" class="slide level2">
+<h1>Directory structure</h1>
+<ul>
+<li>Create a working directory for this course. (<code>eqtl_course</code>)</li>
+<li>Within that directory, create two sub-directories
+<ul>
+<li><code>genotypes</code></li>
+<li><code>analysis</code></li>
+</ul></li>
+<li><em>Mac</em>: create directories under <code>/Users/</code></li>
+<li><em>Windows</em>: create directories under <code>C:\Users\</code></li>
+</ul>
+</section><section id="additional-data" class="slide level2">
+<h1>Additional data</h1>
+<p>The docker image contains most of the data. Further genotyping data is available from</p>
+<pre class="sh"><code>ftp://galahad.well.ox.ac.uk</code></pre>
+<p>Username: eqtl_course</p>
+<p>Download the data and save it into <code>genotypes</code></p>
+<aside class="notes">
+Need to provide password separately.
+</aside>
+</section><section id="start-the-rstudio-server" class="slide level2">
+<h1>Start the RStudio server</h1>
+<p>Windows :</p>
+<pre><code>docker run -p 8787:8787 
+  -v /c/Users/user/eqtl_course/genotpes:/data/genotypes
+  -v /c/Users/user/eqtl_course/analysis:/data/analysis 
+  humburg/eqtl-intro</code></pre>
+<p>IP address of the server usually is 192.168.59.103.</p>
+<p>Use <code>boot2docker ip</code> to check if necessary.</p>
+</section><section id="start-the-rstudio-server-1" class="slide level2">
+<h1>Start the RStudio server</h1>
+<p>Mac :</p>
+<pre><code>docker run -p 8787:8787 
+   -v /Users/user/eqtl_course/genotpes:/data/genotypes 
+   -v /Users/user/eqtl_course/analysis:/data/analysis 
+   humburg/eqtl-intro</code></pre>
+<p>IP address of the server usually is 192.168.59.103.</p>
+<p>Use <code>boot2docker ip</code> to check if necessary.</p>
+</section><section id="start-the-rstudio-server-2" class="slide level2">
+<h1>Start the RStudio server</h1>
+<p>Linux :</p>
+<pre><code>docker run -p 8787:8787 
+  -v /home/user/eqtl_course/genotpes:/data/genotypes
+  -v /home/user/eqtl_course/analysis:/data/analysis
+  -e USER=$USER  -e USERID = $UID 
+  humburg/eqtl-intro</code></pre>
+<p>IP address of the server usually is 127.0.0.1 (or <em>localhost</em>).</p>
+</section><section id="using-rstudio" class="slide level2">
+<h1>Using RStudio</h1>
+<p>Access the RStudio interface at <em>http://yourip:8787</em>.</p>
+<pre><code>* Username: rstudio
+* Password: rstudio</code></pre>
+</section></section>
 <section><section id="what-are-eqtl" class="titleslide slide level1"><h1>What are eQTL?</h1></section><section id="quantitative-trait-loci" class="slide level2">
 <h1>Quantitative trait loci</h1>
 <p>QTL are regions of the genome associated with quantitative traits</p>
@@ -313,14 +373,15 @@ code > span.er { font-weight: bold; }
 <div class="fragment">
 <p>It is implied that</p>
 <ul>
-<li>Values of <span class="math">\(Y\)</span> for each value of <span class="math">\(X\)</span> are normally distributed.</li>
 <li>There is a linear relationship between <span class="math">\(X\)</span> and <span class="math">\(Y\)</span>.</li>
+<li>Values of <span class="math">\(Y\)</span> for each value of <span class="math">\(X\)</span> are normally distributed.</li>
+<li>There is only one source of variation not explained by <span class="math">\(X\)</span>.</li>
 </ul>
 </div>
 </section><section id="linear-regression-robustness" class="slide level2" data-transition="none">
 <h1>Linear regression – Robustness</h1>
 <h3 id="independence-of-residuals">Independence of residuals</h3>
-<p>Can produce misleading results.</p>
+<p>Lack of independence can produce misleading results.</p>
 <p>What could cause this?</p>
 </section><section id="linear-regression-robustness-1" class="slide level2" data-transition="none">
 <h1>Linear regression – Robustness</h1>
@@ -352,28 +413,14 @@ When might this occur with eQTL data?
 <img src="figure/dominant.png" />
 </div>
 </section></section>
-<section><section id="hands-on-simple-linear-regression" class="titleslide slide level1"><h1>Hands-on: Simple linear regression</h1></section><section id="setup" class="slide level2">
-<h1>Setup</h1>
-<ul>
-<li><p>Make sure you have the latest version of the Docker image</p>
-<pre class="sh"><code>docker pull humburg/eqtl-intro</code></pre></li>
-<li><p>Start the RStudio server</p>
-<pre class="sh"><code>docker run -p 8787:8787 humburg/eqtl-intro</code></pre></li>
-<li>On <strong>Mac</strong> and <strong>Windows</strong> determine the servers IP address with <code>boot2docker ip</code>. On <strong>Linux</strong> use <em>localhost</em>.</li>
-<li>Access the RStudio interface at <em>http://yourip:8787</em>.
-<ul>
-<li>Username: rstudio</li>
-<li>Password: rstudio</li>
-</ul></li>
-</ul>
-</section><section id="data" class="slide level2">
+<section><section id="hands-on-simple-linear-regression" class="titleslide slide level1"><h1><em>Hands-on</em> : Simple linear regression</h1></section><section id="data" class="slide level2">
 <h1>Data</h1>
 <dl>
 <dt>Genotypes</dt>
 <dd><em>/data/simulated/sim_genotypes.tab</em>
 </dd>
 <dt>Gene expression</dt>
-<dd><em>/data/simulated/expression1.tab</em>
+<dd><em>/data/simulated/sim_expression1.tab</em>
 </dd>
 </dl>
 </section><section id="warm-up" class="slide level2">
@@ -441,11 +488,124 @@ fig &lt;-<span class="st"> </span><span class="kw">ggplot</span>(estimates, <spa
 fig &lt;-<span class="st"> </span>fig +<span class="st"> </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="fl">1.5</span>)</code></pre>
 </aside>
 </section></section>
-<section><section id="detecting-eqtl-not-that-simple" class="titleslide slide level1"><h1>Detecting eQTL – Not <em>that</em> simple</h1></section></section>
-<section><section id="hands-on-covariates" class="titleslide slide level1"><h1>Hands-on: Covariates</h1></section></section>
+<section><section id="detecting-eqtl-not-that-simple" class="titleslide slide level1"><h1>Detecting eQTL – Not <em>that</em> simple</h1></section><section id="additional-sources-of-variation" class="slide level2">
+<h1>Additional sources of variation</h1>
+<ul>
+<li>Gene expression is subject to many sources of variation.</li>
+<li>A model with a single SNP as explanatory variable is unlikely to be sufficient.</li>
+</ul>
+<div class="fragment">
+<p>Use multiple regression to obtain better estimates of SNP effects.</p>
+</div>
+</section><section id="multiple-regression" class="slide level2">
+<h1>Multiple regression</h1>
+<p><span class="math">\[Y = \beta_0 + \sum_{i=1}^n \beta_i X_i + \varepsilon\]</span></p>
+<ul>
+<li>Similar to simple linear regression but incorporates multiple explanatory variables.</li>
+<li><span class="math">\(\beta_i\)</span> are interpreted as “change of <span class="math">\(Y\)</span> due to a unit change in <span class="math">\(X_i\)</span> when <em>all other explanatory variables are held constant</em>”.</li>
+</ul>
+<ul>
+<li class="fragment">Explanatory variables are assumed to be uncorrelated with each other.</li>
+</ul>
+</section></section>
+<section><section id="hands-on-covariates" class="titleslide slide level1"><h1><em>Hands-on</em> : Covariates</h1></section><section id="data-1" class="slide level2">
+<h1>Data</h1>
+<dl>
+<dt>Genotypes</dt>
+<dd><em>/data/simulated/sim_genotypes.tab</em>
+</dd>
+<dt>Gene expression</dt>
+<dd><em>/data/simulated/sim_expression2.tab</em>
+</dd>
+<dt>Covariates</dt>
+<dd><em>/data/simulated/sim_covariates.tab</em>
+</dd>
+</dl>
+<aside class="notes">
+geno &lt;- readr::read_tsv(“/data/simulated/sim_genotypes.tab”) expr &lt;- readr::read_tsv(“/data/simulated/sim_expression2.tab”) covar &lt;- readr::read_tsv(“/data/simulated/sim_covariates.tab”)
+</aside>
+</section><section id="plotting-the-data-1" class="slide level2">
+<h1>Plotting the data</h1>
+<p>Create a plot of gene expression by genotype for you SNP/gene pair of choice.</p>
+<p>How does this compare to the plot from the previous exercise.</p>
+<aside class="notes">
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+genoLong &lt;-<span class="st"> </span>tidyr::<span class="kw">gather</span>(geno, snp, genotype, -sample)
+exprLong &lt;-<span class="st"> </span>tidyr::<span class="kw">gather</span>(expr, gene, expression, -sample)
+dataLong &lt;-<span class="st"> </span><span class="kw">cbind</span>(genoLong, exprLong[<span class="st">&quot;expression&quot;</span>])
+dataLong$genotype &lt;-<span class="st"> </span><span class="kw">as.factor</span>(dataLong$genotype) 
+<span class="kw">ggplot</span>(dataLong, <span class="kw">aes</span>(genotype, expression)) +
+<span class="st">        </span><span class="kw">geom_jitter</span>(<span class="dt">colour=</span><span class="st">&quot;darkgrey&quot;</span>, 
+                <span class="dt">position=</span><span class="kw">position_jitter</span>(<span class="dt">width=</span><span class="fl">0.25</span>)) +
+<span class="st">        </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.size=</span><span class="dv">0</span>, <span class="dt">alpha=</span><span class="fl">0.6</span>, <span class="dt">fill=</span><span class="st">&quot;grey&quot;</span>) +<span class="st"> </span>
+<span class="st">        </span><span class="kw">facet_wrap</span>(~snp) +<span class="st"> </span><span class="kw">theme_bw</span>()</code></pre>
+There is very little evidence of a SNP effect in these plots.
+</aside>
+</section><section id="simple-linear-regression" class="slide level2">
+<h1>Simple linear regression</h1>
+<p>Repeat the simple linear regession analysis with these data.</p>
+<ol>
+<li>Fit a model for one of the SNP/gene pairs</li>
+<li>Create diagnostic plots</li>
+<li>Compute the confidence interval for the coefficient</li>
+</ol>
+<p>How does this compare to the result from the previous analysis?</p>
+<aside class="notes">
+<pre class="sourceCode r"><code class="sourceCode r">simpleFit &lt;-<span class="st"> </span><span class="kw">mapply</span>(function(e, g) <span class="kw">lm</span>(e ~<span class="st"> </span>g), 
+        expr[-<span class="dv">1</span>], geno[-<span class="dv">1</span>], <span class="dt">SIMPLIFY=</span><span class="ot">FALSE</span>)
+simpleBetaHat &lt;-<span class="st"> </span><span class="kw">sapply</span>(simpleFit, coef)[<span class="dv">2</span>,]
+simpleCI &lt;-<span class="st"> </span><span class="kw">sapply</span>(simpleFit, confint, <span class="st">&quot;g&quot;</span>)
+<span class="kw">rownames</span>(simpleCI) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>)</code></pre>
+<p>Plot all results:</p>
+<pre class="sourceCode r"><code class="sourceCode r">maf &lt;-<span class="st"> </span><span class="kw">colMeans</span>(geno)/<span class="dv">2</span>
+estimates &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">estimate=</span>simpleBetaHat, <span class="kw">t</span>(simpleCI), <span class="dt">maf=</span>maf)
+<span class="kw">ggplot</span>(estimates, <span class="kw">aes</span>(<span class="dt">x=</span>maf)) +<span class="st"> </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="fl">1.5</span>) +<span class="st"> </span>
+<span class="st">        </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="dv">0</span>, <span class="dt">linetype=</span><span class="st">&quot;longdash&quot;</span>) +<span class="st"> </span>
+<span class="st">        </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin=</span>lower, <span class="dt">ymax=</span>upper)) +
+<span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>estimate))  +<span class="st"> </span><span class="kw">theme_bw</span>()</code></pre>
+Note that the true SNP coefficient is still 1.5 but estimates are considerably worse.
+</aside>
+</section><section id="multiple-linear-regression" class="slide level2">
+<h1>Multiple linear regression</h1>
+<ol>
+<li>Use the first five variables contained in the covariates file as covariates in your model.</li>
+<li>Create diagnostic plots</li>
+<li>Compute the confidence interval for the coefficient</li>
+</ol>
+<aside class="notes">
+<pre class="sourceCode r"><code class="sourceCode r">covarFit &lt;-<span class="st"> </span><span class="kw">mapply</span>(function(e, g, var) <span class="kw">lm</span>(e ~<span class="st"> </span>g +<span class="st"> </span>var), 
+        expr[-<span class="dv">1</span>], geno[-<span class="dv">1</span>], 
+        <span class="dt">MoreArgs=</span><span class="kw">list</span>(<span class="kw">as.matrix</span>(covar[<span class="dv">2</span>:<span class="dv">6</span>])), <span class="dt">SIMPLIFY=</span><span class="ot">FALSE</span>)
+covarBetaHat &lt;-<span class="st"> </span><span class="kw">sapply</span>(covarFit, coef)[<span class="dv">2</span>,]
+covarCI &lt;-<span class="st"> </span><span class="kw">sapply</span>(covarFit, confint, <span class="st">&quot;g&quot;</span>)
+<span class="kw">rownames</span>(covarCI) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>)</code></pre>
+May also want to try including all 20 variables.
+</aside>
+</section></section>
+<section><section id="covariates-choose-wisely" class="titleslide slide level1"><h1>Covariates – Choose wisely</h1></section><section id="multi-colinearity" class="slide level2">
+<h1>(Multi)-colinearity</h1>
+<p>If <span class="math">\(X_i\)</span> and <span class="math">\(X_j\)</span> are correlated the estimates of <span class="math">\(\beta_i\)</span> and <span class="math">\(\beta_j\)</span> will be biased. Several issues may occur:</p>
+<ul>
+<li><p>All the variance in <span class="math">\(Y\)</span> due to <span class="math">\(X_i\)</span> and <span class="math">\(X_j\)</span> is wholly attributed to one of the variables (say, <span class="math">\(X_i\)</span>).</p>
+<ul>
+<li>Results in over estimation of <span class="math">\(\beta_i\)</span> and under estimation of <span class="math">\(\beta_j\)</span></li>
+</ul></li>
+<li>Estimates for both <span class="math">\(\beta_i\)</span> and <span class="math">\(\beta_j\)</span> are too low because all of the variance is explained by the other variable that is <em>held constant</em>.</li>
+<li>No sensible interpretation for <span class="math">\(\beta_i\)</span> and <span class="math">\(\beta_j\)</span>.</li>
+<li><p>Model fitting may fail.</p></li>
+</ul>
+</section><section id="dealing-with-colinearity" class="slide level2">
+<h1>Dealing with colinearity</h1>
+<ul>
+<li>Check correlation between explanatory variables.</li>
+<li>Check variance inflation factor (VIF).</li>
+<li>Choose only one from each group of correlated variables.</li>
+</ul>
+<p>Only really need to worry about variables of interest for downstream analysis.</p>
+</section></section>
 <section><section id="if-only-we-knew-covariates-for-real-data" class="titleslide slide level1"><h1>If only we knew – Covariates for real data</h1></section></section>
-<section><section id="hands-on-dealing-with-real-data" class="titleslide slide level1"><h1>Hands-on: Dealing with real data</h1></section></section>
-<section><section id="hands-on-scaling-it-up" class="titleslide slide level1 unnumbered"><h1>Hands-on: Scaling it up</h1></section></section>
+<section><section id="hands-on-dealing-with-real-data" class="titleslide slide level1"><h1><em>Hands-on</em> : Dealing with real data</h1></section></section>
+<section><section id="hands-on-scaling-it-up" class="titleslide slide level1 unnumbered"><h1><em>Hands-on</em> : Scaling it up</h1></section></section>
     </div>
   </div>
 
