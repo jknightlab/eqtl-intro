@@ -472,7 +472,7 @@ rownames(simpleCI) <- c("lower", "upper")
 Plot all results:
 
 ```r
-maf <- colMeans(geno)/2
+maf <- colMeans(geno[-1])/2
 estimates <- data.frame(estimate=simpleBetaHat, t(simpleCI), maf=maf)
 ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) + 
 		geom_hline(yintercept=0, linetype="longdash") + 
@@ -527,9 +527,25 @@ Only really need to worry about variables of interest for
 downstream analysis.
 
 # If only we knew -- Covariates for real data
+## Limited information
+
+* Real data comes with varying amounts of additional information.
+    * Sex and age are common
+    * May have detailed phenotyping data
+* Some variables will have big impact on gene expression
+* Won't have information on all relevant variables.
+
+## Use the data
+
+* We don't have to know what the (non-genetic) sources of variation are
+  as long as we can account for them.
+* Principle component analysis (PCA) can identify major directions of variation
+  from the data.
+  
+## Principle component analysis
 
 # *Hands-on* : Dealing with real data
 
 # *Hands-on* : Scaling it up
  
-
+# Interpreting results

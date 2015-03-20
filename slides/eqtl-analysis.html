@@ -68,6 +68,7 @@ code > span.er { font-weight: bold; }
 <li><a href="#/if-only-we-knew-covariates-for-real-data">If only we knew – Covariates for real data</a></li>
 <li><a href="#/hands-on-dealing-with-real-data"><em>Hands-on</em> : Dealing with real data</a></li>
 <li><a href="#/hands-on-scaling-it-up"><em>Hands-on</em> : Scaling it up</a></li>
+<li><a href="#/interpreting-results">Interpreting results</a></li>
 </ul>
 </section>
 
@@ -557,7 +558,7 @@ simpleBetaHat &lt;-<span class="st"> </span><span class="kw">sapply</span>(simpl
 simpleCI &lt;-<span class="st"> </span><span class="kw">sapply</span>(simpleFit, confint, <span class="st">&quot;g&quot;</span>)
 <span class="kw">rownames</span>(simpleCI) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>)</code></pre>
 <p>Plot all results:</p>
-<pre class="sourceCode r"><code class="sourceCode r">maf &lt;-<span class="st"> </span><span class="kw">colMeans</span>(geno)/<span class="dv">2</span>
+<pre class="sourceCode r"><code class="sourceCode r">maf &lt;-<span class="st"> </span><span class="kw">colMeans</span>(geno[-<span class="dv">1</span>])/<span class="dv">2</span>
 estimates &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">estimate=</span>simpleBetaHat, <span class="kw">t</span>(simpleCI), <span class="dt">maf=</span>maf)
 <span class="kw">ggplot</span>(estimates, <span class="kw">aes</span>(<span class="dt">x=</span>maf)) +<span class="st"> </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="fl">1.5</span>) +<span class="st"> </span>
 <span class="st">        </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="dv">0</span>, <span class="dt">linetype=</span><span class="st">&quot;longdash&quot;</span>) +<span class="st"> </span>
@@ -603,9 +604,29 @@ May also want to try including all 20 variables.
 </ul>
 <p>Only really need to worry about variables of interest for downstream analysis.</p>
 </section></section>
-<section><section id="if-only-we-knew-covariates-for-real-data" class="titleslide slide level1"><h1>If only we knew – Covariates for real data</h1></section></section>
+<section><section id="if-only-we-knew-covariates-for-real-data" class="titleslide slide level1"><h1>If only we knew – Covariates for real data</h1></section><section id="limited-information" class="slide level2">
+<h1>Limited information</h1>
+<ul>
+<li>Real data comes with varying amounts of additional information.
+<ul>
+<li>Sex and age are common</li>
+<li>May have detailed phenotyping data</li>
+</ul></li>
+<li>Some variables will have big impact on gene expression</li>
+<li>Won’t have information on all relevant variables.</li>
+</ul>
+</section><section id="use-the-data" class="slide level2">
+<h1>Use the data</h1>
+<ul>
+<li>We don’t have to know what the (non-genetic) sources of variation are as long as we can account for them.</li>
+<li>Principle component analysis (PCA) can identify major directions of variation from the data.</li>
+</ul>
+</section><section id="principle-component-analysis" class="slide level2">
+<h1>Principle component analysis</h1>
+</section></section>
 <section><section id="hands-on-dealing-with-real-data" class="titleslide slide level1"><h1><em>Hands-on</em> : Dealing with real data</h1></section></section>
-<section><section id="hands-on-scaling-it-up" class="titleslide slide level1 unnumbered"><h1><em>Hands-on</em> : Scaling it up</h1></section></section>
+<section><section id="hands-on-scaling-it-up" class="titleslide slide level1"><h1><em>Hands-on</em> : Scaling it up</h1></section></section>
+<section><section id="interpreting-results" class="titleslide slide level1 unnumbered"><h1>Interpreting results</h1></section></section>
     </div>
   </div>
 
