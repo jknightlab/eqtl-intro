@@ -582,6 +582,95 @@ Fairfax, Humburg, Makino, *et al.*
 **Innate Immune Activity Conditions the Effect of Regulatory Variants upon Monocyte 
 Gene Expression**. Science (2014). doi:[ 10.1126/science.1246949](http://doi.org/10.1126/science.1246949).
 
+## Brief look at the data
+
+* Load the data and examine it 
+
+<div class="notes">
+
+```r
+geno <- readr::read_tsv(file("/data/genotypes/genotypes.tab.gz"))
+expr <- readr::read_tsv(file("/data/monocytes/expression/ifn_expression.tab.gz"))
+```
+
+Note that these files have variables in rows and samples in columns.  
+Look at the data.frames biefly, maybe plot some gene expression data
+if there is time. 
+</div>
+
+## Interlude: Data processing
+
+* These data have alredy been QC'd and processed.
+* When dealing with raw data extensive QC is required for genotyping and expression data.
+* Gene expression data also needs to be normalised across samples.
+* Can be a lengthy process but is crucial for the quality of results.
+
+## PCA 101
+
+* Compute principle components of gene expression data.
+* Create a plot of the variances for the first 10 PCs.
+* How much of the total variance is explained by the first 10 PCs?
+
+<div class="notes">
+
+```r
+pca <- prcomp(t(expr[-1]), center=TRUE, scale = TRUE)
+pc <- pca$x
+```
+
+```r
+plot(pca, npcs=10)
+```
+
+Since the data were scaled prior to the PCA the total variance is the same as the 
+number of probes. The variance accounted for by each component is available through 
+the `sdev` field of the `prcomp` return value.
+
+```r
+sum(pca$sdev[1:10]^2)/nrow(expr)
+```
+</div>
+
+## Model fitting with PCA covariates
+
+* Model the expression measured by probe 3710685 as a function of SNP 
+  rs4077515 and the first 10 PCs.
+* Create a plot of gene expression by genotype with the effect of the PCs
+  removed.
+* How does this compare to the simple linear regression model for
+  this SNP/gene pair.  
+
+<div class="notes">
+To make our life a bit easier we collect all the relevant data into a single data.frame.
+
+```r
+data <- data.frame(probe=unlist(subset(expr, Probe=="3710685")[-1]), 
+        rs4077515=unlist(subset(geno, id=="rs4077515")[-1]), pc[,1:10])
+```        
+
+```r
+pcFit <- lm(probe ~ ., data=data)
+summary(pcFit)
+```
+
+Simple model:
+
+```r
+simpleFit <- lm(probe ~ rs4077515, data=data)
+summary(simpleFit)
+```
+
+Plotting
+
+```r
+library(ggplot2)
+corrected <- data$probe - rowSums(coef(pcFit)[-(1:2)]*data[, 3:12])
+corrected <- data.frame(expression=corrected, genotype=factor(data$rs4077515))
+ggplot(corrected, aes(genotype, expression)) +
+        geom_jitter(colour="darkgrey", position=position_jitter(width=0.25)) +
+        geom_boxplot(outlier.size=0, alpha=0.6, fill="grey") + theme_bw()
+```
+</div>
 
 # Large scale eQTL analysis
 
