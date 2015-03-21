@@ -51,7 +51,7 @@ ggplot(dataLong, aes(genotype, expression)) +
 
 ## Estimating SNP effects
 To obtain estimates of the genotypic contribution to gene expression
-we fit a simple linear regression model of the form $E_i = \beta_0 + \beta G_i + \vareps$,
+we fit a simple linear regression model of the form $E_i = \beta_0 + \beta G_i + \varepsilon$,
 where $E_i$ is the vector of gene expression values for gene $i$ and 
 $G_i$ is the genotype vector for SNP $i$. We are interested in the estimate for
 $\beta$ which indicates the change in gene expression for each copy of the second
