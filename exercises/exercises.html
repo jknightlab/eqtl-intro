@@ -20,10 +20,107 @@ Peter Humburg
 </h2>
 </header>
 <div id="content">
+<nav id="TOC">
+<ul>
+<li><a href="#prerequisites">Prerequisites</a><ul>
+<li><a href="#using-the-docker-image">Using the Docker image</a></li>
+<li><a href="#included-data">Included data</a></li>
+</ul></li>
+<li><a href="#associations-between-snps-and-gene-expression---a-simple-example">Associations between SNPs and gene expression - A simple example</a><ul>
+<li><a href="#questions">Questions</a></li>
+</ul></li>
+<li><a href="#associations-between-snps-and-gene-expression---confounding-variation">Associations between SNPs and gene expression - Confounding variation</a><ul>
+<li><a href="#questions-1">Questions</a></li>
+</ul></li>
+<li><a href="#using-principle-components-as-covariates">Using principle components as covariates</a><ul>
+<li><a href="#exercises">Exercises</a></li>
+</ul></li>
+</ul>
+</nav>
 <div id="main_content">
+<h1 id="prerequisites" class="unnumbered">Prerequisites</h1>
+<h2 id="using-the-docker-image">Using the Docker image</h2>
+<p>All exercises assume the use of the docker container <code>humburg/eqtl-intro</code> to provide the required data as well as the necessary software environment. This requires a working Docker installation<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. The docker image can be obtained from DockerHub via</p>
+<pre class="sh"><code>docker pull humburg/eqtl-intro</code></pre>
+<p>To run the RStudio server run</p>
+<pre class="sh"><code>docker run -p 8787:8787 humburg/eqtl-intro</code></pre>
+<p>RStudio is then accessible at <code>localhost:8787</code> or, when using <a href="http://boot2docker.io/">boot2docker</a> via the IP address indicated by <code>boot2docker ip</code>.</p>
+<h2 id="included-data">Included data</h2>
+<p>The image includes a number of simulated and real data sets used for these exercises. All data are provided as tab-separated files (typically with a column header). Files are located in directories below <code>/data</code>. All simulated data are located in <code>/data/simulated</code>. Real data can be found in <code>/data/genotyping</code>, <code>/data/expression</code> and <code>/data/annotation</code> for genotyping, gene expression and annotation data respectively.</p>
+<h1 id="associations-between-snps-and-gene-expression---a-simple-example" class="exercise">Associations between SNPs and gene expression - A simple example</h1>
+<p>We will investigate the properties of a small simulated data set consisting of genotypes for 10 SNPs and expression values for 10 genes from 300 individuals. Genotypes are encoded as 0, 1, and 2, indicating the number of copies of the second allele.</p>
+<p>Genotypes are located in the file <code>/data/simulated/sim_genotypes.tab</code> and gene expression values can be found in <code>/data/simulated/expression1.tab</code>.</p>
+<h2 id="questions">Questions</h2>
+<ol>
+<li>What are the minor allele frequencies of the different SNPs in the data set?</li>
+<li>Consider pairs of SNPs and genes such that <em>snp_1</em> is paired with <em>gene_1</em>, <em>snp_2</em> with <em>gene_2</em> and so on.
+<ol type="i">
+<li>Create a plot showing gene expression by genotype for one of the SNP/gene pairs.</li>
+<li>For each SNP/gene pair fit a linear regression model to obtain an estimate of the genotype effect on gene expression and compute the 95% confidence intervals for the ten SNP effects.</li>
+<li>Create a plot to compare the estimated coefficients and their 95% confidence intervals to 1.5, the true value of <img style="vertical-align:middle" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAASCAIAAAACF7MiAAAABmJLR0QA/wD/AP+gvaeTAAABV0lEQVQokXWSL8vCUBSHzy6vE9w07jtoFCeKQdE0o82PYBh+gLWVpYXB9BNYzGbDirBgMyzMoFhkMLlBEffnGDbc5RV/7dzfw+HhcDlEhK88n88oigRBIIT8/evSNDVN83q9xnF8u91UVQVkkiSJYRiu62bjarUaj8eEXWDbtizL7XY7G0VRpJQWxOPxOB6Po9Ho87Lb7er1euGx2Wy63W4cx5fLhRDi+/7hcLAsq/CYz+eU0uVy2el0er3eYDDY7/eIWBCz2Yy1XiwWk8kEEXOPIAgEQWCtm83m6XQ6n885sd1uW60WS3AclyRJGIY54bquoigs4ThOtVptNBo54XlepVJhr+44znA45HmeAEAYhuVy2bbtT63ruiRJmqYBAIeI6/U6TVPf94MgAID7/d7v96fTaalUAgD4XAJ/hGRra7Xa9x/IQiiloij+qnOP1+vF8/wv4g2q6Otfm2gnKQAAAABJRU5ErkJggg==" alt="\beta" title="\beta" />. What do you observe?</li>
+</ol></li>
+</ol>
+<h1 id="associations-between-snps-and-gene-expression---confounding-variation" class="exercise">Associations between SNPs and gene expression - Confounding variation</h1>
+<p>In this example we investigate the effect that the presence of other sources of variation has on our ability to detect the genotypic effects of interest.</p>
+<p>This exercise uses the same simulated genotypes as the previous one (<code>/data/simulated/sim_genotypes.tab</code>). The gene expression data is located in <code>/data/simulated/sim_expression2.tab</code>. The later parts of the exercise also requires a number of covariates located in <code>/data/simulated/sim_covariates.tab</code></p>
+<h2 id="questions-1">Questions</h2>
+<ol>
+<li>Create a plot of gene expression by genotype for one of the SNP/gene pairs. How does this compare to the plot from the previous exercise?</li>
+<li>Carry out a simple eQTL analysis for the matched SNP/gene pairs.
+<ol type="i">
+<li>For each SNP/gene pair fit a linear regression model to obtain an estimate of the genotype effect on gene expression and compute the 95% confidence intervals for the ten SNP effects.</li>
+<li>Create a plot that compares the estimates of effect size obtained above to the true value of 1.5. How does this compare to the results from the previous example?</li>
+</ol></li>
+<li>Using the additional variables contained in the covariates file, fit another set of models.
+<ol type="i">
+<li>For each gene fit a model that incorporates the corresponding SNP as well as the first five variables from the covariates file.</li>
+<li>Create the same plot of effect size estimates as before for this extended model. How do they compare?</li>
+<li>Repeat the above analysis with all covariates included in the model.</li>
+<li>Create a plot of gene expression by genotype illustrating the effect.</li>
+</ol></li>
+</ol>
+<h1 id="using-principle-components-as-covariates" class="exercise">Using principle components as covariates</h1>
+<p>We will explore the use of principle components as covariates in linear models of gene expression to account for unknown sources of variation.</p>
+<p>Gene expression data are located in <em>/data/monocytes/expression/ifn_expression.tab.gz</em> Genotypes are located in <em>/data/genotypes/genotypes.tab.gz</em> (provided during course)</p>
+<p>These data are part of the dataset published in Fairfax, Humburg, Makino, et al. Innate Immune Activity Conditions the Effect of Regulatory Variants upon Monocyte Gene Expression. Science (2014). doi:<a href="http://doi.org/10.1126/science.1246949">10.1126/science.1246949</a>.</p>
+<p>In addition to the primary datasets a few files with annotations for SNPs and genes is available in the <em>/data/monocytes/annotation</em> directory:</p>
+<dl>
+<dt>snp_loc_hg19.tab</dt>
+<dd>Genomic location of SNPs.
+</dd>
+<dt>probe_loc_hg19.tab</dt>
+<dd>Genomic location of gene expression probes.
+</dd>
+<dt>probeAnnotations.tab</dt>
+<dd>Further annotations for gene expression probes, including associated gene symbols.
+</dd>
+</dl>
+<p>All coordinates refer to the hg19 reference build.</p>
+<h2 id="exercises">Exercises</h2>
+<ol>
+<li>Determine the dimensions of this dataset. How many genes, SNPs and samples are included?</li>
+<li>Principle components of the expression data.
+<ol type="i">
+<li>Compute the principle components.</li>
+<li>Create a plot of the variances for the first 20 PCs.</li>
+<li>How much of the total variance is explained by the first 20 PCs?</li>
+</ol></li>
+<li>Using PCs in eQTL analysis.
+<ol type="i">
+<li>Model the expression measured by probe 3710685 as a function of SNP rs4077515 and the first 10 PCs.</li>
+<li>Create a plot of gene expression by genotype with the effect of the PCs removed.</li>
+<li>How does this compare to the simple linear regression model for this SNP/gene pair.</li>
+</ol></li>
+</ol>
 <div class="references">
 
 </div>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>installation instructions are available from the <a href="https://docs.docker.com/installation/">Docker website</a>.<a href="#fnref1">↩</a></p></li>
+</ol>
+</section>
 </div>
 </div>
 </body>
