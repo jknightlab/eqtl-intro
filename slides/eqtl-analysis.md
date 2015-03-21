@@ -555,8 +555,16 @@ How does that help us?
 * The major sources of variation in gene expression data are (usually) not genetic.
 * Can remove non-genetic sources of variation by including the3 first $k$ PCs into
   the model.
-* But need to look out for PCs that *do* correlate with genotype.
 
+## Practical considerations
+
+* Not obvious how many PCs to include in model.
+* Need to look out for PCs that *do* correlate with genotype.
+
+. . .
+
+* Beware of data formatting issues.
+* Data should be centred and scaled prior to PCA.
 
 # *Hands-on* : Dealing with real data
 
