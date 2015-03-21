@@ -1,0 +1,47 @@
+#Solution for *Using principle components as covariates* {.solution}
+We start by loading all relevant data.
+
+```{r loadData}
+geno <- readr::read_tsv(file("/data/genotypes/genotypes.tab.gz"))
+expr <- readr::read_tsv(file("/data/monocytes/expression/ifn_expression.tab.gz"))
+
+probePos <- readr::read_tsv("/data/monocytes/annotation/probe_loc_hg19.tab")
+snpPos <- readr::read_tsv("/data/monocytes/annotation/snp_loc_hg19.tab")
+probeAnno <- readr::read_tsv("/data/monocytes/annotation/probeAnnotations.tab")
+```
+
+## Size of dataset
+
+```{r dataSize}
+dim(expr)
+dim(geno)
+```
+
+Note that these files have samples in columns and variables in rows. 
+So the data consists of `r ncol(expr)` samples with measurements for `r nrow(expr)` 
+gene expression probes and `r nrow(geno)` SNPs.
+  
+## Computing principle components
+R provides the function `prcomp` for this task. Like most standard R functions
+it expects data to be laid out with variables in columns and samples in rows.
+We therefore have to transpose the data, compute and extract the principle
+components (stored in the `x` element of the return value) and transpose
+the result again.
+
+```{r prcomp}
+pca <- prcomp(t(expr[-1]), center=TRUE, scale = TRUE)
+pc <- t(pca$x)
+```
+Plotting the variances for the first 20 PCs is then straightforward.
+
+```{r pcPlot}
+plot(pca, npcs=20)
+```
+
+Since the data were scaled prior to the PCA the total variance is the same as
+the number of probes. The variance accounted for by each component is available
+through the `sdev` field of the `prcomp` return value.
+
+```{r varProp}
+sum(pca$sdev[1:20]^2)/nrow(expr)
+```
