@@ -34,7 +34,7 @@ pc <- pca$x
 Plotting the variances for the first 20 PCs is then straightforward.
 
 ```{r pcPlot}
-plot(pca, npcs=20)
+plot(pca, npcs=10)
 ```
 
 Since the data were scaled prior to the PCA the total variance is the same as
@@ -42,7 +42,7 @@ the number of probes. The variance accounted for by each component is available
 through the `sdev` field of the `prcomp` return value.
 
 ```{r varProp}
-sum(pca$sdev[1:20]^2)/nrow(expr)
+sum(pca$sdev[1:10]^2)/nrow(expr)
 ```
 
 ## Fitting a model with PC covariates
