@@ -619,12 +619,36 @@ May also want to try including all 20 variables.
 <h1>Use the data</h1>
 <ul>
 <li>We don’t have to know what the (non-genetic) sources of variation are as long as we can account for them.</li>
-<li>Principle component analysis (PCA) can identify major directions of variation from the data.</li>
+<li>Dimensionality reduction techniques can identify major directions of variation from the data.</li>
 </ul>
 </section><section id="principle-component-analysis" class="slide level2">
 <h1>Principle component analysis</h1>
+<ul>
+<li>Transforms the data into set of (linearly) uncorrelated variables (principle components).</li>
+<li>Principle components (PCs) are ordered by the proportion of variance they explain.</li>
+<li>Can reduce the dimensionality of a dataset by considering only the first <span class="math">\(k\)</span> PCs.</li>
+</ul>
+<p>How does that help us?</p>
+</section><section id="accounting-for-unknown-sources-of-variation" class="slide level2">
+<h1>Accounting for unknown sources of variation</h1>
+<ul>
+<li>The major sources of variation in gene expression data are (usually) not genetic.</li>
+<li>Can remove non-genetic sources of variation by including the3 first <span class="math">\(k\)</span> PCs into the model.</li>
+<li>But need to look out for PCs that <em>do</em> correlate with genotype.</li>
+</ul>
 </section></section>
-<section><section id="hands-on-dealing-with-real-data" class="titleslide slide level1"><h1><em>Hands-on</em> : Dealing with real data</h1></section></section>
+<section><section id="hands-on-dealing-with-real-data" class="titleslide slide level1"><h1><em>Hands-on</em> : Dealing with real data</h1></section><section id="data-2" class="slide level2">
+<h1>Data</h1>
+<dl>
+<dt>Gene expression</dt>
+<dd><em>/data/monocytes/expression/ifn_expression.tab.gz</em>
+</dd>
+<dt>Genotypes</dt>
+<dd><em>/data/genotypes/genotypes.tab.gz</em><br /> (downloaded earlier)
+</dd>
+</dl>
+<p>Subset of data published in<br />Fairfax, Humburg, Makino, <em>et al.</em><br /><strong>Innate Immune Activity Conditions the Effect of Regulatory Variants upon Monocyte Gene Expression</strong>. Science (2014). doi:<a href="http://doi.org/10.1126/science.1246949">10.1126/science.1246949</a>.</p>
+</section></section>
 <section><section id="hands-on-scaling-it-up" class="titleslide slide level1"><h1><em>Hands-on</em> : Scaling it up</h1></section></section>
 <section><section id="interpreting-results" class="titleslide slide level1 unnumbered"><h1>Interpreting results</h1></section></section>
     </div>
