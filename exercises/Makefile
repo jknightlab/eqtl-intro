@@ -1,5 +1,6 @@
 WD:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-RSCRIPT=docker run -v  $(WD):/exercises -w /exercises humburg/eqtl-intro Rscript
+RSCRIPT=docker run -v  $(WD):/exercises -v $(GENOTYPE_DIR):/data/genotypes \
+        -w /exercises humburg/eqtl-intro Rscript
 PANDOC=docker run -v  $(WD):/exercises -v $(TOP_DIR)include/:/exercises/include \
        -w /exercises humburg/eqtl-intro pandoc
 
@@ -12,8 +13,8 @@ PANDOC_HTML = -t html5 --self-contained --webtex --template=include/report.html5
             -c include/buttondown.css
 
 
-EXERCISES=questions/simple_eqtl.md questions/covar_eqtl.md
-SOLUTIONS=solutions/simple_eqtl.Rmd solutions/covar_eqtl.Rmd
+EXERCISES=questions/simple_eqtl.md questions/covar_eqtl.md questions/pca_eqtl.md
+SOLUTIONS=solutions/simple_eqtl.Rmd solutions/covar_eqtl.Rmd solutions//pca_eqtl.Rmd
 
 all: exercises.md exercises_and_solutions.md pdf html
 exercises.md: exercises.Rmd $(EXERCISES)

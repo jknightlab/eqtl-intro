@@ -18,19 +18,18 @@ dim(geno)
 ```
 
 Note that these files have samples in columns and variables in rows. 
-So the data consists of `r ncol(expr)` samples with measurements for `r nrow(expr)` 
+So the data consists of `r ncol(expr) - 1` samples with measurements for `r nrow(expr)` 
 gene expression probes and `r nrow(geno)` SNPs.
   
 ## Computing principle components
 R provides the function `prcomp` for this task. Like most standard R functions
 it expects data to be laid out with variables in columns and samples in rows.
 We therefore have to transpose the data, compute and extract the principle
-components (stored in the `x` element of the return value) and transpose
-the result again.
+components (stored in the `x` element of the return value).
 
 ```{r prcomp}
 pca <- prcomp(t(expr[-1]), center=TRUE, scale = TRUE)
-pc <- t(pca$x)
+pc <- pca$x
 ```
 Plotting the variances for the first 20 PCs is then straightforward.
 
@@ -44,4 +43,39 @@ through the `sdev` field of the `prcomp` return value.
 
 ```{r varProp}
 sum(pca$sdev[1:20]^2)/nrow(expr)
+```
+
+## Fitting a model with PC covariates
+To make our life a bit easier we collect all the relevant data into a single *data.frame*.
+
+```{r preparePCfit}
+data <- data.frame(probe=unlist(subset(expr, Probe=="3710685")[-1]), 
+		rs4077515=unlist(subset(geno, id=="rs4077515")[-1]), pc[,1:10])
+```
+
+Now we fit the model including the PCs:
+
+```{r fitPC}
+pcFit <- lm(probe ~ ., data=data)
+summary(pcFit)
+```
+
+For comparison we also fit the simple model:
+
+```{r fitSimple}
+simpleFit <- lm(probe ~ rs4077515, data=data)
+summary(simpleFit)
+```
+
+## Visualising SNP effect on gene expression
+As in the previous set of exercises we plot the gene expression with the
+effect of the non-genetic covariates removed.
+
+```{r rs4077515Plot}
+library(ggplot2)
+corrected <- data$probe - rowSums(coef(pcFit)[-(1:2)]*data[, 3:12])
+corrected <- data.frame(expression=corrected, genotype=factor(data$rs4077515))
+ggplot(corrected, aes(genotype, expression)) +
+		geom_jitter(colour="darkgrey", position=position_jitter(width=0.25)) +
+		geom_boxplot(outlier.size=0, alpha=0.6, fill="grey") + theme_bw()
 ```

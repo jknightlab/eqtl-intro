@@ -433,3 +433,210 @@ ggplot(combLong, aes(genotype, expression)) +
 ```
 
 ![plot of chunk covar_plot_corrected](figure/covar_plot_corrected-1.png) 
+
+
+# Using principle components as covariates {.exercise}
+We will explore the use of principle components as 
+covariates in linear models of gene expression to account
+for unknown sources of variation.
+
+Gene expression data are located in */data/monocytes/expression/ifn_expression.tab.gz*
+Genotypes are located in */data/genotypes/genotypes.tab.gz* (provided during course)
+
+These data are part of the dataset published in
+Fairfax, Humburg, Makino, et al.
+Innate Immune Activity Conditions the Effect of Regulatory Variants upon 
+Monocyte Gene Expression. Science (2014).
+doi:[10.1126/science.1246949](http://doi.org/10.1126/science.1246949). 
+
+In addition to the primary datasets a few files with annotations for SNPs and
+genes is available in the */data/monocytes/annotation* directory:
+
+snp_loc_hg19.tab
+  : Genomic location of SNPs.
+
+probe_loc_hg19.tab
+  : Genomic location of gene expression probes.
+  
+probeAnnotations.tab
+  : Further annotations for gene expression probes, including associated gene symbols.
+  
+All coordinates refer to the hg19 reference build.
+
+## Exercises
+
+#. Determine the dimensions of this dataset. How many genes, SNPs and samples are included?
+#. Principle components of the expression data.
+    i. Compute the principle components.
+    ii. Create a plot of the variances for the first 20 PCs.
+    iii. How much of the total variance is explained by the first 20 PCs?
+#. Using PCs in eQTL analysis.
+    i. Model the expression measured by probe 3710685 as a function of SNP 
+       rs4077515 and the first 10 PCs.
+    ii. Create a plot of gene expression by genotype with the effect of the PCs
+       removed.
+    iii. How does this compare to the simple linear regression model for
+       this SNP/gene pair.  
+
+
+#Solution for *Using principle components as covariates* {.solution}
+We start by loading all relevant data.
+
+
+```r
+geno <- readr::read_tsv(file("/data/genotypes/genotypes.tab.gz"))
+expr <- readr::read_tsv(file("/data/monocytes/expression/ifn_expression.tab.gz"))
+
+probePos <- readr::read_tsv("/data/monocytes/annotation/probe_loc_hg19.tab")
+snpPos <- readr::read_tsv("/data/monocytes/annotation/snp_loc_hg19.tab")
+probeAnno <- readr::read_tsv("/data/monocytes/annotation/probeAnnotations.tab")
+```
+
+## Size of dataset
+
+
+```r
+dim(expr)
+```
+
+```
+## [1] 382 368
+```
+
+```r
+dim(geno)
+```
+
+```
+## [1] 28307   368
+```
+
+Note that these files have samples in columns and variables in rows. 
+So the data consists of 367 samples with measurements for 382 
+gene expression probes and 28307 SNPs.
+  
+## Computing principle components
+R provides the function `prcomp` for this task. Like most standard R functions
+it expects data to be laid out with variables in columns and samples in rows.
+We therefore have to transpose the data, compute and extract the principle
+components (stored in the `x` element of the return value).
+
+
+```r
+pca <- prcomp(t(expr[-1]), center=TRUE, scale = TRUE)
+pc <- pca$x
+```
+Plotting the variances for the first 20 PCs is then straightforward.
+
+
+```r
+plot(pca, npcs=20)
+```
+
+![plot of chunk pcPlot](figure/pcPlot-1.png) 
+
+Since the data were scaled prior to the PCA the total variance is the same as
+the number of probes. The variance accounted for by each component is available
+through the `sdev` field of the `prcomp` return value.
+
+
+```r
+sum(pca$sdev[1:20]^2)/nrow(expr)
+```
+
+```
+## [1] 0.5525595
+```
+
+## Fitting a model with PC covariates
+To make our life a bit easier we collect all the relevant data into a single *data.frame*.
+
+
+```r
+data <- data.frame(probe=unlist(subset(expr, Probe=="3710685")[-1]), 
+		rs4077515=unlist(subset(geno, id=="rs4077515")[-1]), pc[,1:10])
+```
+
+Now we fit the model including the PCs:
+
+
+```r
+pcFit <- lm(probe ~ ., data=data)
+summary(pcFit)
+```
+
+```
+## 
+## Call:
+## lm(formula = probe ~ ., data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.60608 -0.11507 -0.00226  0.11512  0.50406 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 11.1795963  0.0144326 774.605  < 2e-16 ***
+## rs4077515    0.2007593  0.0132594  15.141  < 2e-16 ***
+## PC1         -0.0056932  0.0014343  -3.969 8.72e-05 ***
+## PC2         -0.0033494  0.0015755  -2.126 0.034199 *  
+## PC3          0.0360871  0.0019708  18.311  < 2e-16 ***
+## PC4         -0.0008474  0.0023431  -0.362 0.717816    
+## PC5          0.0240226  0.0024796   9.688  < 2e-16 ***
+## PC6          0.0121790  0.0027809   4.380 1.57e-05 ***
+## PC7          0.0030278  0.0031813   0.952 0.341884    
+## PC8         -0.0115654  0.0033857  -3.416 0.000709 ***
+## PC9         -0.0096879  0.0034202  -2.833 0.004881 ** 
+## PC10         0.0164822  0.0036735   4.487 9.78e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.1777 on 355 degrees of freedom
+## Multiple R-squared:  0.6834,	Adjusted R-squared:  0.6736 
+## F-statistic: 69.67 on 11 and 355 DF,  p-value: < 2.2e-16
+```
+
+For comparison we also fit the simple model:
+
+
+```r
+simpleFit <- lm(probe ~ rs4077515, data=data)
+summary(simpleFit)
+```
+
+```
+## 
+## Call:
+## lm(formula = probe ~ rs4077515, data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.80426 -0.17877  0.00095  0.19813  0.84187 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 11.17425    0.02190  510.32   <2e-16 ***
+## rs4077515    0.20717    0.01991   10.41   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.2736 on 365 degrees of freedom
+## Multiple R-squared:  0.2288,	Adjusted R-squared:  0.2267 
+## F-statistic: 108.3 on 1 and 365 DF,  p-value: < 2.2e-16
+```
+
+## Visualising SNP effect on gene expression
+As in the previous set of exercises we plot the gene expression with the
+effect of the non-genetic covariates removed.
+
+
+```r
+library(ggplot2)
+corrected <- data$probe - rowSums(coef(pcFit)[-(1:2)]*data[, 3:12])
+corrected <- data.frame(expression=corrected, genotype=factor(data$rs4077515))
+ggplot(corrected, aes(genotype, expression)) +
+		geom_jitter(colour="darkgrey", position=position_jitter(width=0.25)) +
+		geom_boxplot(outlier.size=0, alpha=0.6, fill="grey") + theme_bw()
+```
+
+![plot of chunk rs4077515Plot](figure/rs4077515Plot-1.png) 

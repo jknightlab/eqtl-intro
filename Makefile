@@ -1,4 +1,5 @@
 export TOP_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+export GENOTYPE_DIR = $(HOME)/eqtl_course/
 export UNAME=humburg
 export GNAME=$(UNAME)
 BUILD_DIR=docker
