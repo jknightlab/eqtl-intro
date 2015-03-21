@@ -539,12 +539,40 @@ downstream analysis.
 
 * We don't have to know what the (non-genetic) sources of variation are
   as long as we can account for them.
-* Principle component analysis (PCA) can identify major directions of variation
+* Dimensionality reduction techniques can identify major directions of variation
   from the data.
   
 ## Principle component analysis
 
+* Transforms the data into set of (linearly) uncorrelated variables (principle components).
+* Principle components (PCs) are ordered by the proportion of variance they explain.
+* Can reduce the dimensionality of a dataset by considering only the first $k$ PCs.
+
+How does that help us?
+
+## Accounting for unknown sources of variation
+
+* The major sources of variation in gene expression data are (usually) not genetic.
+* Can remove non-genetic sources of variation by including the3 first $k$ PCs into
+  the model.
+* But need to look out for PCs that *do* correlate with genotype.
+
+
 # *Hands-on* : Dealing with real data
+
+## Data
+
+Gene expression
+  : */data/monocytes/expression/ifn_expression.tab.gz*
+  
+Genotypes
+  : */data/genotypes/genotypes.tab.gz*  
+  (downloaded earlier) 
+
+Subset of data published in  
+Fairfax, Humburg, Makino, *et al.*  
+**Innate Immune Activity Conditions the Effect of Regulatory Variants upon Monocyte 
+Gene Expression**. Science (2014). doi:[ 10.1126/science.1246949](http://doi.org/10.1126/science.1246949).
 
 # *Hands-on* : Scaling it up
  
