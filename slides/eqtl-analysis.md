@@ -582,6 +582,9 @@ Fairfax, Humburg, Makino, *et al.*
 **Innate Immune Activity Conditions the Effect of Regulatory Variants upon Monocyte 
 Gene Expression**. Science (2014). doi:[ 10.1126/science.1246949](http://doi.org/10.1126/science.1246949).
 
+
+# Large scale eQTL analysis
+
 # *Hands-on* : Scaling it up
  
 # Interpreting results
