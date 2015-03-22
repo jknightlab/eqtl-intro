@@ -880,4 +880,13 @@ start to appear after addition of PCs.
 * Comparison of eQTL between different conditions (tissues, treatments, ...)
 * Other approaches to eQTL analysis (Bayesian, nonparametric)
 
+<div class="notes">
+Things that may have come up in discussion but should be mentioned
+if they didn't
 
+* Conditioning on lead SNP to identify secondary peaks.
+* How to choose the number of PCs to include in the model.
+* Point out [mePipe](https://github.com/jknightlab/mePipe) and its
+  command-line interface to Matrix-eQTL
+
+</div>
