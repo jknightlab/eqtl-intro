@@ -4,10 +4,6 @@ We start by loading all relevant data.
 ```{r loadData}
 geno <- readr::read_tsv(file("/data/genotypes/genotypes.tab.gz"))
 expr <- readr::read_tsv(file("/data/monocytes/expression/ifn_expression.tab.gz"))
-
-probePos <- readr::read_tsv("/data/monocytes/annotation/probe_loc_hg19.tab")
-snpPos <- readr::read_tsv("/data/monocytes/annotation/snp_loc_hg19.tab")
-probeAnno <- readr::read_tsv("/data/monocytes/annotation/probeAnnotations.tab")
 ```
 
 ## Size of dataset
