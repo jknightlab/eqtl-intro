@@ -18,6 +18,7 @@ ggplot(dataLong, aes(genotype, expression)) +
 		geom_boxplot(outlier.size=0, alpha=0.6, fill="grey") + 
 		facet_wrap(~snp) + theme_bw()
 ```
+
 These data show very little evidence of a SNP effect on gene expression.
 
 ## Simple linear regression
@@ -34,13 +35,14 @@ simpleCI
 ```
 
 ```{r covar_plot_simple}
-maf <- colMeans(geno)/2
+maf <- colMeans(geno[-1])/2
 estimates <- data.frame(estimate=simpleBetaHat, t(simpleCI), maf=maf)
 ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) + 
 		geom_hline(yintercept=0, linetype="longdash") + 
 		geom_errorbar(aes(ymin=lower, ymax=upper)) +
 		geom_point(aes(y=estimate))  + theme_bw()
 ```
+
 The confidence intervals obtained from this analysis are much wider than
 previously. Unlike before they frequently contain 0 and although most of them
 still contain the true value this is not always the case. Also note that the 
@@ -71,6 +73,7 @@ ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) +
 		geom_errorbar(aes(ymin=lower, ymax=upper)) +
 		geom_point(aes(y=estimate))  + theme_bw()
 ```
+
 The inclusion of the covariates leads to a tighter set of confidence intervals.
 While it remains difficult to detect any meaningful genotypic effect
 at low minor allele frequencies the estimates appear to be more reliable

@@ -3,7 +3,7 @@ title: Exercises for *Introduction to eQTL Analysis*
 author: Peter Humburg
 ---
 
-```{r setup}
+```{r setup, echo=FALSE}
 library(knitr)
 
 opts_chunk$set(dpi=300)
@@ -22,4 +22,16 @@ opts_chunk$set(dpi=300)
 ```
 
 ```{r ans2, child="solutions/covar_eqtl.Rmd", include=solution, eval=solution}
+```
+
+```{r ex3, child="questions/pca_eqtl.md"}
+```
+
+```{r ans3, child="solutions/pca_eqtl.Rmd", include=solution, eval=solution}
+```
+
+```{r ex4, child="questions/matrix_eqtl.md"}
+```
+
+```{r ans4, child="solutions/matrix_eqtl.Rmd", include=solution, eval=solution}
 ```

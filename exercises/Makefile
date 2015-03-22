@@ -1,5 +1,6 @@
 WD:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-RSCRIPT=docker run -v  $(WD):/exercises -w /exercises humburg/eqtl-intro Rscript
+RSCRIPT=docker run -v  $(WD):/exercises -v $(GENOTYPE_DIR):/data/genotypes \
+        -v $(ANALYSIS_DIR):/data/analysis -w /exercises humburg/eqtl-intro Rscript
 PANDOC=docker run -v  $(WD):/exercises -v $(TOP_DIR)include/:/exercises/include \
        -w /exercises humburg/eqtl-intro pandoc
 
@@ -12,8 +13,8 @@ PANDOC_HTML = -t html5 --self-contained --webtex --template=include/report.html5
             -c include/buttondown.css
 
 
-EXERCISES=questions/simple_eqtl.md questions/covar_eqtl.md
-SOLUTIONS=solutions/simple_eqtl.Rmd solutions/covar_eqtl.Rmd
+EXERCISES=questions/simple_eqtl.md questions/covar_eqtl.md questions/pca_eqtl.md
+SOLUTIONS=solutions/simple_eqtl.Rmd solutions/covar_eqtl.Rmd solutions//pca_eqtl.Rmd
 
 all: exercises.md exercises_and_solutions.md pdf html
 exercises.md: exercises.Rmd $(EXERCISES)
@@ -29,6 +30,10 @@ exercises_and_solutions.html: exercises_and_solutions.md ../include/buttondown.c
 exercises.pdf: exercises.md ../include/report.latex ../include/captions.tex ../include/references.bib
 	$(PANDOC) $(PANDOC_COMMON) $(PANDOC_PDF) -s exercises.md -o exercises.pdf
 	chown $(UNAME):$(GNAME) exercises.pdf
+exercises_and_solutions.pdf: exercises_and_solutions.md ../include/report.latex ../include/captions.tex ../include/references.bib
+	$(PANDOC) $(PANDOC_COMMON) $(PANDOC_PDF) -s exercises_and_solutions.md -o exercises_and_solutions.pdf
+	chown $(UNAME):$(GNAME) exercises_and_solutions.pdf
+
 
 .PHONY: pdf html all
 pdf: exercises.pdf exercises_and_solutions.pdf

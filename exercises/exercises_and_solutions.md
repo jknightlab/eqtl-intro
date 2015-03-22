@@ -4,11 +4,6 @@ author: Peter Humburg
 ---
 
 
-```r
-library(knitr)
-
-opts_chunk$set(dpi=300)
-```
 
 
 # Prerequisites {-}
@@ -142,7 +137,7 @@ ggplot(dataLong, aes(genotype, expression)) +
 
 ## Estimating SNP effects
 To obtain estimates of the genotypic contribution to gene expression
-we fit a simple linear regression model of the form $E_i = \beta_0 + \beta G_i + \vareps$,
+we fit a simple linear regression model of the form $E_i = \beta_0 + \beta G_i + \varepsilon$,
 where $E_i$ is the vector of gene expression values for gene $i$ and 
 $G_i$ is the genotype vector for SNP $i$. We are interested in the estimate for
 $\beta$ which indicates the change in gene expression for each copy of the second
@@ -258,6 +253,7 @@ ggplot(dataLong, aes(genotype, expression)) +
 ```
 
 ![plot of chunk covar_exprPlot](figure/covar_exprPlot-1.png) 
+
 These data show very little evidence of a SNP effect on gene expression.
 
 ## Simple linear regression
@@ -295,14 +291,7 @@ simpleCI
 
 
 ```r
-maf <- colMeans(geno)/2
-```
-
-```
-## Error in colMeans(geno): 'x' must be numeric
-```
-
-```r
+maf <- colMeans(geno[-1])/2
 estimates <- data.frame(estimate=simpleBetaHat, t(simpleCI), maf=maf)
 ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) + 
 		geom_hline(yintercept=0, linetype="longdash") + 
@@ -311,6 +300,7 @@ ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) +
 ```
 
 ![plot of chunk covar_plot_simple](figure/covar_plot_simple-1.png) 
+
 The confidence intervals obtained from this analysis are much wider than
 previously. Unlike before they frequently contain 0 and although most of them
 still contain the true value this is not always the case. Also note that the 
@@ -365,6 +355,7 @@ ggplot(estimates, aes(x=maf)) + geom_hline(yintercept=1.5) +
 ```
 
 ![plot of chunk covar_plot_5cv](figure/covar_plot_5cv-1.png) 
+
 The inclusion of the covariates leads to a tighter set of confidence intervals.
 While it remains difficult to detect any meaningful genotypic effect
 at low minor allele frequencies the estimates appear to be more reliable
@@ -442,3 +433,490 @@ ggplot(combLong, aes(genotype, expression)) +
 ```
 
 ![plot of chunk covar_plot_corrected](figure/covar_plot_corrected-1.png) 
+
+
+# Using principle components as covariates {.exercise}
+We will explore the use of principle components as 
+covariates in linear models of gene expression to account
+for unknown sources of variation.
+
+Gene expression data are located in */data/monocytes/expression/ifn_expression.tab.gz*
+Genotypes are located in */data/genotypes/genotypes.tab.gz* (provided during course)
+
+These data are part of the dataset published in
+Fairfax, Humburg, Makino, et al.
+Innate Immune Activity Conditions the Effect of Regulatory Variants upon 
+Monocyte Gene Expression. Science (2014).
+doi:[10.1126/science.1246949](http://doi.org/10.1126/science.1246949). 
+
+## Exercises
+
+#. Determine the dimensions of this dataset. How many genes, SNPs and samples are included?
+#. Principle components of the expression data.
+    i. Compute the principle components.
+    ii. Create a plot of the variances for the first 10 PCs.
+    iii. How much of the total variance is explained by the first 10 PCs?
+#. Using PCs in eQTL analysis.
+    i. Model the expression measured by probe 3710685 as a function of SNP 
+       rs4077515 and the first 10 PCs.
+    ii. Create a plot of gene expression by genotype with the effect of the PCs
+       removed.
+    iii. How does this compare to the simple linear regression model for
+       this SNP/gene pair.  
+
+
+#Solution for *Using principle components as covariates* {.solution}
+We start by loading all relevant data.
+
+
+```r
+geno <- readr::read_tsv(file("/data/genotypes/genotypes.tab.gz"))
+expr <- readr::read_tsv(file("/data/monocytes/expression/ifn_expression.tab.gz"))
+```
+
+## Size of dataset
+
+
+```r
+dim(expr)
+```
+
+```
+## [1] 382 368
+```
+
+```r
+dim(geno)
+```
+
+```
+## [1] 28307   368
+```
+
+Note that these files have samples in columns and variables in rows. 
+So the data consists of 367 samples with measurements for 382 
+gene expression probes and 28307 SNPs.
+  
+## Computing principle components
+R provides the function `prcomp` for this task. Like most standard R functions
+it expects data to be laid out with variables in columns and samples in rows.
+We therefore have to transpose the data, compute and extract the principle
+components (stored in the `x` element of the return value).
+
+
+```r
+pca <- prcomp(t(expr[-1]), center=TRUE, scale = TRUE)
+pc <- pca$x
+```
+Plotting the variances for the first 20 PCs is then straightforward.
+
+
+```r
+plot(pca, npcs=10)
+```
+
+![plot of chunk pcPlot](figure/pcPlot-1.png) 
+
+Since the data were scaled prior to the PCA the total variance is the same as
+the number of probes. The variance accounted for by each component is available
+through the `sdev` field of the `prcomp` return value.
+
+
+```r
+sum(pca$sdev[1:10]^2)/nrow(expr)
+```
+
+```
+## [1] 0.4464829
+```
+
+## Fitting a model with PC covariates
+To make our life a bit easier we collect all the relevant data into a single *data.frame*.
+
+
+```r
+data <- data.frame(probe=unlist(subset(expr, Probe=="3710685")[-1]), 
+		rs4077515=unlist(subset(geno, id=="rs4077515")[-1]), pc[,1:10])
+```
+
+Now we fit the model including the PCs:
+
+
+```r
+pcFit <- lm(probe ~ ., data=data)
+summary(pcFit)
+```
+
+```
+## 
+## Call:
+## lm(formula = probe ~ ., data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.60608 -0.11507 -0.00226  0.11512  0.50406 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 11.1795963  0.0144326 774.605  < 2e-16 ***
+## rs4077515    0.2007593  0.0132594  15.141  < 2e-16 ***
+## PC1         -0.0056932  0.0014343  -3.969 8.72e-05 ***
+## PC2         -0.0033494  0.0015755  -2.126 0.034199 *  
+## PC3          0.0360871  0.0019708  18.311  < 2e-16 ***
+## PC4         -0.0008474  0.0023431  -0.362 0.717816    
+## PC5          0.0240226  0.0024796   9.688  < 2e-16 ***
+## PC6          0.0121790  0.0027809   4.380 1.57e-05 ***
+## PC7          0.0030278  0.0031813   0.952 0.341884    
+## PC8         -0.0115654  0.0033857  -3.416 0.000709 ***
+## PC9         -0.0096879  0.0034202  -2.833 0.004881 ** 
+## PC10         0.0164822  0.0036735   4.487 9.78e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.1777 on 355 degrees of freedom
+## Multiple R-squared:  0.6834,	Adjusted R-squared:  0.6736 
+## F-statistic: 69.67 on 11 and 355 DF,  p-value: < 2.2e-16
+```
+
+For comparison we also fit the simple model:
+
+
+```r
+simpleFit <- lm(probe ~ rs4077515, data=data)
+summary(simpleFit)
+```
+
+```
+## 
+## Call:
+## lm(formula = probe ~ rs4077515, data = data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.80426 -0.17877  0.00095  0.19813  0.84187 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 11.17425    0.02190  510.32   <2e-16 ***
+## rs4077515    0.20717    0.01991   10.41   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.2736 on 365 degrees of freedom
+## Multiple R-squared:  0.2288,	Adjusted R-squared:  0.2267 
+## F-statistic: 108.3 on 1 and 365 DF,  p-value: < 2.2e-16
+```
+
+## Visualising SNP effect on gene expression
+As in the previous set of exercises we plot the gene expression with the
+effect of the non-genetic covariates removed.
+
+
+```r
+library(ggplot2)
+corrected <- data$probe - rowSums(coef(pcFit)[-(1:2)]*data[, 3:12])
+corrected <- data.frame(expression=corrected, genotype=factor(data$rs4077515))
+ggplot(corrected, aes(genotype, expression)) +
+		geom_jitter(colour="darkgrey", position=position_jitter(width=0.25)) +
+		geom_boxplot(outlier.size=0, alpha=0.6, fill="grey") + theme_bw()
+```
+
+![plot of chunk rs4077515Plot](figure/rs4077515Plot-1.png) 
+
+
+# Genome-wide eQTL analysis {.exercise}
+
+In this set of exercises we'll use Matrix-eQTL to conduct a larger scale 
+scan for SNP/gene interactions. To reduce the computing time required
+the data has been restricted to chromosome 9.
+
+Gene expression data are located in */data/monocytes/expression/ifn_expression.tab.gz*
+Genotypes are located in */data/genotypes/genotypes.tab.gz* (provided during course)
+
+These data are part of the dataset published in
+Fairfax, Humburg, Makino, et al.
+Innate Immune Activity Conditions the Effect of Regulatory Variants upon 
+Monocyte Gene Expression. Science (2014).
+doi:[10.1126/science.1246949](http://doi.org/10.1126/science.1246949). 
+
+In addition to the primary datasets a few files with annotations for SNPs and
+genes is available in the */data/monocytes/annotation* directory:
+
+snp_loc_hg19.tab
+  : Genomic location of SNPs.
+
+probe_loc_hg19.tab
+  : Genomic location of gene expression probes.
+  
+probeAnnotations.tab
+  : Further annotations for gene expression probes, including associated gene symbols.
+  
+All coordinates refer to the hg19 reference build.
+
+## Exercises
+
+#. Use Matrix-eQTL to carry out a *cis*/*trans* eQTL analysis. 
+   i. Use a 1MB window around probes as local association region and a 
+      p-value threshold of $10^{-3}$ and $10^{-5}$ for $cis$ and $trans$ associations 
+      respectively.
+   ii. Repeat the analysis with 10 PCs included as covariates. How do the numbers of
+      reported *cis* and *trans* associations change?
+   iii. Replace the Probe IDs in the Matrix-eQTL results with the corresponding
+      gene names.
+   iv. Find the results for SNP rs4077151 and compare them to the result from the previous 
+      exercise.
+
+   
+
+
+# Solution for *Genome-wide eQTL analysis* {.solution}
+We start by loading the data as usual. Matrix-eQTL requires the use of
+a specific data structure to store the gene expression and genotyping
+data. This enables Matrix-eQTL to read the data in chunks rather than 
+loading it into memory in its entirety (which may not be possible).
+
+We also load the files containing the genomic coordinates of the probes
+and SNPs as well as further annotations for later reference.
+
+
+```r
+library(MatrixEQTL)
+snps <- SlicedData$new()
+snps$LoadFile("/data/genotypes/genotypes.tab.gz")
+```
+
+```
+## Warning in readLines(con = fid, n = max(fileSkipRows, 1L), ok = TRUE, warn
+## = TRUE): seek on a gzfile connection returned an internal error
+```
+
+```
+## Rows read:  1,000 
+## Rows read:  2,000 
+## Rows read:  3,000 
+## Rows read:  4,000 
+## Rows read:  5,000 
+## Rows read:  6,000 
+## Rows read:  7,000 
+## Rows read:  8,000 
+## Rows read:  9,000 
+## Rows read:  10,000 
+## Rows read:  11,000 
+## Rows read:  12,000 
+## Rows read:  13,000 
+## Rows read:  14,000 
+## Rows read:  15,000 
+## Rows read:  16,000 
+## Rows read:  17,000 
+## Rows read:  18,000 
+## Rows read:  19,000 
+## Rows read:  20,000 
+## Rows read:  21,000 
+## Rows read:  22,000 
+## Rows read:  23,000 
+## Rows read:  24,000 
+## Rows read:  25,000 
+## Rows read:  26,000 
+## Rows read:  27,000 
+## Rows read:  28,000 
+## Rows read:  28307  done.
+```
+
+```r
+genes <- SlicedData$new()
+genes$LoadFile("/data//monocytes/expression/ifn_expression.tab.gz")
+```
+
+```
+## Warning in readLines(con = fid, n = max(fileSkipRows, 1L), ok = TRUE, warn
+## = TRUE): seek on a gzfile connection returned an internal error
+```
+
+```
+## Rows read:  382  done.
+```
+
+```r
+probePos <- readr::read_tsv("/data/monocytes/annotation/probe_loc_hg19.tab")
+snpPos <- readr::read_tsv("/data/monocytes/annotation/snp_loc_hg19.tab")
+probeAnno <- readr::read_tsv("/data/monocytes/annotation/probeAnnotations.tab")
+```
+
+## Running Matrix-eQTL
+Matrix-eQTL is somewhat pedantic about the class of the objects storing
+the genomic locations. So we need to remove additional class information
+attached to them by *readr*.
+
+
+```r
+chr9.eQTL <- Matrix_eQTL_main(snps, genes,
+		output_file_name="/data/analysis/ifn_chr9_eQTL.trans", 
+		output_file_name.cis="/data/analysis/ifn_chr9_eQTL.cis", 
+		pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
+		genepos=as.data.frame(probePos))
+```
+
+```
+## Matching data files and location files 
+## 382 of 382  genes matched
+## 28307 of 28307  SNPs matched
+## Task finished in  0.019  seconds
+## Reordering genes
+##  
+## Task finished in  0.113  seconds
+## Processing covariates 
+## Task finished in  0.001  seconds
+## Processing gene expression data (imputation, residualization, etc.) 
+## Task finished in  0.006  seconds
+## Creating output file(s) 
+## Task finished in  0.012  seconds
+## Performing eQTL analysis 
+##  3.44% done, 71 cis-eQTLs, 6 trans-eQTLs
+##  6.89% done, 108 cis-eQTLs, 8 trans-eQTLs
+## 10.34% done, 121 cis-eQTLs, 12 trans-eQTLs
+## 13.79% done, 121 cis-eQTLs, 16 trans-eQTLs
+## 17.24% done, 121 cis-eQTLs, 19 trans-eQTLs
+## 20.68% done, 160 cis-eQTLs, 23 trans-eQTLs
+## 24.13% done, 160 cis-eQTLs, 30 trans-eQTLs
+## 27.58% done, 194 cis-eQTLs, 46 trans-eQTLs
+## 31.03% done, 199 cis-eQTLs, 47 trans-eQTLs
+## 34.48% done, 270 cis-eQTLs, 52 trans-eQTLs
+## 37.93% done, 498 cis-eQTLs, 60 trans-eQTLs
+## 41.37% done, 645 cis-eQTLs, 69 trans-eQTLs
+## 44.82% done, 649 cis-eQTLs, 70 trans-eQTLs
+## 48.27% done, 738 cis-eQTLs, 74 trans-eQTLs
+## 51.72% done, 739 cis-eQTLs, 85 trans-eQTLs
+## 55.17% done, 758 cis-eQTLs, 87 trans-eQTLs
+## 58.62% done, 795 cis-eQTLs, 97 trans-eQTLs
+## 62.06% done, 967 cis-eQTLs, 101 trans-eQTLs
+## 65.51% done, 1,144 cis-eQTLs, 105 trans-eQTLs
+## 68.96% done, 1,214 cis-eQTLs, 112 trans-eQTLs
+## 72.41% done, 1,235 cis-eQTLs, 117 trans-eQTLs
+## 75.86% done, 1,258 cis-eQTLs, 119 trans-eQTLs
+## 79.31% done, 1,323 cis-eQTLs, 125 trans-eQTLs
+## 82.75% done, 1,327 cis-eQTLs, 130 trans-eQTLs
+## 86.20% done, 1,518 cis-eQTLs, 143 trans-eQTLs
+## 89.65% done, 1,731 cis-eQTLs, 156 trans-eQTLs
+## 93.10% done, 1,917 cis-eQTLs, 162 trans-eQTLs
+## 96.55% done, 2,120 cis-eQTLs, 167 trans-eQTLs
+## 100.00% done, 2,177 cis-eQTLs, 168 trans-eQTLs
+## Task finished in  3.966  seconds
+## 
+```
+Principle components are computed as previously. For use with Matrix-eQTL
+the chosen number of PCs has to be extracted and converted into a *SlicedData*
+object.
+
+
+```r
+pca <- prcomp(t(expr[-1]), center=TRUE, scale = TRUE)
+pc <- pca$x
+
+covar <- SlicedData$new()
+covar$CreateFromMatrix(t(pc[,1:10]))
+```
+
+
+```r
+chr9.eQTL.pc10 <- Matrix_eQTL_main(snps, genes, cvrt=covar, 
+		output_file_name="/data/analysis/ifn_chr9_eQTL.pc10.trans", 
+		output_file_name.cis="/data/analysis/ifn_chr9_eQTL.pc10.cis", 
+		pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
+		genepos=as.data.frame(probePos))
+```
+
+```
+## Matching data files and location files 
+## 382 of 382  genes matched
+## 28307 of 28307  SNPs matched
+## Task finished in  0.017  seconds
+## Reordering genes
+##  
+## Task finished in  0.127  seconds
+## Processing covariates 
+## Task finished in  0.002  seconds
+## Processing gene expression data (imputation, residualization, etc.) 
+## Task finished in  0.009  seconds
+## Creating output file(s) 
+## Task finished in  0.011  seconds
+## Performing eQTL analysis 
+##  3.44% done, 80 cis-eQTLs, 3 trans-eQTLs
+##  6.89% done, 123 cis-eQTLs, 5 trans-eQTLs
+## 10.34% done, 141 cis-eQTLs, 10 trans-eQTLs
+## 13.79% done, 141 cis-eQTLs, 20 trans-eQTLs
+## 17.24% done, 141 cis-eQTLs, 23 trans-eQTLs
+## 20.68% done, 183 cis-eQTLs, 28 trans-eQTLs
+## 24.13% done, 190 cis-eQTLs, 38 trans-eQTLs
+## 27.58% done, 229 cis-eQTLs, 39 trans-eQTLs
+## 31.03% done, 265 cis-eQTLs, 44 trans-eQTLs
+## 34.48% done, 363 cis-eQTLs, 47 trans-eQTLs
+## 37.93% done, 711 cis-eQTLs, 47 trans-eQTLs
+## 41.37% done, 968 cis-eQTLs, 54 trans-eQTLs
+## 44.82% done, 1,001 cis-eQTLs, 59 trans-eQTLs
+## 48.27% done, 1,084 cis-eQTLs, 63 trans-eQTLs
+## 51.72% done, 1,084 cis-eQTLs, 72 trans-eQTLs
+## 55.17% done, 1,127 cis-eQTLs, 82 trans-eQTLs
+## 58.62% done, 1,184 cis-eQTLs, 89 trans-eQTLs
+## 62.06% done, 1,531 cis-eQTLs, 90 trans-eQTLs
+## 65.51% done, 1,733 cis-eQTLs, 91 trans-eQTLs
+## 68.96% done, 1,853 cis-eQTLs, 97 trans-eQTLs
+## 72.41% done, 1,912 cis-eQTLs, 97 trans-eQTLs
+## 75.86% done, 1,948 cis-eQTLs, 99 trans-eQTLs
+## 79.31% done, 2,051 cis-eQTLs, 103 trans-eQTLs
+## 82.75% done, 2,060 cis-eQTLs, 109 trans-eQTLs
+## 86.20% done, 2,383 cis-eQTLs, 120 trans-eQTLs
+## 89.65% done, 2,719 cis-eQTLs, 124 trans-eQTLs
+## 93.10% done, 3,001 cis-eQTLs, 129 trans-eQTLs
+## 96.55% done, 3,221 cis-eQTLs, 129 trans-eQTLs
+## 100.00% done, 3,331 cis-eQTLs, 129 trans-eQTLs
+## Task finished in  3.77  seconds
+## 
+```
+
+For the simple regression Matrix-eQTL reports `chr9.eQTL$cis$neqtls` *cis* and
+`chr9.eQTL$trans$neqtls` *trans* associations that meet the specified cut-offs but
+note that none of the *trans* associations reach FDR values that would typically
+be considered significant.
+
+When the PCs are included `chr9.eQTL.p10$cis$neqtls` and `chr9.eQTL.p10$trans$neqtls`
+associations are reported for *cis* and *trans* respectively. Despite the reduced 
+number of reported *trans* associations, the FDR of the top hits has improved such
+that the first two or three associations now look like viable candidates for
+further analysis.
+
+## Annotating results
+To make interpreting the results a bit easier we replace the probe IDs with
+gene symbols from the annotation file.
+
+
+```r
+chr9.eQTL.pc10$cis$eqtls$gene <- as.integer(as.character(chr9.eQTL.pc10$cis$eqtls$gene))
+chr9.eQTL.pc10$trans$eqtls$gene <- as.integer(as.character(chr9.eQTL.pc10$trans$eqtls$gene))
+
+chr9.eQTL.pc10$cis$eqtls <- dplyr::left_join(chr9.eQTL.pc10$cis$eqtls, 
+		probeAnno[c("ArrayAddress", "SymbolReannotated")], by=c(gene="ArrayAddress"))
+chr9.eQTL.pc10$trans$eqtls <- dplyr::left_join(chr9.eQTL.pc10$trans$eqtls, 
+		probeAnno[c("ArrayAddress", "SymbolReannotated")], by=c(gene="ArrayAddress"))
+```
+
+## Comparison with previous results
+
+
+```r
+subset(chr9.eQTL.pc10$cis$eqtls, snps=="rs4077515")
+```
+
+```
+##           snps    gene  statistic       pvalue          FDR        beta
+## 58   rs4077515 3710685  15.140927 2.644644e-40 8.017147e-37  0.20075927
+## 132  rs4077515 3370255 -12.430463 1.066145e-29 1.420114e-26 -0.13061841
+## 1076 rs4077515   60706  -5.566205 5.140754e-08 8.400307e-06 -0.04593125
+##      SymbolReannotated
+## 58               CARD9
+## 132             INPP5E
+## 1076           SDCCAG3
+```
+
+This shows that the result for probe 3710685 is identical to the one
+obtained previously via `lm`. In addition there are two associations
+with other genes that may be of interest.
