@@ -79,7 +79,7 @@ chr9.eQTL.pc10$trans$eqtls <- dplyr::left_join(chr9.eQTL.pc10$trans$eqtls,
 ## Comparison with previous results
 
 ```{r me_rs4077515}
-subset(chr9.eQTL.pc10$cis, snps=="rs4077515")
+subset(chr9.eQTL.pc10$cis$eqtls, snps=="rs4077515")
 ```
 
 This shows that the result for probe 3710685 is identical to the one
