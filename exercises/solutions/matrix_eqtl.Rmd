@@ -1,0 +1,86 @@
+# Solution for *Genome-wide eQTL analysis* {.solution}
+We start by loading the data as usual. Matrix-eQTL requires the use of
+a specific data structure to store the gene expression and genotyping
+data. This enables Matrix-eQTL to read the data in chunks rather than 
+loading it into memory in its entirety (which may not be possible).
+
+We also load the files containing the genomic coordinates of the probes
+and SNPs as well as further annotations for later reference.
+
+```{r me_loadData}
+snps <- SlicedData$new()
+snps$LoadFile("/data/genotypes/genotypes.tab.gz")
+genes <- SlicedData$new()
+genes$LoadFile("/data//monocytes/expression/ifn_expression.tab.gz")
+
+probePos <- readr::read_tsv("/data/monocytes/annotation/probe_loc_hg19.tab")
+snpPos <- readr::read_tsv("/data/monocytes/annotation/snp_loc_hg19.tab")
+probeAnno <- readr::read_tsv("/data/monocytes/annotation/probeAnnotations.tab")
+```
+
+## Running Matrix-eQTL
+Matrix-eQTL is somewhat pedantic about the class of the objects storing
+the genomic locations. So we need to remove additional class information
+attached to them by *readr*.
+
+```{r cme_allME}
+chr9.eQTL <- Matrix_eQTL_main(snps, genes,
+		output_file_name="/data/analysis/ifn_chr9_eQTL.trans", 
+		output_file_name.cis="/data/analysis/ifn_chr9_eQTL.cis", 
+		pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
+		genepos=as.data.frame(probePos))
+```
+Principle components are computed as previously. For use with Matrix-eQTL
+the chosen number of PCs has to be extracted and converted into a *SlicedData*
+object.
+
+```{r me_cvrt}
+pca <- prcomp(t(expr[-1]), center=TRUE, scale = TRUE)
+pc <- pca$x
+
+covar <- SlicedData$new()
+covar$CreateFromMatrix(t(pc[,1:10]))
+```
+
+```{r me_callMEpc}
+chr9.eQTL.pc10 <- Matrix_eQTL_main(snps, genes, cvrt=covar, 
+		output_file_name="/data/analysis/ifn_chr9_eQTL.pc10.trans", 
+		output_file_name.cis="/data/analysis/ifn_chr9_eQTL.pc10.cis", 
+		pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
+		genepos=as.data.frame(probePos))
+```
+
+For the simple regression Matrix-eQTL reports `chr9.eQTL$cis$neqtls` *cis* and
+`chr9.eQTL$trans$neqtls` *trans* associations that meet the specified cut-offs but
+note that none of the *trans* associations reach FDR values that would typically
+be considered significant.
+
+When the PCs are included `chr9.eQTL.p10$cis$neqtls` and `chr9.eQTL.p10$trans$neqtls`
+associations are reported for *cis* and *trans* respectively. Despite the reduced 
+number of reported *trans* associations, the FDR of the top hits has improved such
+that the first two or three associations now look like viable candidates for
+further analysis.
+
+## Annotating results
+To make interpreting the results a bit easier we replace the probe IDs with
+gene symbols from the annotation file.
+
+```{r me_annotation}
+chr9.eQTL.pc10$cis$eqtls$gene <- as.integer(as.character(chr9.eQTL.pc10$cis$eqtls$gene))
+chr9.eQTL.pc10$trans$eqtls$gene <- as.integer(as.character(chr9.eQTL.pc10$trans$eqtls$gene))
+
+chr9.eQTL.pc10$cis$eqtls <- dplyr::left_join(chr9.eQTL.pc10$cis$eqtls, 
+		probeAnno[c("ArrayAddress", "SymbolReannotated")], by=c(gene="ArrayAddress"))
+chr9.eQTL.pc10$trans$eqtls <- dplyr::left_join(chr9.eQTL.pc10$trans$eqtls, 
+		probeAnno[c("ArrayAddress", "SymbolReannotated")], by=c(gene="ArrayAddress"))
+```
+
+## Comparison with previous results
+
+```{r me_rs4077515}
+subset(chr9.eQTL.pc10$cis, snps=="rs4077515")
+```
+
+This shows that the result for probe 3710685 is identical to the one
+obtained previously via `lm`. In addition there are two associations
+with other genes that may be of interest.

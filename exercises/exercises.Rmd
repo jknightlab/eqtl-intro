@@ -29,3 +29,9 @@ opts_chunk$set(dpi=300)
 
 ```{r ans3, child="solutions/pca_eqtl.Rmd", include=solution, eval=solution}
 ```
+
+```{r ex4, child="questions/matrix_eqtl.md"}
+```
+
+```{r ans4, child="solutions/matrix_eqtl.Rmd", include=solution, eval=solution}
+```

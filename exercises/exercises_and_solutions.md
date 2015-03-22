@@ -449,27 +449,13 @@ Innate Immune Activity Conditions the Effect of Regulatory Variants upon
 Monocyte Gene Expression. Science (2014).
 doi:[10.1126/science.1246949](http://doi.org/10.1126/science.1246949). 
 
-In addition to the primary datasets a few files with annotations for SNPs and
-genes is available in the */data/monocytes/annotation* directory:
-
-snp_loc_hg19.tab
-  : Genomic location of SNPs.
-
-probe_loc_hg19.tab
-  : Genomic location of gene expression probes.
-  
-probeAnnotations.tab
-  : Further annotations for gene expression probes, including associated gene symbols.
-  
-All coordinates refer to the hg19 reference build.
-
 ## Exercises
 
 #. Determine the dimensions of this dataset. How many genes, SNPs and samples are included?
 #. Principle components of the expression data.
     i. Compute the principle components.
-    ii. Create a plot of the variances for the first 20 PCs.
-    iii. How much of the total variance is explained by the first 20 PCs?
+    ii. Create a plot of the variances for the first 10 PCs.
+    iii. How much of the total variance is explained by the first 10 PCs?
 #. Using PCs in eQTL analysis.
     i. Model the expression measured by probe 3710685 as a function of SNP 
        rs4077515 and the first 10 PCs.
@@ -486,10 +472,6 @@ We start by loading all relevant data.
 ```r
 geno <- readr::read_tsv(file("/data/genotypes/genotypes.tab.gz"))
 expr <- readr::read_tsv(file("/data/monocytes/expression/ifn_expression.tab.gz"))
-
-probePos <- readr::read_tsv("/data/monocytes/annotation/probe_loc_hg19.tab")
-snpPos <- readr::read_tsv("/data/monocytes/annotation/snp_loc_hg19.tab")
-probeAnno <- readr::read_tsv("/data/monocytes/annotation/probeAnnotations.tab")
 ```
 
 ## Size of dataset
@@ -530,7 +512,7 @@ Plotting the variances for the first 20 PCs is then straightforward.
 
 
 ```r
-plot(pca, npcs=20)
+plot(pca, npcs=10)
 ```
 
 ![plot of chunk pcPlot](figure/pcPlot-1.png) 
@@ -541,11 +523,11 @@ through the `sdev` field of the `prcomp` return value.
 
 
 ```r
-sum(pca$sdev[1:20]^2)/nrow(expr)
+sum(pca$sdev[1:10]^2)/nrow(expr)
 ```
 
 ```
-## [1] 0.5525595
+## [1] 0.4464829
 ```
 
 ## Fitting a model with PC covariates
@@ -640,3 +622,216 @@ ggplot(corrected, aes(genotype, expression)) +
 ```
 
 ![plot of chunk rs4077515Plot](figure/rs4077515Plot-1.png) 
+
+
+# Genome-wide eQTL analysis {.exercise}
+
+In this set of exercises we'll use Matrix-eQTL to conduct a larger scale 
+scan for SNP/gene interactions. To reduce the computing time required
+the data has been restricted to chromosome 9.
+
+Gene expression data are located in */data/monocytes/expression/ifn_expression.tab.gz*
+Genotypes are located in */data/genotypes/genotypes.tab.gz* (provided during course)
+
+These data are part of the dataset published in
+Fairfax, Humburg, Makino, et al.
+Innate Immune Activity Conditions the Effect of Regulatory Variants upon 
+Monocyte Gene Expression. Science (2014).
+doi:[10.1126/science.1246949](http://doi.org/10.1126/science.1246949). 
+
+In addition to the primary datasets a few files with annotations for SNPs and
+genes is available in the */data/monocytes/annotation* directory:
+
+snp_loc_hg19.tab
+  : Genomic location of SNPs.
+
+probe_loc_hg19.tab
+  : Genomic location of gene expression probes.
+  
+probeAnnotations.tab
+  : Further annotations for gene expression probes, including associated gene symbols.
+  
+All coordinates refer to the hg19 reference build.
+
+## Exercises
+
+#. Use Matrix-eQTL to carry out a *cis*/*trans* eQTL analysis. 
+   i. Use a 1MB window around probes as local association region and a 
+      p-value threshold of $10^{-3}$ and $10^{-5}$ for $cis$ and $trans$ associations 
+      respectively.
+   ii. Repeat the analysis with 10 PCs included as covariates. How do the numbers of
+      reported *cis* and *trans* associations change?
+   iii. Replace the Probe IDs in the Matrix-eQTL results with the corresponding
+      gene names.
+   iv. Find the results for SNP rs4077151 and compare them to the result from the previous 
+      exercise.
+
+   
+
+
+# Solution for *Genome-wide eQTL analysis* {.solution}
+We start by loading the data as usual. Matrix-eQTL requires the use of
+a specific data structure to store the gene expression and genotyping
+data. This enables Matrix-eQTL to read the data in chunks rather than 
+loading it into memory in its entirety (which may not be possible).
+
+We also load the files containing the genomic coordinates of the probes
+and SNPs as well as further annotations for later reference.
+
+
+```r
+snps <- SlicedData$new()
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'SlicedData' not found
+```
+
+```r
+snps$LoadFile("/data/genotypes/genotypes.tab.gz")
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'snps' not found
+```
+
+```r
+genes <- SlicedData$new()
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'SlicedData' not found
+```
+
+```r
+genes$LoadFile("/data//monocytes/expression/ifn_expression.tab.gz")
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'genes' not found
+```
+
+```r
+probePos <- readr::read_tsv("/data/monocytes/annotation/probe_loc_hg19.tab")
+snpPos <- readr::read_tsv("/data/monocytes/annotation/snp_loc_hg19.tab")
+probeAnno <- readr::read_tsv("/data/monocytes/annotation/probeAnnotations.tab")
+```
+
+## Running Matrix-eQTL
+Matrix-eQTL is somewhat pedantic about the class of the objects storing
+the genomic locations. So we need to remove additional class information
+attached to them by *readr*.
+
+
+```r
+chr9.eQTL <- Matrix_eQTL_main(snps, genes,
+		output_file_name="/data/analysis/ifn_chr9_eQTL.trans", 
+		output_file_name.cis="/data/analysis/ifn_chr9_eQTL.cis", 
+		pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
+		genepos=as.data.frame(probePos))
+```
+
+```
+## Error in eval(expr, envir, enclos): could not find function "Matrix_eQTL_main"
+```
+Principle components are computed as previously. For use with Matrix-eQTL
+the chosen number of PCs has to be extracted and converted into a *SlicedData*
+object.
+
+
+```r
+pca <- prcomp(t(expr[-1]), center=TRUE, scale = TRUE)
+pc <- pca$x
+
+covar <- SlicedData$new()
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'SlicedData' not found
+```
+
+```r
+covar$CreateFromMatrix(t(pc[,1:10]))
+```
+
+```
+## Error in eval(expr, envir, enclos): attempt to apply non-function
+```
+
+
+```r
+chr9.eQTL.pc10 <- Matrix_eQTL_main(snps, genes, cvrt=covar, 
+		output_file_name="/data/analysis/ifn_chr9_eQTL.pc10.trans", 
+		output_file_name.cis="/data/analysis/ifn_chr9_eQTL.pc10.cis", 
+		pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
+		genepos=as.data.frame(probePos))
+```
+
+```
+## Error in eval(expr, envir, enclos): could not find function "Matrix_eQTL_main"
+```
+
+For the simple regression Matrix-eQTL reports `chr9.eQTL$cis$neqtls` *cis* and
+`chr9.eQTL$trans$neqtls` *trans* associations that meet the specified cut-offs but
+note that none of the *trans* associations reach FDR values that would typically
+be considered significant.
+
+When the PCs are included `chr9.eQTL.p10$cis$neqtls` and `chr9.eQTL.p10$trans$neqtls`
+associations are reported for *cis* and *trans* respectively. Despite the reduced 
+number of reported *trans* associations, the FDR of the top hits has improved such
+that the first two or three associations now look like viable candidates for
+further analysis.
+
+## Annotating results
+To make interpreting the results a bit easier we replace the probe IDs with
+gene symbols from the annotation file.
+
+
+```r
+chr9.eQTL.pc10$cis$eqtls$gene <- as.integer(as.character(chr9.eQTL.pc10$cis$eqtls$gene))
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'chr9.eQTL.pc10' not found
+```
+
+```r
+chr9.eQTL.pc10$trans$eqtls$gene <- as.integer(as.character(chr9.eQTL.pc10$trans$eqtls$gene))
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'chr9.eQTL.pc10' not found
+```
+
+```r
+chr9.eQTL.pc10$cis$eqtls <- dplyr::left_join(chr9.eQTL.pc10$cis$eqtls, 
+		probeAnno[c("ArrayAddress", "SymbolReannotated")], by=c(gene="ArrayAddress"))
+```
+
+```
+## Error in dplyr::left_join(chr9.eQTL.pc10$cis$eqtls, probeAnno[c("ArrayAddress", : object 'chr9.eQTL.pc10' not found
+```
+
+```r
+chr9.eQTL.pc10$trans$eqtls <- dplyr::left_join(chr9.eQTL.pc10$trans$eqtls, 
+		probeAnno[c("ArrayAddress", "SymbolReannotated")], by=c(gene="ArrayAddress"))
+```
+
+```
+## Error in dplyr::left_join(chr9.eQTL.pc10$trans$eqtls, probeAnno[c("ArrayAddress", : object 'chr9.eQTL.pc10' not found
+```
+
+## Comparison with previous results
+
+
+```r
+subset(chr9.eQTL.pc10$cis, snps=="rs4077515")
+```
+
+```
+## Error in subset(chr9.eQTL.pc10$cis, snps == "rs4077515"): object 'chr9.eQTL.pc10' not found
+```
+
+This shows that the result for probe 3710685 is identical to the one
+obtained previously via `lm`. In addition there are two associations
+with other genes that may be of interest.
