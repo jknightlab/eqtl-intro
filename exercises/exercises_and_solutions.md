@@ -680,35 +680,60 @@ and SNPs as well as further annotations for later reference.
 
 
 ```r
+library(MatrixEQTL)
 snps <- SlicedData$new()
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'SlicedData' not found
-```
-
-```r
 snps$LoadFile("/data/genotypes/genotypes.tab.gz")
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'snps' not found
+## Warning in readLines(con = fid, n = max(fileSkipRows, 1L), ok = TRUE, warn
+## = TRUE): seek on a gzfile connection returned an internal error
+```
+
+```
+## Rows read:  1,000 
+## Rows read:  2,000 
+## Rows read:  3,000 
+## Rows read:  4,000 
+## Rows read:  5,000 
+## Rows read:  6,000 
+## Rows read:  7,000 
+## Rows read:  8,000 
+## Rows read:  9,000 
+## Rows read:  10,000 
+## Rows read:  11,000 
+## Rows read:  12,000 
+## Rows read:  13,000 
+## Rows read:  14,000 
+## Rows read:  15,000 
+## Rows read:  16,000 
+## Rows read:  17,000 
+## Rows read:  18,000 
+## Rows read:  19,000 
+## Rows read:  20,000 
+## Rows read:  21,000 
+## Rows read:  22,000 
+## Rows read:  23,000 
+## Rows read:  24,000 
+## Rows read:  25,000 
+## Rows read:  26,000 
+## Rows read:  27,000 
+## Rows read:  28,000 
+## Rows read:  28307  done.
 ```
 
 ```r
 genes <- SlicedData$new()
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'SlicedData' not found
-```
-
-```r
 genes$LoadFile("/data//monocytes/expression/ifn_expression.tab.gz")
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'genes' not found
+## Warning in readLines(con = fid, n = max(fileSkipRows, 1L), ok = TRUE, warn
+## = TRUE): seek on a gzfile connection returned an internal error
+```
+
+```
+## Rows read:  382  done.
 ```
 
 ```r
@@ -732,7 +757,51 @@ chr9.eQTL <- Matrix_eQTL_main(snps, genes,
 ```
 
 ```
-## Error in eval(expr, envir, enclos): could not find function "Matrix_eQTL_main"
+## Matching data files and location files 
+## 382 of 382  genes matched
+## 28307 of 28307  SNPs matched
+## Task finished in  0.019  seconds
+## Reordering genes
+##  
+## Task finished in  0.113  seconds
+## Processing covariates 
+## Task finished in  0.001  seconds
+## Processing gene expression data (imputation, residualization, etc.) 
+## Task finished in  0.006  seconds
+## Creating output file(s) 
+## Task finished in  0.012  seconds
+## Performing eQTL analysis 
+##  3.44% done, 71 cis-eQTLs, 6 trans-eQTLs
+##  6.89% done, 108 cis-eQTLs, 8 trans-eQTLs
+## 10.34% done, 121 cis-eQTLs, 12 trans-eQTLs
+## 13.79% done, 121 cis-eQTLs, 16 trans-eQTLs
+## 17.24% done, 121 cis-eQTLs, 19 trans-eQTLs
+## 20.68% done, 160 cis-eQTLs, 23 trans-eQTLs
+## 24.13% done, 160 cis-eQTLs, 30 trans-eQTLs
+## 27.58% done, 194 cis-eQTLs, 46 trans-eQTLs
+## 31.03% done, 199 cis-eQTLs, 47 trans-eQTLs
+## 34.48% done, 270 cis-eQTLs, 52 trans-eQTLs
+## 37.93% done, 498 cis-eQTLs, 60 trans-eQTLs
+## 41.37% done, 645 cis-eQTLs, 69 trans-eQTLs
+## 44.82% done, 649 cis-eQTLs, 70 trans-eQTLs
+## 48.27% done, 738 cis-eQTLs, 74 trans-eQTLs
+## 51.72% done, 739 cis-eQTLs, 85 trans-eQTLs
+## 55.17% done, 758 cis-eQTLs, 87 trans-eQTLs
+## 58.62% done, 795 cis-eQTLs, 97 trans-eQTLs
+## 62.06% done, 967 cis-eQTLs, 101 trans-eQTLs
+## 65.51% done, 1,144 cis-eQTLs, 105 trans-eQTLs
+## 68.96% done, 1,214 cis-eQTLs, 112 trans-eQTLs
+## 72.41% done, 1,235 cis-eQTLs, 117 trans-eQTLs
+## 75.86% done, 1,258 cis-eQTLs, 119 trans-eQTLs
+## 79.31% done, 1,323 cis-eQTLs, 125 trans-eQTLs
+## 82.75% done, 1,327 cis-eQTLs, 130 trans-eQTLs
+## 86.20% done, 1,518 cis-eQTLs, 143 trans-eQTLs
+## 89.65% done, 1,731 cis-eQTLs, 156 trans-eQTLs
+## 93.10% done, 1,917 cis-eQTLs, 162 trans-eQTLs
+## 96.55% done, 2,120 cis-eQTLs, 167 trans-eQTLs
+## 100.00% done, 2,177 cis-eQTLs, 168 trans-eQTLs
+## Task finished in  3.966  seconds
+## 
 ```
 Principle components are computed as previously. For use with Matrix-eQTL
 the chosen number of PCs has to be extracted and converted into a *SlicedData*
@@ -744,18 +813,7 @@ pca <- prcomp(t(expr[-1]), center=TRUE, scale = TRUE)
 pc <- pca$x
 
 covar <- SlicedData$new()
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'SlicedData' not found
-```
-
-```r
 covar$CreateFromMatrix(t(pc[,1:10]))
-```
-
-```
-## Error in eval(expr, envir, enclos): attempt to apply non-function
 ```
 
 
@@ -768,7 +826,51 @@ chr9.eQTL.pc10 <- Matrix_eQTL_main(snps, genes, cvrt=covar,
 ```
 
 ```
-## Error in eval(expr, envir, enclos): could not find function "Matrix_eQTL_main"
+## Matching data files and location files 
+## 382 of 382  genes matched
+## 28307 of 28307  SNPs matched
+## Task finished in  0.017  seconds
+## Reordering genes
+##  
+## Task finished in  0.127  seconds
+## Processing covariates 
+## Task finished in  0.002  seconds
+## Processing gene expression data (imputation, residualization, etc.) 
+## Task finished in  0.009  seconds
+## Creating output file(s) 
+## Task finished in  0.011  seconds
+## Performing eQTL analysis 
+##  3.44% done, 80 cis-eQTLs, 3 trans-eQTLs
+##  6.89% done, 123 cis-eQTLs, 5 trans-eQTLs
+## 10.34% done, 141 cis-eQTLs, 10 trans-eQTLs
+## 13.79% done, 141 cis-eQTLs, 20 trans-eQTLs
+## 17.24% done, 141 cis-eQTLs, 23 trans-eQTLs
+## 20.68% done, 183 cis-eQTLs, 28 trans-eQTLs
+## 24.13% done, 190 cis-eQTLs, 38 trans-eQTLs
+## 27.58% done, 229 cis-eQTLs, 39 trans-eQTLs
+## 31.03% done, 265 cis-eQTLs, 44 trans-eQTLs
+## 34.48% done, 363 cis-eQTLs, 47 trans-eQTLs
+## 37.93% done, 711 cis-eQTLs, 47 trans-eQTLs
+## 41.37% done, 968 cis-eQTLs, 54 trans-eQTLs
+## 44.82% done, 1,001 cis-eQTLs, 59 trans-eQTLs
+## 48.27% done, 1,084 cis-eQTLs, 63 trans-eQTLs
+## 51.72% done, 1,084 cis-eQTLs, 72 trans-eQTLs
+## 55.17% done, 1,127 cis-eQTLs, 82 trans-eQTLs
+## 58.62% done, 1,184 cis-eQTLs, 89 trans-eQTLs
+## 62.06% done, 1,531 cis-eQTLs, 90 trans-eQTLs
+## 65.51% done, 1,733 cis-eQTLs, 91 trans-eQTLs
+## 68.96% done, 1,853 cis-eQTLs, 97 trans-eQTLs
+## 72.41% done, 1,912 cis-eQTLs, 97 trans-eQTLs
+## 75.86% done, 1,948 cis-eQTLs, 99 trans-eQTLs
+## 79.31% done, 2,051 cis-eQTLs, 103 trans-eQTLs
+## 82.75% done, 2,060 cis-eQTLs, 109 trans-eQTLs
+## 86.20% done, 2,383 cis-eQTLs, 120 trans-eQTLs
+## 89.65% done, 2,719 cis-eQTLs, 124 trans-eQTLs
+## 93.10% done, 3,001 cis-eQTLs, 129 trans-eQTLs
+## 96.55% done, 3,221 cis-eQTLs, 129 trans-eQTLs
+## 100.00% done, 3,331 cis-eQTLs, 129 trans-eQTLs
+## Task finished in  3.77  seconds
+## 
 ```
 
 For the simple regression Matrix-eQTL reports `chr9.eQTL$cis$neqtls` *cis* and
@@ -789,47 +891,30 @@ gene symbols from the annotation file.
 
 ```r
 chr9.eQTL.pc10$cis$eqtls$gene <- as.integer(as.character(chr9.eQTL.pc10$cis$eqtls$gene))
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'chr9.eQTL.pc10' not found
-```
-
-```r
 chr9.eQTL.pc10$trans$eqtls$gene <- as.integer(as.character(chr9.eQTL.pc10$trans$eqtls$gene))
-```
 
-```
-## Error in eval(expr, envir, enclos): object 'chr9.eQTL.pc10' not found
-```
-
-```r
 chr9.eQTL.pc10$cis$eqtls <- dplyr::left_join(chr9.eQTL.pc10$cis$eqtls, 
 		probeAnno[c("ArrayAddress", "SymbolReannotated")], by=c(gene="ArrayAddress"))
-```
-
-```
-## Error in dplyr::left_join(chr9.eQTL.pc10$cis$eqtls, probeAnno[c("ArrayAddress", : object 'chr9.eQTL.pc10' not found
-```
-
-```r
 chr9.eQTL.pc10$trans$eqtls <- dplyr::left_join(chr9.eQTL.pc10$trans$eqtls, 
 		probeAnno[c("ArrayAddress", "SymbolReannotated")], by=c(gene="ArrayAddress"))
-```
-
-```
-## Error in dplyr::left_join(chr9.eQTL.pc10$trans$eqtls, probeAnno[c("ArrayAddress", : object 'chr9.eQTL.pc10' not found
 ```
 
 ## Comparison with previous results
 
 
 ```r
-subset(chr9.eQTL.pc10$cis, snps=="rs4077515")
+subset(chr9.eQTL.pc10$cis$eqtls, snps=="rs4077515")
 ```
 
 ```
-## Error in subset(chr9.eQTL.pc10$cis, snps == "rs4077515"): object 'chr9.eQTL.pc10' not found
+##           snps    gene  statistic       pvalue          FDR        beta
+## 58   rs4077515 3710685  15.140927 2.644644e-40 8.017147e-37  0.20075927
+## 132  rs4077515 3370255 -12.430463 1.066145e-29 1.420114e-26 -0.13061841
+## 1076 rs4077515   60706  -5.566205 5.140754e-08 8.400307e-06 -0.04593125
+##      SymbolReannotated
+## 58               CARD9
+## 132             INPP5E
+## 1076           SDCCAG3
 ```
 
 This shows that the result for probe 3710685 is identical to the one
