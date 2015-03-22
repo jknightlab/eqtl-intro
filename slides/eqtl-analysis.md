@@ -411,7 +411,8 @@ conditions **not** to how likely the null hypothesis is.
 Use p-values as a guide to identify potentially interesting results, not as a definitive
 statement of which findings are real.
 
-Consider other evidence, especially estimates of effect sizes and their confidence intervals.
+Consider other evidence, especially estimates of effect sizes and their confidence intervals
+as well as domain knowledge.
 </div>
 
 # Detecting eQTL -- Not *that* simple
@@ -700,11 +701,13 @@ ggplot(corrected, aes(genotype, expression)) +
 # Large scale eQTL analysis
 ## Genome-wide analysis
 
-* We don't just want to analyse a single SNP/gene pair ...
+* We don't just want to analyse a single SNP/gene pair
 * or even all SNP associations with a single gene
 
->* We want to study *all* SNP/gene pairs.
->* (but may restrict this to local associations). 
+. . .
+
+* We want to study *all* SNP/gene pairs.
+* (but may restrict this to local associations). 
 
 . . .
 
@@ -760,11 +763,89 @@ Can precompute p-value threshold based on $r^2$
 # *Hands-on* : Scaling it up
 ## Data
 
+Gene expression
+  : */data/monocytes/expression/ifn_expression.tab.gz*
+  
+Genotypes
+  : */data/genotypes/genotypes.tab.gz*  
+  (downloaded earlier) 
+
+<div class="notes">
+
+```r
+library(MatrixEQTL)
+snps <- SlicedData$new()
+snps$LoadFile("/data/genotypes/genotypes.tab.gz")
+genes <- SlicedData$new()
+genes$LoadFile("/data//monocytes/expression/ifn_expression.tab.gz")
+```
+</div>
+
+## Annotation data
+
+Located in */data/monocytes/annotation/*
+
+snp_loc_hg19.tab
+  : Genomic location of SNPs.
+
+probe_loc_hg19.tab
+  : Genomic location of gene expression probes.
+
+probeAnnotations.tab
+  : Further annotations for gene expression probes, including associated gene symbols.
+
+<div class="notes">
+
+```r
+probePos <- readr::read_tsv("/data/monocytes/annotation/probe_loc_hg19.tab")
+snpPos <- readr::read_tsv("/data/monocytes/annotation/snp_loc_hg19.tab")
+probeAnno <- readr::read_tsv("/data/monocytes/annotation/probeAnnotations.tab")
+```
+</div>
+
 ## Running Matrix-eQTL
+Use Matrix-eQTL to carry out a *cis*/*trans* eQTL analysis.
 
-## A command-line interface
+* Use a 1MB window around probes as local association region
+* Use a p-value threshold of $10^{-3}$ and $10^{-5}$ for *cis* and *trans* 
+  associations respectively
 
- 
+. . .
+
+* Repeat the analysis with the first 10 PC included as covariates. How do
+  results differ?
+
+<div class="notes">
+
+```r
+chr9.eQTL <- Matrix_eQTL_main(snps, genes,
+        output_file_name="/data/analysis/ifn_chr9_eQTL.trans", 
+        output_file_name.cis="/data/analysis/ifn_chr9_eQTL.cis", 
+        pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
+        genepos=as.data.frame(probePos))
+```
+
+```r
+pca <- prcomp(t(expr[-1]), center=TRUE, scale = TRUE)
+pc <- pca$x
+
+covar <- SlicedData$new()
+covar$CreateFromMatrix(t(pc[,1:10]))
+
+chr9.eQTL.pc10 <- Matrix_eQTL_main(snps, genes, cvrt=covar, 
+        output_file_name="/data/analysis/ifn_chr9_eQTL.pc10.trans", 
+        output_file_name.cis="/data/analysis/ifn_chr9_eQTL.pc10.cis", 
+        pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
+        genepos=as.data.frame(probePos))
+```    
+
+Compare number of associations reported and take a look at 
+p-values/FDR and effect sizes.  
+For trans associations in particular interesting results only
+start to appear after addition of PCs.
+
+</div>
+
 # Interpreting results
 ## Still just a pile of data
 
@@ -781,4 +862,22 @@ Can precompute p-value threshold based on $r^2$
     * [Blueprint](http://www.blueprint-epigenome.eu/)
     * [ENCODE](https://www.encodeproject.org/)
 * Visualise SNPs in genomic context, e.g. using
-  [UCSC genome browser](http://genome-euro.ucsc.edu/index.html) 
+  [UCSC genome browser](http://genome-euro.ucsc.edu/index.html)
+  
+# Summary
+## We talked about
+
+* What eQTL are
+* How linear models can be used to find them
+* Complications that arise and possible approaches to deal with them
+* How to carry out large scale eQTL analyses
+* Some ideas of how to follow up on findings
+
+## We didn't talk about
+
+* Details of data QC
+* The role of linkage disequilibrium in interpreting results
+* Comparison of eQTL between different conditions (tissues, treatments, ...)
+* Other approaches to eQTL analysis (Bayesian, nonparametric)
+
+

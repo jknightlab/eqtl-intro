@@ -70,6 +70,7 @@ code > span.er { font-weight: bold; }
 <li><a href="#/large-scale-eqtl-analysis">Large scale eQTL analysis</a></li>
 <li><a href="#/hands-on-scaling-it-up"><em>Hands-on</em> : Scaling it up</a></li>
 <li><a href="#/interpreting-results">Interpreting results</a></li>
+<li><a href="#/summary">Summary</a></li>
 </ul>
 </section>
 
@@ -506,7 +507,7 @@ fig &lt;-<span class="st"> </span>fig +<span class="st"> </span><span class="kw"
 <p>The p-value is the probability of observing an effect at least as extreme as the one in the sample data if the null hypothesis is true.</p>
 <p>P-values relate to how likely it is to observe the data under pre-specified conditions <strong>not</strong> to how likely the null hypothesis is.</p>
 <p>Use p-values as a guide to identify potentially interesting results, not as a definitive statement of which findings are real.</p>
-Consider other evidence, especially estimates of effect sizes and their confidence intervals.
+Consider other evidence, especially estimates of effect sizes and their confidence intervals as well as domain knowledge.
 </aside>
 </section></section>
 <section><section id="detecting-eqtl-not-that-simple" class="titleslide slide level1"><h1>Detecting eQTL – Not <em>that</em> simple</h1></section><section id="additional-sources-of-variation" class="slide level2">
@@ -739,13 +740,15 @@ corrected &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span
 <section><section id="large-scale-eqtl-analysis" class="titleslide slide level1"><h1>Large scale eQTL analysis</h1></section><section id="genome-wide-analysis" class="slide level2">
 <h1>Genome-wide analysis</h1>
 <ul>
-<li>We don’t just want to analyse a single SNP/gene pair …</li>
+<li>We don’t just want to analyse a single SNP/gene pair</li>
 <li>or even all SNP associations with a single gene</li>
 </ul>
+<div class="fragment">
 <ul>
-<li class="fragment">We want to study <em>all</em> SNP/gene pairs.</li>
-<li class="fragment">(but may restrict this to local associations).</li>
+<li>We want to study <em>all</em> SNP/gene pairs.</li>
+<li>(but may restrict this to local associations).</li>
 </ul>
+</div>
 <div class="fragment">
 <p>This is computationally intensive and may be very time consuming.</p>
 </div>
@@ -789,10 +792,71 @@ t = \sqrt{n-2}\frac{r}{\sqrt{1-r^2}}
 </section></section>
 <section><section id="hands-on-scaling-it-up" class="titleslide slide level1"><h1><em>Hands-on</em> : Scaling it up</h1></section><section id="data-3" class="slide level2">
 <h1>Data</h1>
+<dl>
+<dt>Gene expression</dt>
+<dd><em>/data/monocytes/expression/ifn_expression.tab.gz</em>
+</dd>
+<dt>Genotypes</dt>
+<dd><em>/data/genotypes/genotypes.tab.gz</em><br /> (downloaded earlier)
+</dd>
+</dl>
+<aside class="notes">
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MatrixEQTL)
+snps &lt;-<span class="st"> </span>SlicedData$<span class="kw">new</span>()
+snps$<span class="kw">LoadFile</span>(<span class="st">&quot;/data/genotypes/genotypes.tab.gz&quot;</span>)
+genes &lt;-<span class="st"> </span>SlicedData$<span class="kw">new</span>()
+genes$<span class="kw">LoadFile</span>(<span class="st">&quot;/data//monocytes/expression/ifn_expression.tab.gz&quot;</span>)</code></pre>
+</aside>
+</section><section id="annotation-data" class="slide level2">
+<h1>Annotation data</h1>
+<p>Located in <em>/data/monocytes/annotation/</em></p>
+<dl>
+<dt>snp_loc_hg19.tab</dt>
+<dd>Genomic location of SNPs.
+</dd>
+<dt>probe_loc_hg19.tab</dt>
+<dd>Genomic location of gene expression probes.
+</dd>
+<dt>probeAnnotations.tab</dt>
+<dd>Further annotations for gene expression probes, including associated gene symbols.
+</dd>
+</dl>
+<aside class="notes">
+<pre class="sourceCode r"><code class="sourceCode r">probePos &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="st">&quot;/data/monocytes/annotation/probe_loc_hg19.tab&quot;</span>)
+snpPos &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="st">&quot;/data/monocytes/annotation/snp_loc_hg19.tab&quot;</span>)
+probeAnno &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="st">&quot;/data/monocytes/annotation/probeAnnotations.tab&quot;</span>)</code></pre>
+</aside>
 </section><section id="running-matrix-eqtl" class="slide level2">
 <h1>Running Matrix-eQTL</h1>
-</section><section id="a-command-line-interface" class="slide level2">
-<h1>A command-line interface</h1>
+<p>Use Matrix-eQTL to carry out a <em>cis</em>/<em>trans</em> eQTL analysis.</p>
+<ul>
+<li>Use a 1MB window around probes as local association region</li>
+<li>Use a p-value threshold of <span class="math">\(10^{-3}\)</span> and <span class="math">\(10^{-5}\)</span> for <em>cis</em> and <em>trans</em> associations respectively</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Repeat the analysis with the first 10 PC included as covariates. How do results differ?</li>
+</ul>
+<aside class="notes">
+<pre class="sourceCode r"><code class="sourceCode r">chr9.eQTL &lt;-<span class="st"> </span><span class="kw">Matrix_eQTL_main</span>(snps, genes,
+        <span class="dt">output_file_name=</span><span class="st">&quot;/data/analysis/ifn_chr9_eQTL.trans&quot;</span>, 
+        <span class="dt">output_file_name.cis=</span><span class="st">&quot;/data/analysis/ifn_chr9_eQTL.cis&quot;</span>, 
+        <span class="dt">pvOutputThreshold.cis=</span><span class="fl">1e-3</span>, <span class="dt">snpspos=</span><span class="kw">as.data.frame</span>(snpPos), 
+        <span class="dt">genepos=</span><span class="kw">as.data.frame</span>(probePos))</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">pca &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(expr[-<span class="dv">1</span>]), <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">scale =</span> <span class="ot">TRUE</span>)
+pc &lt;-<span class="st"> </span>pca$x
+
+covar &lt;-<span class="st"> </span>SlicedData$<span class="kw">new</span>()
+covar$<span class="kw">CreateFromMatrix</span>(<span class="kw">t</span>(pc[,<span class="dv">1</span>:<span class="dv">10</span>]))
+
+chr9.eQTL.pc10 &lt;-<span class="st"> </span><span class="kw">Matrix_eQTL_main</span>(snps, genes, <span class="dt">cvrt=</span>covar, 
+        <span class="dt">output_file_name=</span><span class="st">&quot;/data/analysis/ifn_chr9_eQTL.pc10.trans&quot;</span>, 
+        <span class="dt">output_file_name.cis=</span><span class="st">&quot;/data/analysis/ifn_chr9_eQTL.pc10.cis&quot;</span>, 
+        <span class="dt">pvOutputThreshold.cis=</span><span class="fl">1e-3</span>, <span class="dt">snpspos=</span><span class="kw">as.data.frame</span>(snpPos), 
+        <span class="dt">genepos=</span><span class="kw">as.data.frame</span>(probePos))</code></pre>
+<p>Compare number of associations reported and take a look at p-values/FDR and effect sizes.<br />For trans associations in particular interesting results only start to appear after addition of PCs.</p>
+</aside>
+</div>
 </section></section>
 <section><section id="interpreting-results" class="titleslide slide level1"><h1>Interpreting results</h1></section><section id="still-just-a-pile-of-data" class="slide level2">
 <h1>Still just a pile of data</h1>
@@ -813,6 +877,24 @@ t = \sqrt{n-2}\frac{r}{\sqrt{1-r^2}}
 <li><a href="https://www.encodeproject.org/">ENCODE</a></li>
 </ul></li>
 <li>Visualise SNPs in genomic context, e.g. using <a href="http://genome-euro.ucsc.edu/index.html">UCSC genome browser</a></li>
+</ul>
+</section></section>
+<section><section id="summary" class="titleslide slide level1"><h1>Summary</h1></section><section id="we-talked-about" class="slide level2">
+<h1>We talked about</h1>
+<ul>
+<li>What eQTL are</li>
+<li>How linear models can be used to find them</li>
+<li>Complications that arise and possible approaches to deal with them</li>
+<li>How to carry out large scale eQTL analyses</li>
+<li>Some ideas of how to follow up on findings</li>
+</ul>
+</section><section id="we-didnt-talk-about" class="slide level2">
+<h1>We didn’t talk about</h1>
+<ul>
+<li>Details of data QC</li>
+<li>The role of linkage disequilibrium in interpreting results</li>
+<li>Comparison of eQTL between different conditions (tissues, treatments, …)</li>
+<li>Other approaches to eQTL analysis (Bayesian, nonparametric)</li>
 </ul>
 <div class="references">
 
