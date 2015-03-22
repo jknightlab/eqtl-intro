@@ -84,6 +84,10 @@ Access the RStudio interface at *http://yourip:8787*.
     * Username: rstudio
     * Password: rstudio
 
+## Useful resources
+
+* RStudio [cheat sheets](http://www.rstudio.com/resources/cheatsheets/)
+
 # What are eQTL?
 ## Quantitative trait loci
 QTL are regions of the genome associated with quantitative traits
@@ -389,6 +393,27 @@ fig <- fig + geom_hline(yintercept=1.5)
 ```
 </div>
 
+## Interlude: p-values
+
+* After estimating model coefficients we can test them for departure from 0.
+* We are interested in identifying SNPs with non-zero coefficients.
+* The strength of the evidence that the true coefficient is non-zero is often
+  gauged by the resulting p-value.
+* How should p-values be interpreted?
+
+<div class="notes">
+The p-value is the probability of observing an effect at least as extreme as
+the one in the sample data if the null hypothesis is true.
+
+P-values relate to how likely it is to observe the data under pre-specified
+conditions **not** to how likely the null hypothesis is.
+
+Use p-values as a guide to identify potentially interesting results, not as a definitive
+statement of which findings are real.
+
+Consider other evidence, especially estimates of effect sizes and their confidence intervals.
+</div>
+
 # Detecting eQTL -- Not *that* simple
 ## Additional sources of variation
 
@@ -673,7 +698,87 @@ ggplot(corrected, aes(genotype, expression)) +
 </div>
 
 # Large scale eQTL analysis
+## Genome-wide analysis
+
+* We don't just want to analyse a single SNP/gene pair ...
+* or even all SNP associations with a single gene
+
+>* We want to study *all* SNP/gene pairs.
+>* (but may restrict this to local associations). 
+
+. . .
+
+This is computationally intensive and may be very time consuming.
+
+. . .
+
+Need to be clever about how we do this.
+
+## Fast model fitting with Matrix-eQTL
+[Matrix-eQTL](http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/)
+strategies to reduce run time:
+<div class="multicolumn">
+<div>
+
+* Required test statistic can be expressed
+  in terms of the correlation between SNP and gene expression.
+* Use efficient matrix multiplications to compute the correlations.
+* Computing p-values is expensive, only do this for SNP/gene pairs 
+  that are sufficiently interesting.
+
+</div>
+<div>
+![](figure/matrix_mult.gif)
+</div>
+</div>
+
+<div class="notes">
+For simple linear regression:
+$$
+t = \sqrt{n-2}\frac{r}{\sqrt{1-r^2}}
+$$
+Can precompute p-value threshold based on $r^2$
+</div>
+
+## Correcting for multiple testing
+
+* A genome-wide analysis requires estimating millions of effect sizes.
+* For an individual SNP/gene pair the p-value of the genotype coefficient may be
+  a useful to gauge whether it is likely to be relevant.
+* Interpreting p-values becomes more difficult if millions of them have to be considered.
+
+## False discovery rate
+
+* Instead of considering each test individually try to control the number of
+  tests that are incorrectly interpreted as indicating a true departure from
+  the null hypothesis.
+* Adjust p-values such that the resulting value is an estimate of the proportion
+  of false positives obtained at a given threshold.
+* Matrix-eQTL uses the Benjamini-Hochberg procedure.
+
 
 # *Hands-on* : Scaling it up
+## Data
+
+## Running Matrix-eQTL
+
+## A command-line interface
+
  
 # Interpreting results
+## Still just a pile of data
+
+* The initial analysis can produce a long list of SNP/gene associations.
+* Without further analysis these are not particularly helpful.
+* How can we identify particularly interesting results?
+* How can we assign biological meaning to the list of associations?
+
+## External data sources
+
+* A lot of genomic datasets and derived annotations are available.
+* Link SNPs to functional annotations using
+    * [GWAS catalogue](http://www.genome.gov/gwastudies/)
+    * [Blueprint](http://www.blueprint-epigenome.eu/)
+    * [ENCODE](https://www.encodeproject.org/)
+* Visualise SNPs in genomic context, e.g. using
+  [UCSC genome browser](http://genome-euro.ucsc.edu/index.html) 

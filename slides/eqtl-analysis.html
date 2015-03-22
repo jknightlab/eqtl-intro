@@ -67,6 +67,7 @@ code > span.er { font-weight: bold; }
 <li><a href="#/covariates-choose-wisely">Covariates – Choose wisely</a></li>
 <li><a href="#/if-only-we-knew-covariates-for-real-data">If only we knew – Covariates for real data</a></li>
 <li><a href="#/hands-on-dealing-with-real-data"><em>Hands-on</em> : Dealing with real data</a></li>
+<li><a href="#/large-scale-eqtl-analysis">Large scale eQTL analysis</a></li>
 <li><a href="#/hands-on-scaling-it-up"><em>Hands-on</em> : Scaling it up</a></li>
 <li><a href="#/interpreting-results">Interpreting results</a></li>
 </ul>
@@ -129,6 +130,11 @@ Need to provide password separately.
 <p>Access the RStudio interface at <em>http://yourip:8787</em>.</p>
 <pre><code>* Username: rstudio
 * Password: rstudio</code></pre>
+</section><section id="useful-resources" class="slide level2">
+<h1>Useful resources</h1>
+<ul>
+<li>RStudio <a href="http://www.rstudio.com/resources/cheatsheets/">cheat sheets</a></li>
+</ul>
 </section></section>
 <section><section id="what-are-eqtl" class="titleslide slide level1"><h1>What are eQTL?</h1></section><section id="quantitative-trait-loci" class="slide level2">
 <h1>Quantitative trait loci</h1>
@@ -488,6 +494,20 @@ fig &lt;-<span class="st"> </span><span class="kw">ggplot</span>(estimates, <spa
 <span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>estimate))  +<span class="st"> </span><span class="kw">theme_bw</span>()
 fig &lt;-<span class="st"> </span>fig +<span class="st"> </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="fl">1.5</span>)</code></pre>
 </aside>
+</section><section id="interlude-p-values" class="slide level2">
+<h1>Interlude: p-values</h1>
+<ul>
+<li>After estimating model coefficients we can test them for departure from 0.</li>
+<li>We are interested in identifying SNPs with non-zero coefficients.</li>
+<li>The strength of the evidence that the true coefficient is non-zero is often gauged by the resulting p-value.</li>
+<li>How should p-values be interpreted?</li>
+</ul>
+<aside class="notes">
+<p>The p-value is the probability of observing an effect at least as extreme as the one in the sample data if the null hypothesis is true.</p>
+<p>P-values relate to how likely it is to observe the data under pre-specified conditions <strong>not</strong> to how likely the null hypothesis is.</p>
+<p>Use p-values as a guide to identify potentially interesting results, not as a definitive statement of which findings are real.</p>
+Consider other evidence, especially estimates of effect sizes and their confidence intervals.
+</aside>
 </section></section>
 <section><section id="detecting-eqtl-not-that-simple" class="titleslide slide level1"><h1>Detecting eQTL – Not <em>that</em> simple</h1></section><section id="additional-sources-of-variation" class="slide level2">
 <h1>Additional sources of variation</h1>
@@ -634,8 +654,19 @@ May also want to try including all 20 variables.
 <ul>
 <li>The major sources of variation in gene expression data are (usually) not genetic.</li>
 <li>Can remove non-genetic sources of variation by including the3 first <span class="math">\(k\)</span> PCs into the model.</li>
-<li>But need to look out for PCs that <em>do</em> correlate with genotype.</li>
 </ul>
+</section><section id="practical-considerations" class="slide level2">
+<h1>Practical considerations</h1>
+<ul>
+<li>Not obvious how many PCs to include in model.</li>
+<li>Need to look out for PCs that <em>do</em> correlate with genotype.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Beware of data formatting issues.</li>
+<li>Data should be centred and scaled prior to PCA.</li>
+</ul>
+</div>
 </section></section>
 <section><section id="hands-on-dealing-with-real-data" class="titleslide slide level1"><h1><em>Hands-on</em> : Dealing with real data</h1></section><section id="data-2" class="slide level2">
 <h1>Data</h1>
@@ -648,9 +679,145 @@ May also want to try including all 20 variables.
 </dd>
 </dl>
 <p>Subset of data published in<br />Fairfax, Humburg, Makino, <em>et al.</em><br /><strong>Innate Immune Activity Conditions the Effect of Regulatory Variants upon Monocyte Gene Expression</strong>. Science (2014). doi:<a href="http://doi.org/10.1126/science.1246949">10.1126/science.1246949</a>.</p>
+</section><section id="brief-look-at-the-data" class="slide level2">
+<h1>Brief look at the data</h1>
+<ul>
+<li>Load the data and examine it</li>
+</ul>
+<aside class="notes">
+<pre class="sourceCode r"><code class="sourceCode r">geno &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="kw">file</span>(<span class="st">&quot;/data/genotypes/genotypes.tab.gz&quot;</span>))
+expr &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="kw">file</span>(<span class="st">&quot;/data/monocytes/expression/ifn_expression.tab.gz&quot;</span>))</code></pre>
+Note that these files have variables in rows and samples in columns.<br />Look at the data.frames biefly, maybe plot some gene expression data if there is time.
+</aside>
+</section><section id="interlude-data-processing" class="slide level2">
+<h1>Interlude: Data processing</h1>
+<ul>
+<li>These data have alredy been QC’d and processed.</li>
+<li>When dealing with raw data extensive QC is required for genotyping and expression data.</li>
+<li>Gene expression data also needs to be normalised across samples.</li>
+<li>Can be a lengthy process but is crucial for the quality of results.</li>
+</ul>
+</section><section id="pca-101" class="slide level2">
+<h1>PCA 101</h1>
+<ul>
+<li>Compute principle components of gene expression data.</li>
+<li>Create a plot of the variances for the first 10 PCs.</li>
+<li>How much of the total variance is explained by the first 10 PCs?</li>
+</ul>
+<aside class="notes">
+<pre class="sourceCode r"><code class="sourceCode r">pca &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(expr[-<span class="dv">1</span>]), <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">scale =</span> <span class="ot">TRUE</span>)
+pc &lt;-<span class="st"> </span>pca$x</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(pca, <span class="dt">npcs=</span><span class="dv">10</span>)</code></pre>
+<p>Since the data were scaled prior to the PCA the total variance is the same as the number of probes. The variance accounted for by each component is available through the <code>sdev</code> field of the <code>prcomp</code> return value.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(pca$sdev[<span class="dv">1</span>:<span class="dv">10</span>]^<span class="dv">2</span>)/<span class="kw">nrow</span>(expr)</code></pre>
+</aside>
+</section><section id="model-fitting-with-pca-covariates" class="slide level2">
+<h1>Model fitting with PCA covariates</h1>
+<ul>
+<li>Model the expression measured by probe 3710685 as a function of SNP rs4077515 and the first 10 PCs.</li>
+<li>Create a plot of gene expression by genotype with the effect of the PCs removed.</li>
+<li>How does this compare to the simple linear regression model for this SNP/gene pair.</li>
+</ul>
+<aside class="notes">
+<p>To make our life a bit easier we collect all the relevant data into a single data.frame.</p>
+<pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">probe=</span><span class="kw">unlist</span>(<span class="kw">subset</span>(expr, Probe==<span class="st">&quot;3710685&quot;</span>)[-<span class="dv">1</span>]), 
+        <span class="dt">rs4077515=</span><span class="kw">unlist</span>(<span class="kw">subset</span>(geno, id==<span class="st">&quot;rs4077515&quot;</span>)[-<span class="dv">1</span>]), pc[,<span class="dv">1</span>:<span class="dv">10</span>])</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">pcFit &lt;-<span class="st"> </span><span class="kw">lm</span>(probe ~<span class="st"> </span>., <span class="dt">data=</span>data)
+<span class="kw">summary</span>(pcFit)</code></pre>
+<p>Simple model:</p>
+<pre class="sourceCode r"><code class="sourceCode r">simpleFit &lt;-<span class="st"> </span><span class="kw">lm</span>(probe ~<span class="st"> </span>rs4077515, <span class="dt">data=</span>data)
+<span class="kw">summary</span>(simpleFit)</code></pre>
+<p>Plotting</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+corrected &lt;-<span class="st"> </span>data$probe -<span class="st"> </span><span class="kw">rowSums</span>(<span class="kw">coef</span>(pcFit)[-(<span class="dv">1</span>:<span class="dv">2</span>)]*data[, <span class="dv">3</span>:<span class="dv">12</span>])
+corrected &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">expression=</span>corrected, <span class="dt">genotype=</span><span class="kw">factor</span>(data$rs4077515))
+<span class="kw">ggplot</span>(corrected, <span class="kw">aes</span>(genotype, expression)) +
+<span class="st">        </span><span class="kw">geom_jitter</span>(<span class="dt">colour=</span><span class="st">&quot;darkgrey&quot;</span>, <span class="dt">position=</span><span class="kw">position_jitter</span>(<span class="dt">width=</span><span class="fl">0.25</span>)) +
+<span class="st">        </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.size=</span><span class="dv">0</span>, <span class="dt">alpha=</span><span class="fl">0.6</span>, <span class="dt">fill=</span><span class="st">&quot;grey&quot;</span>) +<span class="st"> </span><span class="kw">theme_bw</span>()</code></pre>
+</aside>
 </section></section>
-<section><section id="hands-on-scaling-it-up" class="titleslide slide level1"><h1><em>Hands-on</em> : Scaling it up</h1></section></section>
-<section><section id="interpreting-results" class="titleslide slide level1 unnumbered"><h1>Interpreting results</h1></section></section>
+<section><section id="large-scale-eqtl-analysis" class="titleslide slide level1"><h1>Large scale eQTL analysis</h1></section><section id="genome-wide-analysis" class="slide level2">
+<h1>Genome-wide analysis</h1>
+<ul>
+<li>We don’t just want to analyse a single SNP/gene pair …</li>
+<li>or even all SNP associations with a single gene</li>
+</ul>
+<ul>
+<li class="fragment">We want to study <em>all</em> SNP/gene pairs.</li>
+<li class="fragment">(but may restrict this to local associations).</li>
+</ul>
+<div class="fragment">
+<p>This is computationally intensive and may be very time consuming.</p>
+</div>
+<div class="fragment">
+<p>Need to be clever about how we do this.</p>
+</div>
+</section><section id="fast-model-fitting-with-matrix-eqtl" class="slide level2">
+<h1>Fast model fitting with Matrix-eQTL</h1>
+<a href="http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/">Matrix-eQTL</a> strategies to reduce run time:
+<div class="multicolumn">
+<div>
+<ul>
+<li>Required test statistic can be expressed in terms of the correlation between SNP and gene expression.</li>
+<li>Use efficient matrix multiplications to compute the correlations.</li>
+<li>Computing p-values is expensive, only do this for SNP/gene pairs that are sufficiently interesting.</li>
+</ul>
+</div>
+<div>
+<img src="figure/matrix_mult.gif" />
+</div>
+</div>
+<aside class="notes">
+For simple linear regression: <span class="math">\[
+t = \sqrt{n-2}\frac{r}{\sqrt{1-r^2}}
+\]</span> Can precompute p-value threshold based on <span class="math">\(r^2\)</span>
+</aside>
+</section><section id="correcting-for-multiple-testing" class="slide level2">
+<h1>Correcting for multiple testing</h1>
+<ul>
+<li>A genome-wide analysis requires estimating millions of effect sizes.</li>
+<li>For an individual SNP/gene pair the p-value of the genotype coefficient may be a useful to gauge whether it is likely to be relevant.</li>
+<li>Interpreting p-values becomes more difficult if millions of them have to be considered.</li>
+</ul>
+</section><section id="false-discovery-rate" class="slide level2">
+<h1>False discovery rate</h1>
+<ul>
+<li>Instead of considering each test individually try to control the number of tests that are incorrectly interpreted as indicating a true departure from the null hypothesis.</li>
+<li>Adjust p-values such that the resulting value is an estimate of the proportion of false positives obtained at a given threshold.</li>
+<li>Matrix-eQTL uses the Benjamini-Hochberg procedure.</li>
+</ul>
+</section></section>
+<section><section id="hands-on-scaling-it-up" class="titleslide slide level1"><h1><em>Hands-on</em> : Scaling it up</h1></section><section id="data-3" class="slide level2">
+<h1>Data</h1>
+</section><section id="running-matrix-eqtl" class="slide level2">
+<h1>Running Matrix-eQTL</h1>
+</section><section id="a-command-line-interface" class="slide level2">
+<h1>A command-line interface</h1>
+</section></section>
+<section><section id="interpreting-results" class="titleslide slide level1"><h1>Interpreting results</h1></section><section id="still-just-a-pile-of-data" class="slide level2">
+<h1>Still just a pile of data</h1>
+<ul>
+<li>The initial analysis can produce a long list of SNP/gene associations.</li>
+<li>Without further analysis these are not particularly helpful.</li>
+<li>How can we identify particularly interesting results?</li>
+<li>How can we assign biological meaning to the list of associations?</li>
+</ul>
+</section><section id="external-data-sources" class="slide level2">
+<h1>External data sources</h1>
+<ul>
+<li>A lot of genomic datasets and derived annotations are available.</li>
+<li>Link SNPs to functional annotations using
+<ul>
+<li><a href="http://www.genome.gov/gwastudies/">GWAS catalogue</a></li>
+<li><a href="http://www.blueprint-epigenome.eu/">Blueprint</a></li>
+<li><a href="https://www.encodeproject.org/">ENCODE</a></li>
+</ul></li>
+<li>Visualise SNPs in genomic context, e.g. using <a href="http://genome-euro.ucsc.edu/index.html">UCSC genome browser</a></li>
+</ul>
+<div class="references">
+
+</div>
+</section></section>
     </div>
   </div>
 
