@@ -8,6 +8,7 @@ We also load the files containing the genomic coordinates of the probes
 and SNPs as well as further annotations for later reference.
 
 ```{r me_loadData}
+library(MatrixEQTL)
 snps <- SlicedData$new()
 snps$LoadFile("/data/genotypes/genotypes.tab.gz")
 genes <- SlicedData$new()
