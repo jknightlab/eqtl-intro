@@ -104,7 +104,6 @@ Need to provide password separately.
 <p>Windows :</p>
 <pre><code>docker run -p 8787:8787 
   -v /c/Users/user/eqtl_course/genotpes:/data/genotypes
-  -v /c/Users/user/eqtl_course/analysis:/data/analysis 
   humburg/eqtl-intro</code></pre>
 <p>IP address of the server usually is 192.168.59.103.</p>
 <p>Use <code>boot2docker ip</code> to check if necessary.</p>
@@ -113,7 +112,6 @@ Need to provide password separately.
 <p>Mac :</p>
 <pre><code>docker run -p 8787:8787 
    -v /Users/user/eqtl_course/genotpes:/data/genotypes 
-   -v /Users/user/eqtl_course/analysis:/data/analysis 
    humburg/eqtl-intro</code></pre>
 <p>IP address of the server usually is 192.168.59.103.</p>
 <p>Use <code>boot2docker ip</code> to check if necessary.</p>
@@ -122,7 +120,6 @@ Need to provide password separately.
 <p>Linux :</p>
 <pre><code>docker run -p 8787:8787 
   -v /home/user/eqtl_course/genotpes:/data/genotypes
-  -v /home/user/eqtl_course/analysis:/data/analysis
   -e USER=$USER  -e USERID = $UID 
   humburg/eqtl-intro</code></pre>
 <p>IP address of the server usually is 127.0.0.1 (or <em>localhost</em>).</p>
@@ -839,8 +836,8 @@ probeAnno &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(
 </ul>
 <aside class="notes">
 <pre class="sourceCode r"><code class="sourceCode r">chr9.eQTL &lt;-<span class="st"> </span><span class="kw">Matrix_eQTL_main</span>(snps, genes,
-        <span class="dt">output_file_name=</span><span class="st">&quot;/data/analysis/ifn_chr9_eQTL.trans&quot;</span>, 
-        <span class="dt">output_file_name.cis=</span><span class="st">&quot;/data/analysis/ifn_chr9_eQTL.cis&quot;</span>, 
+        <span class="dt">output_file_name=</span><span class="st">&quot;./ifn_chr9_eQTL.trans&quot;</span>, 
+        <span class="dt">output_file_name.cis=</span><span class="st">&quot;./ifn_chr9_eQTL.cis&quot;</span>, 
         <span class="dt">pvOutputThreshold.cis=</span><span class="fl">1e-3</span>, <span class="dt">snpspos=</span><span class="kw">as.data.frame</span>(snpPos), 
         <span class="dt">genepos=</span><span class="kw">as.data.frame</span>(probePos))</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">pca &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(expr[-<span class="dv">1</span>]), <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">scale =</span> <span class="ot">TRUE</span>)
@@ -850,8 +847,8 @@ covar &lt;-<span class="st"> </span>SlicedData$<span class="kw">new</span>()
 covar$<span class="kw">CreateFromMatrix</span>(<span class="kw">t</span>(pc[,<span class="dv">1</span>:<span class="dv">10</span>]))
 
 chr9.eQTL.pc10 &lt;-<span class="st"> </span><span class="kw">Matrix_eQTL_main</span>(snps, genes, <span class="dt">cvrt=</span>covar, 
-        <span class="dt">output_file_name=</span><span class="st">&quot;/data/analysis/ifn_chr9_eQTL.pc10.trans&quot;</span>, 
-        <span class="dt">output_file_name.cis=</span><span class="st">&quot;/data/analysis/ifn_chr9_eQTL.pc10.cis&quot;</span>, 
+        <span class="dt">output_file_name=</span><span class="st">&quot;./ifn_chr9_eQTL.pc10.trans&quot;</span>, 
+        <span class="dt">output_file_name.cis=</span><span class="st">&quot;./ifn_chr9_eQTL.pc10.cis&quot;</span>, 
         <span class="dt">pvOutputThreshold.cis=</span><span class="fl">1e-3</span>, <span class="dt">snpspos=</span><span class="kw">as.data.frame</span>(snpPos), 
         <span class="dt">genepos=</span><span class="kw">as.data.frame</span>(probePos))</code></pre>
 <p>Compare number of associations reported and take a look at p-values/FDR and effect sizes.<br />For trans associations in particular interesting results only start to appear after addition of PCs.</p>

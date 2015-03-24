@@ -750,8 +750,8 @@ attached to them by *readr*.
 
 ```r
 chr9.eQTL <- Matrix_eQTL_main(snps, genes,
-		output_file_name="/data/analysis/ifn_chr9_eQTL.trans", 
-		output_file_name.cis="/data/analysis/ifn_chr9_eQTL.cis", 
+		output_file_name="./ifn_chr9_eQTL.trans", 
+		output_file_name.cis="./ifn_chr9_eQTL.cis", 
 		pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
 		genepos=as.data.frame(probePos))
 ```
@@ -760,16 +760,16 @@ chr9.eQTL <- Matrix_eQTL_main(snps, genes,
 ## Matching data files and location files 
 ## 382 of 382  genes matched
 ## 28307 of 28307  SNPs matched
-## Task finished in  0.019  seconds
+## Task finished in  0.021  seconds
 ## Reordering genes
 ##  
-## Task finished in  0.113  seconds
+## Task finished in  0.129  seconds
 ## Processing covariates 
-## Task finished in  0.001  seconds
+## Task finished in  0.002  seconds
 ## Processing gene expression data (imputation, residualization, etc.) 
-## Task finished in  0.006  seconds
+## Task finished in  0.008  seconds
 ## Creating output file(s) 
-## Task finished in  0.012  seconds
+## Task finished in  0.018  seconds
 ## Performing eQTL analysis 
 ##  3.44% done, 71 cis-eQTLs, 6 trans-eQTLs
 ##  6.89% done, 108 cis-eQTLs, 8 trans-eQTLs
@@ -800,7 +800,7 @@ chr9.eQTL <- Matrix_eQTL_main(snps, genes,
 ## 93.10% done, 1,917 cis-eQTLs, 162 trans-eQTLs
 ## 96.55% done, 2,120 cis-eQTLs, 167 trans-eQTLs
 ## 100.00% done, 2,177 cis-eQTLs, 168 trans-eQTLs
-## Task finished in  3.966  seconds
+## Task finished in  4.365  seconds
 ## 
 ```
 Principle components are computed as previously. For use with Matrix-eQTL
@@ -819,8 +819,8 @@ covar$CreateFromMatrix(t(pc[,1:10]))
 
 ```r
 chr9.eQTL.pc10 <- Matrix_eQTL_main(snps, genes, cvrt=covar, 
-		output_file_name="/data/analysis/ifn_chr9_eQTL.pc10.trans", 
-		output_file_name.cis="/data/analysis/ifn_chr9_eQTL.pc10.cis", 
+		output_file_name="./ifn_chr9_eQTL.pc10.trans", 
+		output_file_name.cis="./ifn_chr9_eQTL.pc10.cis", 
 		pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
 		genepos=as.data.frame(probePos))
 ```
@@ -829,16 +829,16 @@ chr9.eQTL.pc10 <- Matrix_eQTL_main(snps, genes, cvrt=covar,
 ## Matching data files and location files 
 ## 382 of 382  genes matched
 ## 28307 of 28307  SNPs matched
-## Task finished in  0.017  seconds
+## Task finished in  0.02  seconds
 ## Reordering genes
 ##  
-## Task finished in  0.127  seconds
+## Task finished in  0.122  seconds
 ## Processing covariates 
-## Task finished in  0.002  seconds
+## Task finished in  0.003  seconds
 ## Processing gene expression data (imputation, residualization, etc.) 
-## Task finished in  0.009  seconds
+## Task finished in  0.008  seconds
 ## Creating output file(s) 
-## Task finished in  0.011  seconds
+## Task finished in  0.014  seconds
 ## Performing eQTL analysis 
 ##  3.44% done, 80 cis-eQTLs, 3 trans-eQTLs
 ##  6.89% done, 123 cis-eQTLs, 5 trans-eQTLs
@@ -869,7 +869,7 @@ chr9.eQTL.pc10 <- Matrix_eQTL_main(snps, genes, cvrt=covar,
 ## 93.10% done, 3,001 cis-eQTLs, 129 trans-eQTLs
 ## 96.55% done, 3,221 cis-eQTLs, 129 trans-eQTLs
 ## 100.00% done, 3,331 cis-eQTLs, 129 trans-eQTLs
-## Task finished in  3.77  seconds
+## Task finished in  4.363  seconds
 ## 
 ```
 
