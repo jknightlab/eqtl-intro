@@ -41,11 +41,6 @@ $(EX_DIR)/%:
 	$(MAKE) -C $(EX_DIR)
 	chown $(UNAME):$(GNAME) $(EX_FILES)
 	
-<<<<<<< HEAD
-.PHONY: exercises simulation
-exercises: $(EX_FILES)
-simulation: $(SIM_FILES)
-=======
 $(SLIDE_DIR)/%:
 	$(MAKE) -C $(SLIDE_DIR)
 	
@@ -58,4 +53,3 @@ deploy:
 	cp -r $(SLIDE_DIR)/figure $(WEB_DIR)/
 	cp $(TOP_DIR)/include/slides.css $(WEB_DIR)/include/
 	mv $(WEB_DIR)/eqtl-analysis.html $(WEB_DIR)/index.html
->>>>>>> master
