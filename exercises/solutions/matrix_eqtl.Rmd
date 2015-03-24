@@ -26,8 +26,8 @@ attached to them by *readr*.
 
 ```{r cme_allME}
 chr9.eQTL <- Matrix_eQTL_main(snps, genes,
-		output_file_name="/data/analysis/ifn_chr9_eQTL.trans", 
-		output_file_name.cis="/data/analysis/ifn_chr9_eQTL.cis", 
+		output_file_name="./ifn_chr9_eQTL.trans", 
+		output_file_name.cis="./ifn_chr9_eQTL.cis", 
 		pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
 		genepos=as.data.frame(probePos))
 ```
@@ -45,8 +45,8 @@ covar$CreateFromMatrix(t(pc[,1:10]))
 
 ```{r me_callMEpc}
 chr9.eQTL.pc10 <- Matrix_eQTL_main(snps, genes, cvrt=covar, 
-		output_file_name="/data/analysis/ifn_chr9_eQTL.pc10.trans", 
-		output_file_name.cis="/data/analysis/ifn_chr9_eQTL.pc10.cis", 
+		output_file_name="./ifn_chr9_eQTL.pc10.trans", 
+		output_file_name.cis="./ifn_chr9_eQTL.pc10.cis", 
 		pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
 		genepos=as.data.frame(probePos))
 ```

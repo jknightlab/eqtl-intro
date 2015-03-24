@@ -40,7 +40,6 @@ Windows
   
     docker run -p 8787:8787 
       -v /c/Users/user/eqtl_course/genotpes:/data/genotypes
-      -v /c/Users/user/eqtl_course/analysis:/data/analysis 
       humburg/eqtl-intro
     
 
@@ -56,7 +55,6 @@ Mac
     
     docker run -p 8787:8787 
        -v /Users/user/eqtl_course/genotpes:/data/genotypes 
-       -v /Users/user/eqtl_course/analysis:/data/analysis 
        humburg/eqtl-intro
 
 IP address of the server usually is 192.168.59.103.
@@ -70,7 +68,6 @@ Linux
   
     docker run -p 8787:8787 
       -v /home/user/eqtl_course/genotpes:/data/genotypes
-      -v /home/user/eqtl_course/analysis:/data/analysis
       -e USER=$USER  -e USERID = $UID 
       humburg/eqtl-intro
     
@@ -819,8 +816,8 @@ Use Matrix-eQTL to carry out a *cis*/*trans* eQTL analysis.
 
 ```r
 chr9.eQTL <- Matrix_eQTL_main(snps, genes,
-        output_file_name="/data/analysis/ifn_chr9_eQTL.trans", 
-        output_file_name.cis="/data/analysis/ifn_chr9_eQTL.cis", 
+        output_file_name="./ifn_chr9_eQTL.trans", 
+        output_file_name.cis="./ifn_chr9_eQTL.cis", 
         pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
         genepos=as.data.frame(probePos))
 ```
@@ -833,8 +830,8 @@ covar <- SlicedData$new()
 covar$CreateFromMatrix(t(pc[,1:10]))
 
 chr9.eQTL.pc10 <- Matrix_eQTL_main(snps, genes, cvrt=covar, 
-        output_file_name="/data/analysis/ifn_chr9_eQTL.pc10.trans", 
-        output_file_name.cis="/data/analysis/ifn_chr9_eQTL.pc10.cis", 
+        output_file_name="./ifn_chr9_eQTL.pc10.trans", 
+        output_file_name.cis="./ifn_chr9_eQTL.pc10.cis", 
         pvOutputThreshold.cis=1e-3, snpspos=as.data.frame(snpPos), 
         genepos=as.data.frame(probePos))
 ```    

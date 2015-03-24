@@ -1,6 +1,6 @@
 WD:=$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 RSCRIPT=docker run -v  $(WD):/exercises -v $(GENOTYPE_DIR):/data/genotypes \
-        -v $(ANALYSIS_DIR):/data/analysis -w /exercises humburg/eqtl-intro Rscript
+        -w /exercises humburg/eqtl-intro Rscript
 PANDOC=docker run -v  $(WD):/exercises -v $(TOP_DIR)include/:/exercises/include \
        -w /exercises humburg/eqtl-intro pandoc
 
