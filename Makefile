@@ -11,6 +11,7 @@ SIM_OUT=$(DATA_OUT)/simulated
 EX_DIR=exercises
 SLIDE_DIR=slides
 WEB_DIR=/usr/local/www/data/eqtl-intro
+GITHUB_DIR=/home/humburg/git/eqtl-intro-page
 
 MKDIR=mkdir -p
 
@@ -44,7 +45,7 @@ $(EX_DIR)/%:
 $(SLIDE_DIR)/%:
 	$(MAKE) -C $(SLIDE_DIR)
 	
-.PHONY: data exercises slides all deploy
+.PHONY: data exercises slides all deploy deploy_github
 data: $(SIM_FILES)
 exercises: $(EX_FILES)
 slides: $(SLIDE_FILES)
@@ -53,3 +54,13 @@ deploy:
 	cp -r $(SLIDE_DIR)/figure $(WEB_DIR)/
 	cp $(TOP_DIR)/include/slides.css $(WEB_DIR)/include/
 	mv $(WEB_DIR)/eqtl-analysis.html $(WEB_DIR)/index.html
+deploy_github:
+	cp $(SLIDE_FILES) $(GITHUB_DIR)/
+	cp -r $(SLIDE_DIR)/figure $(GITHUB_DIR)/slides
+	cp $(TOP_DIR)/include/slides.css $(GITHUB_DIR)/slides/include/
+	cp $(EX_DIR)/exercises.html $(GITHUB_DIR)/exercises/ 
+	cp $(EX_DIR)/exercises_and_solutions.html $(GITHUB_DIR)/exercises/
+	cd $(GITHUB_DIR)
+	git commit -a -m "Updated page content"
+	git push origin gh-pages
+	
