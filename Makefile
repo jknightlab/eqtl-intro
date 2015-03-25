@@ -61,6 +61,7 @@ deploy_github:
 	cp $(EX_DIR)/exercises.html $(GITHUB_DIR)/exercises/ 
 	cp $(EX_DIR)/exercises_and_solutions.html $(GITHUB_DIR)/exercises/
 	cd $(GITHUB_DIR)
-	git commit -a -m "Updated page content"
-	git push origin gh-pages
+	git add .
+	git commit -m "Updated page content"
+	git push
 	
