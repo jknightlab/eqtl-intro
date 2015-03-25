@@ -55,7 +55,7 @@ deploy:
 	cp $(TOP_DIR)/include/slides.css $(WEB_DIR)/include/
 	mv $(WEB_DIR)/eqtl-analysis.html $(WEB_DIR)/index.html
 deploy_github:
-	cp $(SLIDE_FILES) $(GITHUB_DIR)/
+	cp $(SLIDE_FILES) $(GITHUB_DIR)/slides/
 	cp -r $(SLIDE_DIR)/figure $(GITHUB_DIR)/slides
 	cp $(TOP_DIR)/include/slides.css $(GITHUB_DIR)/slides/include/
 	cp $(EX_DIR)/exercises.html $(GITHUB_DIR)/exercises/ 
