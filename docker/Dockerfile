@@ -10,8 +10,8 @@ RUN apt-get install -y texlive && apt-get install -y texlive-latex-extra
 RUN cabal update && cabal install pandoc
 
 ## Additional R packages
-RUN Rscript -e "biocLite(c('MatrixEQTL', 'devtools', 'trio', 'dplyr', 'ggplot2', 'tidyr', 'knitr', 'optparse'))"
-RUN Rscript -e "devtools::install_github('humburg/Rsge');devtools::install_github('jknightlab/mePipe');devtools::install_github('hadley/readr')"
+RUN Rscript -e "BiocManager::install(c('MatrixEQTL', 'devtools', 'trio', 'dplyr', 'ggplot2', 'tidyr', 'knitr', 'optparse', 'readr'))"
+RUN Rscript -e "devtools::install_github('cran/lmSupport');devtools::install_github('humburg/Rsge');devtools::install_github('jknightlab/mePipe')"
 
 ## Data for exercises
 ADD data /data
