@@ -1,6 +1,6 @@
 ## Dockerfile to create a reproducible environment for exercises
-FROM bioconductor/release_core
-MAINTAINER Peter Humburg <peter.humburg@gmail.com>
+FROM bioconductor/bioconductor_docker:latest
+LABEL maintainer="Peter Humburg" email="peter.humburg@gmail.com"
 
 ## Install additional software packages
 RUN apt-get update -y && apt-get install -y haskell-platform 
