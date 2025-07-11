@@ -1,4 +1,5 @@
-export TOP_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+PATH = $(realpath $(lastword $(MAKEFILE_LIST)))
+export TOP_DIR := $(shell dirname '$(PATH)')
 export GENOTYPE_DIR = $(HOME)/eqtl_course/genotypes
 export ANALYSIS_DIR = $(HOME)/eqtl_course/analysis
 export UNAME=humburg
@@ -42,8 +43,8 @@ $(EX_DIR)/%:
 	$(MAKE) -C $(EX_DIR)
 	chown $(UNAME):$(GNAME) $(EX_FILES)
 	
-$(SLIDE_DIR)/%:
-	$(MAKE) -C $(SLIDE_DIR)
+$(SLIDE_FILES):
+	$(MAKE) -C $(@D) $(@F)
 	
 .PHONY: data exercises slides all deploy deploy_github
 data: $(SIM_FILES)
