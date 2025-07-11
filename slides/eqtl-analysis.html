@@ -8,27 +8,71 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="reveal.js/css/reveal.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//css/reveal.min.css"/>
     <style type="text/css">code{white-space: pre;}</style>
     <style type="text/css">
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-pre, code { background-color: #f8f8f8; }
-code > span.kw { color: #204a87; font-weight: bold; }
-code > span.dt { color: #204a87; }
-code > span.dv { color: #0000cf; }
-code > span.bn { color: #0000cf; }
-code > span.fl { color: #0000cf; }
-code > span.ch { color: #4e9a06; }
-code > span.st { color: #4e9a06; }
-code > span.co { color: #8f5902; font-style: italic; }
-code > span.ot { color: #8f5902; }
-code > span.al { color: #ef2929; }
-code > span.fu { color: #000000; }
-code > span.er { font-weight: bold; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
     </style>
     <link rel="stylesheet" href="include/slides.css"/>
     <!-- If the query includes 'print-pdf', include the PDF print sheet -->
@@ -37,14 +81,13 @@ code > span.er { font-weight: bold; }
         var link = document.createElement( 'link' );
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = 'reveal.js/css/print/pdf.css';
+        link.href = 'https://unpkg.com/reveal.js@^4//css/print/pdf.css';
         document.getElementsByTagName( 'head' )[0].appendChild( link );
       }
     </script>
     <!--[if lt IE 9]>
-    <script src="reveal.js/lib/js/html5shiv.js"></script>
+    <script src="https://unpkg.com/reveal.js@^4//lib/js/html5shiv.js"></script>
     <![endif]-->
-    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 </head>
 <body>
   <div class="reveal">
@@ -58,84 +101,125 @@ code > span.er { font-weight: bold; }
 <section id="TOC">
 <h1>Overview</h1>
 <ul>
-<li><a href="#/hands-on-setup"><em>Hands-on</em> : Setup</a></li>
-<li><a href="#/what-are-eqtl">What are eQTL?</a></li>
-<li><a href="#/detecting-eqtl-a-simple-model">Detecting eQTL – A simple model</a></li>
-<li><a href="#/hands-on-simple-linear-regression"><em>Hands-on</em> : Simple linear regression</a></li>
-<li><a href="#/detecting-eqtl-not-that-simple">Detecting eQTL – Not <em>that</em> simple</a></li>
-<li><a href="#/hands-on-covariates"><em>Hands-on</em> : Covariates</a></li>
-<li><a href="#/covariates-choose-wisely">Covariates – Choose wisely</a></li>
-<li><a href="#/if-only-we-knew-covariates-for-real-data">If only we knew – Covariates for real data</a></li>
-<li><a href="#/hands-on-dealing-with-real-data"><em>Hands-on</em> : Dealing with real data</a></li>
-<li><a href="#/large-scale-eqtl-analysis">Large scale eQTL analysis</a></li>
-<li><a href="#/hands-on-scaling-it-up"><em>Hands-on</em> : Scaling it up</a></li>
-<li><a href="#/interpreting-results">Interpreting results</a></li>
-<li><a href="#/summary">Summary</a></li>
+<li><a href="#/hands-on-setup"
+id="/toc-hands-on-setup"><em>Hands-on</em> : Setup</a></li>
+<li><a href="#/what-are-eqtl" id="/toc-what-are-eqtl">What are
+eQTL?</a></li>
+<li><a href="#/detecting-eqtl-a-simple-model"
+id="/toc-detecting-eqtl-a-simple-model">Detecting eQTL – A simple
+model</a></li>
+<li><a href="#/hands-on-simple-linear-regression"
+id="/toc-hands-on-simple-linear-regression"><em>Hands-on</em> : Simple
+linear regression</a></li>
+<li><a href="#/detecting-eqtl-not-that-simple"
+id="/toc-detecting-eqtl-not-that-simple">Detecting eQTL – Not
+<em>that</em> simple</a></li>
+<li><a href="#/hands-on-covariates"
+id="/toc-hands-on-covariates"><em>Hands-on</em> : Covariates</a></li>
+<li><a href="#/covariates-choose-wisely"
+id="/toc-covariates-choose-wisely">Covariates – Choose wisely</a></li>
+<li><a href="#/if-only-we-knew-covariates-for-real-data"
+id="/toc-if-only-we-knew-covariates-for-real-data">If only we knew –
+Covariates for real data</a></li>
+<li><a href="#/hands-on-dealing-with-real-data"
+id="/toc-hands-on-dealing-with-real-data"><em>Hands-on</em> : Dealing
+with real data</a></li>
+<li><a href="#/large-scale-eqtl-analysis"
+id="/toc-large-scale-eqtl-analysis">Large scale eQTL analysis</a></li>
+<li><a href="#/hands-on-scaling-it-up"
+id="/toc-hands-on-scaling-it-up"><em>Hands-on</em> : Scaling it
+up</a></li>
+<li><a href="#/interpreting-results"
+id="/toc-interpreting-results">Interpreting results</a></li>
+<li><a href="#/summary" id="/toc-summary">Summary</a></li>
 </ul>
 </section>
 
-<section><section id="hands-on-setup" class="titleslide slide level1"><h1><em>Hands-on</em> : Setup</h1></section><section id="docker-image" class="slide level2">
-<h1>Docker image</h1>
+<section>
+<section id="hands-on-setup" class="title-slide slide level1">
+<h1><em>Hands-on</em> : Setup</h1>
+
+</section>
+<section id="docker-image" class="slide level2">
+<h2>Docker image</h2>
 <p>Make sure you have the latest version of the docker image.</p>
-<pre class="sh"><code>docker pull humburg/eqtl-intro</code></pre>
-</section><section id="directory-structure" class="slide level2">
-<h1>Directory structure</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> pull humburg/eqtl-intro</span></code></pre></div>
+</section>
+<section id="directory-structure" class="slide level2">
+<h2>Directory structure</h2>
 <ul>
-<li>Create a working directory for this course. (<code>eqtl_course</code>)</li>
+<li>Create a working directory for this course.
+(<code>eqtl_course</code>)</li>
 <li>Within that directory, create two sub-directories
 <ul>
 <li><code>genotypes</code></li>
 <li><code>analysis</code></li>
 </ul></li>
 <li><em>Mac</em>: create directories under <code>/Users/</code></li>
-<li><em>Windows</em>: create directories under <code>C:\Users\</code></li>
+<li><em>Windows</em>: create directories under
+<code>C:\Users\</code></li>
 </ul>
-</section><section id="additional-data" class="slide level2">
-<h1>Additional data</h1>
-<p>The docker image contains most of the data. Further genotyping data is available from</p>
-<pre class="sh"><code>ftp://galahad.well.ox.ac.uk</code></pre>
+</section>
+<section id="additional-data" class="slide level2">
+<h2>Additional data</h2>
+<p>The docker image contains most of the data. Further genotyping data
+is available from</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ftp://galahad.well.ox.ac.uk</span></span></code></pre></div>
 <p>Username: eqtl_course</p>
 <p>Download the data and save it into <code>genotypes</code></p>
 <aside class="notes">
-Need to provide password separately.
+<p>Need to provide password separately.</p>
 </aside>
-</section><section id="start-the-rstudio-server" class="slide level2">
-<h1>Start the RStudio server</h1>
+</section>
+<section id="start-the-rstudio-server" class="slide level2">
+<h2>Start the RStudio server</h2>
 <p>Windows :</p>
 <pre><code>docker run -p 8787:8787 
   -v /c/Users/user/eqtl_course/genotpes:/data/genotypes
   humburg/eqtl-intro</code></pre>
 <p>IP address of the server usually is 192.168.59.103.</p>
 <p>Use <code>boot2docker ip</code> to check if necessary.</p>
-</section><section id="start-the-rstudio-server-1" class="slide level2">
-<h1>Start the RStudio server</h1>
+</section>
+<section id="start-the-rstudio-server-1" class="slide level2">
+<h2>Start the RStudio server</h2>
 <p>Mac :</p>
 <pre><code>docker run -p 8787:8787 
    -v /Users/user/eqtl_course/genotpes:/data/genotypes 
    humburg/eqtl-intro</code></pre>
 <p>IP address of the server usually is 192.168.59.103.</p>
 <p>Use <code>boot2docker ip</code> to check if necessary.</p>
-</section><section id="start-the-rstudio-server-2" class="slide level2">
-<h1>Start the RStudio server</h1>
+</section>
+<section id="start-the-rstudio-server-2" class="slide level2">
+<h2>Start the RStudio server</h2>
 <p>Linux :</p>
 <pre><code>docker run -p 8787:8787 
   -v /home/user/eqtl_course/genotpes:/data/genotypes
   -e USER=$USER  -e USERID = $UID 
   humburg/eqtl-intro</code></pre>
-<p>IP address of the server usually is 127.0.0.1 (or <em>localhost</em>).</p>
-</section><section id="using-rstudio" class="slide level2">
-<h1>Using RStudio</h1>
+<p>IP address of the server usually is 127.0.0.1 (or
+<em>localhost</em>).</p>
+</section>
+<section id="using-rstudio" class="slide level2">
+<h2>Using RStudio</h2>
 <p>Access the RStudio interface at <em>http://yourip:8787</em>.</p>
 <pre><code>* Username: rstudio
 * Password: rstudio</code></pre>
-</section><section id="useful-resources" class="slide level2">
-<h1>Useful resources</h1>
+</section>
+<section id="useful-resources" class="slide level2">
+<h2>Useful resources</h2>
 <ul>
-<li>RStudio <a href="http://www.rstudio.com/resources/cheatsheets/">cheat sheets</a></li>
+<li>RStudio <a
+href="http://www.rstudio.com/resources/cheatsheets/">cheat
+sheets</a></li>
 </ul>
 </section></section>
-<section><section id="what-are-eqtl" class="titleslide slide level1"><h1>What are eQTL?</h1></section><section id="quantitative-trait-loci" class="slide level2">
-<h1>Quantitative trait loci</h1>
+<section>
+<section id="what-are-eqtl" class="title-slide slide level1">
+<h1>What are eQTL?</h1>
+
+</section>
+<section id="quantitative-trait-loci" class="slide level2">
+<h2>Quantitative trait loci</h2>
 <p>QTL are regions of the genome associated with quantitative traits</p>
 <ul>
 <li>height</li>
@@ -143,107 +227,128 @@ Need to provide password separately.
 <li>lung capacity</li>
 <li>…</li>
 </ul>
-</section><section id="expression-quantitative-trait-loci" class="slide level2" data-transition="none">
-<h1>Expression quantitative trait loci</h1>
+</section>
+<section id="expression-quantitative-trait-loci" class="slide level2"
+data-transition="none">
+<h2 data-transition="none">Expression quantitative trait loci</h2>
 <div class="multicolumn">
 <div>
-<p>If the trait of interest is the expression of a gene, we talk about eQTL.</p>
+<p>If the trait of interest is the expression of a gene, we talk about
+eQTL.</p>
 <ul>
 <li><strong>Associations can be local (<em>cis</em>)</strong></li>
 <li>or distant (<em>trans</em>)</li>
 </ul>
 </div>
 <div>
-<img src="figure/cis_eqtl.png" />
+<p><img data-src="figure/cis_eqtl.png" /></p>
 </div>
 </div>
-</section><section id="expression-quantitative-trait-loci-1" class="slide level2" data-transition="none">
-<h1>Expression quantitative trait loci</h1>
+</section>
+<section id="expression-quantitative-trait-loci-1" class="slide level2"
+data-transition="none">
+<h2 data-transition="none">Expression quantitative trait loci</h2>
 <div class="multicolumn">
 <div>
-<p>If the trait of interest is the expression of a gene, we talk about eQTL.</p>
+<p>If the trait of interest is the expression of a gene, we talk about
+eQTL.</p>
 <ul>
 <li>Associations can be local (<em>cis</em>)</li>
 <li><strong>or distant (<em>trans</em>)</strong></li>
 </ul>
 </div>
 <div>
-<img src="figure/trans_eqtl.png" />
+<p><img data-src="figure/trans_eqtl.png" /></p>
 </div>
 </div>
-</section><section id="expression-quantitative-trait-loci-2" class="slide level2" data-transition="none">
-<h1>Expression quantitative trait loci</h1>
+</section>
+<section id="expression-quantitative-trait-loci-2" class="slide level2"
+data-transition="none">
+<h2 data-transition="none">Expression quantitative trait loci</h2>
 <div class="multicolumn">
 <div>
-<p>If the trait of interest is the expression of a gene, we talk about eQTL.</p>
+<p>If the trait of interest is the expression of a gene, we talk about
+eQTL.</p>
 <ul>
 <li>Associations can be local (<em>cis</em>)</li>
 <li><strong>or distant (<em>trans</em>)</strong></li>
 </ul>
 </div>
 <div>
-<img src="figure/trans_network.png" />
+<p><img data-src="figure/trans_network.png" /></p>
 </div>
 </div>
 </section></section>
-<section><section id="detecting-eqtl-a-simple-model" class="titleslide slide level1"><h1>Detecting eQTL – A simple model</h1></section><section id="how-do-we-know-whether-a-locus-is-associated-with-the-expression-of-a-gene" class="slide level2" data-transition="none">
-<h1>How do we know whether a locus is associated with the expression of a gene?</h1>
+<section>
+<section id="detecting-eqtl-a-simple-model"
+class="title-slide slide level1">
+<h1>Detecting eQTL – A simple model</h1>
+
+</section>
+<section
+id="how-do-we-know-whether-a-locus-is-associated-with-the-expression-of-a-gene"
+class="slide level2" data-transition="none">
+<h2 data-transition="none">How do we know whether a locus is associated
+with the expression of a gene?</h2>
 <div class="multicolumn">
 <div>
-<figure>
-<img src="figure/genomic_locus.png" />
-</figure>
+<p><img data-src="figure/genomic_locus.png" /></p>
 </div>
 <div>
 <ul>
 <li><strong>Any given locus contains multiple SNPs.</strong></li>
-<li>Can determine genotypes for these SNPs in a (large) number of individuals.</li>
+<li>Can determine genotypes for these SNPs in a (large) number of
+individuals.</li>
 <li>Measure gene expression for genes of interest.</li>
 <li>Assess the evidence that expression varies with genotype.</li>
 </ul>
 </div>
 </div>
-</section><section id="how-do-we-know-whether-a-locus-is-associated-with-the-expression-of-a-gene-1" class="slide level2" data-transition="none">
-<h1>How do we know whether a locus is associated with the expression of a gene?</h1>
+</section>
+<section
+id="how-do-we-know-whether-a-locus-is-associated-with-the-expression-of-a-gene-1"
+class="slide level2" data-transition="none">
+<h2 data-transition="none">How do we know whether a locus is associated
+with the expression of a gene?</h2>
 <div class="multicolumn">
 <div>
 <table>
 <thead>
 <tr class="header">
 <th style="text-align: center;">sample</th>
-<th style="text-align: left;">snp_1</th>
-<th style="text-align: left;">snp_2</th>
-<th style="text-align: left;">snp_3</th>
+<th>snp_1</th>
+<th>snp_2</th>
+<th>snp_3</th>
 <th style="text-align: center;">…</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">sample 1</td>
-<td style="text-align: left;">AA</td>
-<td style="text-align: left;">AA</td>
-<td style="text-align: left;">AB</td>
+<td>AA</td>
+<td>AA</td>
+<td>AB</td>
 <td style="text-align: center;">…</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">sample 2</td>
-<td style="text-align: left;">AB</td>
-<td style="text-align: left;">AB</td>
-<td style="text-align: left;">AA</td>
+<td>AB</td>
+<td>AB</td>
+<td>AA</td>
 <td style="text-align: center;">…</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">sample 3</td>
-<td style="text-align: left;">AB</td>
-<td style="text-align: left;">BB</td>
-<td style="text-align: left;">AB</td>
+<td>AB</td>
+<td>BB</td>
+<td>AB</td>
 <td style="text-align: center;">…</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">…</td>
-<td style="text-align: left;">…</td>
-<td style="text-align: left;">…</td>
-<td style="text-align: left;">…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
 <td style="text-align: center;">…</td>
 </tr>
 </tbody>
@@ -252,53 +357,58 @@ Need to provide password separately.
 <div>
 <ul>
 <li>Any given locus contains multiple SNPs.</li>
-<li><strong>Can determine genotypes for these SNPs in a (large) number of individuals.</strong></li>
+<li><strong>Can determine genotypes for these SNPs in a (large) number
+of individuals.</strong></li>
 <li>Measure gene expression for genes of interest.</li>
 <li>Assess the evidence that expression varies with genotype.</li>
 </ul>
 </div>
 </div>
-</section><section id="how-do-we-know-whether-a-locus-is-associated-with-the-expression-of-a-gene-2" class="slide level2" data-transition="none">
-<h1>How do we know whether a locus is associated with the expression of a gene?</h1>
+</section>
+<section
+id="how-do-we-know-whether-a-locus-is-associated-with-the-expression-of-a-gene-2"
+class="slide level2" data-transition="none">
+<h2 data-transition="none">How do we know whether a locus is associated
+with the expression of a gene?</h2>
 <div class="multicolumn">
 <div>
 <table>
 <thead>
 <tr class="header">
 <th style="text-align: center;">sample</th>
-<th style="text-align: left;">gene_1</th>
+<th>gene_1</th>
 <th style="text-align: right;">gene_2</th>
-<th style="text-align: left;">gene_3</th>
+<th>gene_3</th>
 <th style="text-align: center;">…</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">sample 1</td>
-<td style="text-align: left;">7.3</td>
+<td>7.3</td>
 <td style="text-align: right;">12.8</td>
-<td style="text-align: left;">6.5</td>
+<td>6.5</td>
 <td style="text-align: center;">…</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">sample 2</td>
-<td style="text-align: left;">10.9</td>
+<td>10.9</td>
 <td style="text-align: right;">9.6</td>
-<td style="text-align: left;">8.8</td>
+<td>8.8</td>
 <td style="text-align: center;">…</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">sample 3</td>
-<td style="text-align: left;">9.5</td>
+<td>9.5</td>
 <td style="text-align: right;">10.7</td>
-<td style="text-align: left;">15.1</td>
+<td>15.1</td>
 <td style="text-align: center;">…</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">…</td>
-<td style="text-align: left;">…</td>
+<td>…</td>
 <td style="text-align: right;">…</td>
-<td style="text-align: left;">…</td>
+<td>…</td>
 <td style="text-align: center;">…</td>
 </tr>
 </tbody>
@@ -307,69 +417,97 @@ Need to provide password separately.
 <div>
 <ul>
 <li>Any given locus contains multiple SNPs.</li>
-<li>Can determine genotypes for these SNPs in a (large) number of individuals.</li>
+<li>Can determine genotypes for these SNPs in a (large) number of
+individuals.</li>
 <li><strong>Measure gene expression for genes of interest.</strong></li>
 <li>Assess the evidence that expression varies with genotype.</li>
 </ul>
 </div>
 </div>
-</section><section id="how-do-we-know-whether-a-locus-is-associated-with-the-expression-of-a-gene-3" class="slide level2" data-transition="none">
-<h1>How do we know whether a locus is associated with the expression of a gene?</h1>
+</section>
+<section
+id="how-do-we-know-whether-a-locus-is-associated-with-the-expression-of-a-gene-3"
+class="slide level2" data-transition="none">
+<h2 data-transition="none">How do we know whether a locus is associated
+with the expression of a gene?</h2>
 <div class="multicolumn">
 <div id="snp-expr">
-<img src="figure/snp_expression.png" />
+<p><img data-src="figure/snp_expression.png" /></p>
 </div>
 <div>
 <ul>
 <li>Any given locus contains multiple SNPs.</li>
-<li>Can determine genotypes for these SNPs in a (large) number of individuals.</li>
+<li>Can determine genotypes for these SNPs in a (large) number of
+individuals.</li>
 <li>Measure gene expression for genes of interest.</li>
-<li><strong>Assess the evidence that expression varies with genotype.</strong></li>
+<li><strong>Assess the evidence that expression varies with
+genotype.</strong></li>
 </ul>
 </div>
 </div>
-</section><section id="linear-additive-model" class="slide level2">
-<h1>Linear additive model</h1>
+</section>
+<section id="linear-additive-model" class="slide level2">
+<h2>Linear additive model</h2>
 <div class="multicolumn">
 <div id="snp-expr">
-<img src="figure/snp_expression.png" />
+<p><img data-src="figure/snp_expression.png" /></p>
 </div>
 <div>
 <p>Different alleles of a SNP may exhibit a dosage effect.</p>
 <ul>
-<li>Using the <em>AA</em> genotype as baseline, each copy of the <em>B</em> allele changes expression by a fixed amount.</li>
-<li>Implies a linear relationship between the mean gene expression and the number of <em>B</em> alleles.</li>
-<li>Estimating the change in expression due to the <em>B</em> allele to quantify the SNP’s contribution to gene expression.</li>
+<li>Using the <em>AA</em> genotype as baseline, each copy of the
+<em>B</em> allele changes expression by a fixed amount.</li>
+<li>Implies a linear relationship between the mean gene expression and
+the number of <em>B</em> alleles.</li>
+<li>Estimating the change in expression due to the <em>B</em> allele to
+quantify the SNP’s contribution to gene expression.</li>
 </ul>
 </div>
 </div>
-</section><section id="linear-regression" class="slide level2" data-transition="none">
-<h1>Linear regression</h1>
-<p><span class="math">\[Y = \beta_0 + \beta X + \varepsilon\]</span></p>
+</section>
+<section id="linear-regression" class="slide level2"
+data-transition="none">
+<h2 data-transition="none">Linear regression</h2>
+<p><span class="math display">\[Y = \beta_0 + \beta X +
+\varepsilon\]</span></p>
 <dl>
 <dt>Y</dt>
-<dd>Response variable (here: vector of expression values for gene of interest).
+<dd>
+Response variable (here: vector of expression values for gene of
+interest).
 </dd>
 <dt>X</dt>
-<dd>Explanatory variable (here: vector of genotypes (coded as 0, 1, 2) for the SNP under consideration).
+<dd>
+Explanatory variable (here: vector of genotypes (coded as 0, 1, 2) for
+the SNP under consideration).
 </dd>
 </dl>
-</section><section id="linear-regression-1" class="slide level2" data-transition="none">
-<h1>Linear regression</h1>
-<p><span class="math">\[Y = \beta_0 + \beta X + \varepsilon\]</span></p>
+</section>
+<section id="linear-regression-1" class="slide level2"
+data-transition="none">
+<h2 data-transition="none">Linear regression</h2>
+<p><span class="math display">\[Y = \beta_0 + \beta X +
+\varepsilon\]</span></p>
 <dl>
-<dt><span class="math">\(\beta_0\)</span></dt>
-<dd>Intercept (here: mean expression for <em>AA</em> genotype).
+<dt><span class="math inline">\(\beta_0\)</span></dt>
+<dd>
+Intercept (here: mean expression for <em>AA</em> genotype).
 </dd>
-<dt><span class="math">\(\beta\)</span></dt>
-<dd>Regression coefficient; the effect of X on the mean of Y (here: change in mean gene expression for each copy of the <em>B</em> allele).
+<dt><span class="math inline">\(\beta\)</span></dt>
+<dd>
+Regression coefficient; the effect of X on the mean of Y (here: change
+in mean gene expression for each copy of the <em>B</em> allele).
 </dd>
-<dt><span class="math">\(\varepsilon\)</span></dt>
-<dd>Residuals; the difference between observed values of <span class="math">\(Y\)</span> and the estimated mean of <span class="math">\(Y|X\)</span>
+<dt><span class="math inline">\(\varepsilon\)</span></dt>
+<dd>
+Residuals; the difference between observed values of <span
+class="math inline">\(Y\)</span> and the estimated mean of <span
+class="math inline">\(Y|X\)</span>
 </dd>
 </dl>
-</section><section id="linear-regression-assumptions" class="slide level2">
-<h1>Linear regression – Assumptions</h1>
+</section>
+<section id="linear-regression-assumptions" class="slide level2">
+<h2>Linear regression – Assumptions</h2>
 <p>Residuals are</p>
 <ul>
 <li>independent</li>
@@ -378,190 +516,268 @@ Need to provide password separately.
 <div class="fragment">
 <p>It is implied that</p>
 <ul>
-<li>There is a linear relationship between <span class="math">\(X\)</span> and <span class="math">\(Y\)</span>.</li>
-<li>Values of <span class="math">\(Y\)</span> for each value of <span class="math">\(X\)</span> are normally distributed.</li>
-<li>There is only one source of variation not explained by <span class="math">\(X\)</span>.</li>
+<li>There is a linear relationship between <span
+class="math inline">\(X\)</span> and <span
+class="math inline">\(Y\)</span>.</li>
+<li>Values of <span class="math inline">\(Y\)</span> for each value of
+<span class="math inline">\(X\)</span> are normally distributed.</li>
+<li>There is only one source of variation not explained by <span
+class="math inline">\(X\)</span>.</li>
 </ul>
 </div>
-</section><section id="linear-regression-robustness" class="slide level2" data-transition="none">
-<h1>Linear regression – Robustness</h1>
+</section>
+<section id="linear-regression-robustness" class="slide level2"
+data-transition="none">
+<h2 data-transition="none">Linear regression – Robustness</h2>
 <h3 id="independence-of-residuals">Independence of residuals</h3>
 <p>Lack of independence can produce misleading results.</p>
 <p>What could cause this?</p>
-</section><section id="linear-regression-robustness-1" class="slide level2" data-transition="none">
-<h1>Linear regression – Robustness</h1>
-<h3 id="constant-variance-of-residuals-homoskedacity">Constant variance of residuals (homoskedacity)</h3>
-<p>Violation of this assumption will lead to incorrect p-values and confidence intervals.</p>
-</section><section id="linear-regression-robustness-2" class="slide level2" data-transition="none">
-<h1>Linear regression – Robustness</h1>
+</section>
+<section id="linear-regression-robustness-1" class="slide level2"
+data-transition="none">
+<h2 data-transition="none">Linear regression – Robustness</h2>
+<h3 id="constant-variance-of-residuals-homoskedacity">Constant variance
+of residuals (homoskedacity)</h3>
+<p>Violation of this assumption will lead to incorrect p-values and
+confidence intervals.</p>
+</section>
+<section id="linear-regression-robustness-2" class="slide level2"
+data-transition="none">
+<h2 data-transition="none">Linear regression – Robustness</h2>
 <h3 id="normality">Normality</h3>
 <ul>
-<li>Estimates and their confidence intervals and p-values are fairly robust.</li>
+<li>Estimates and their confidence intervals and p-values are fairly
+robust.</li>
 <li>But beware of long tailed distributions.</li>
-<li>Prediction can become problematic (but we are not interested in that here).</li>
+<li>Prediction can become problematic (but we are not interested in that
+here).</li>
 </ul>
-</section><section id="linear-regression-robustness-3" class="slide level2" data-transition="none">
-<h1>Linear regression – Robustness</h1>
+</section>
+<section id="linear-regression-robustness-3" class="slide level2"
+data-transition="none">
+<h2 data-transition="none">Linear regression – Robustness</h2>
 <h3 id="linearity">Linearity</h3>
 <div class="left">
-<p>If the true relationship between <span class="math">\(Y\)</span> and <span class="math">\(X\)</span> is non-linear conclusions may be misleading.</p>
-When might this occur with eQTL data?
+<p>If the true relationship between <span
+class="math inline">\(Y\)</span> and <span
+class="math inline">\(X\)</span> is non-linear conclusions may be
+misleading.</p>
+<p>When might this occur with eQTL data?</p>
 </div>
-</section><section id="linear-regression-robustness-4" class="slide level2" data-transition="none">
-<h1>Linear regression – Robustness</h1>
+</section>
+<section id="linear-regression-robustness-4" class="slide level2"
+data-transition="none">
+<h2 data-transition="none">Linear regression – Robustness</h2>
 <h3 id="linearity-1">Linearity</h3>
 <div class="left">
-<p>If the true relationship between <span class="math">\(Y\)</span> and <span class="math">\(X\)</span> is non-linear conclusions may be misleading.</p>
-When might this occur with eQTL data?
+<p>If the true relationship between <span
+class="math inline">\(Y\)</span> and <span
+class="math inline">\(X\)</span> is non-linear conclusions may be
+misleading.</p>
+<p>When might this occur with eQTL data?</p>
 </div>
 <div class="right">
-<img src="figure/dominant.png" />
+<p><img data-src="figure/dominant.png" /></p>
 </div>
 </section></section>
-<section><section id="hands-on-simple-linear-regression" class="titleslide slide level1"><h1><em>Hands-on</em> : Simple linear regression</h1></section><section id="data" class="slide level2">
-<h1>Data</h1>
+<section>
+<section id="hands-on-simple-linear-regression"
+class="title-slide slide level1">
+<h1><em>Hands-on</em> : Simple linear regression</h1>
+
+</section>
+<section id="data" class="slide level2">
+<h2>Data</h2>
 <dl>
 <dt>Genotypes</dt>
-<dd><em>/data/simulated/sim_genotypes.tab</em>
+<dd>
+<em>/data/simulated/sim_genotypes.tab</em>
 </dd>
 <dt>Gene expression</dt>
-<dd><em>/data/simulated/sim_expression1.tab</em>
+<dd>
+<em>/data/simulated/sim_expression1.tab</em>
 </dd>
 </dl>
-</section><section id="warm-up" class="slide level2">
-<h1>Warm-up</h1>
+</section>
+<section id="warm-up" class="slide level2">
+<h2>Warm-up</h2>
 <ol>
 <li class="fragment">Load the data into R.</li>
 <li class="fragment">How is the data formatted?</li>
 <li class="fragment">Determine minor allele frequencies.</li>
 </ol>
 <aside class="notes">
-<pre class="sourceCode r"><code class="sourceCode r">geno &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="st">&quot;/data/simulated/sim_genotypes.tab&quot;</span>)
-expr &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="st">&quot;/data/simulated/sim_expression1.tab&quot;</span>)
-
-maf &lt;-<span class="st"> </span><span class="kw">colMeans</span>(geno[-<span class="dv">1</span>])/<span class="dv">2</span></code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>geno <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="st">&quot;/data/simulated/sim_genotypes.tab&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>expr <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="st">&quot;/data/simulated/sim_expression1.tab&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(geno[<span class="sc">-</span><span class="dv">1</span>])<span class="sc">/</span><span class="dv">2</span></span></code></pre></div>
 </aside>
-</section><section id="plotting-the-data" class="slide level2">
-<h1>Plotting the data</h1>
+</section>
+<section id="plotting-the-data" class="slide level2">
+<h2>Plotting the data</h2>
 <ul>
 <li>Choose a SNP/gene pair (snp_1 / gene_1, snp_2 / gene_2, …)</li>
-<li>Create a plot showing gene expression by genotype for this pair.</li>
+<li>Create a plot showing gene expression by genotype for this
+pair.</li>
 </ul>
 <aside class="notes">
-<p>Assign SNP/gene pairs to participants to ensure each is handled at least once.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-genoLong &lt;-<span class="st"> </span>tidyr::<span class="kw">gather</span>(geno, snp, genotype, -sample)
-exprLong &lt;-<span class="st"> </span>tidyr::<span class="kw">gather</span>(expr, gene, expression, -sample)
-dataLong &lt;-<span class="st"> </span><span class="kw">cbind</span>(genoLong, exprLong[<span class="st">&quot;expression&quot;</span>])
-dataLong$genotype &lt;-<span class="st"> </span><span class="kw">as.factor</span>(dataLong$genotype) 
-<span class="kw">ggplot</span>(dataLong, <span class="kw">aes</span>(genotype, expression)) +
-<span class="st">        </span><span class="kw">geom_jitter</span>(<span class="dt">colour=</span><span class="st">&quot;darkgrey&quot;</span>, 
-                <span class="dt">position=</span><span class="kw">position_jitter</span>(<span class="dt">width=</span><span class="fl">0.25</span>)) +
-<span class="st">        </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.size=</span><span class="dv">0</span>, <span class="dt">alpha=</span><span class="fl">0.6</span>, <span class="dt">fill=</span><span class="st">&quot;grey&quot;</span>) +<span class="st"> </span>
-<span class="st">        </span><span class="kw">facet_wrap</span>(~snp) +<span class="st"> </span><span class="kw">theme_bw</span>()</code></pre>
+<p>Assign SNP/gene pairs to participants to ensure each is handled at
+least once.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>genoLong <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">gather</span>(geno, snp, genotype, <span class="sc">-</span>sample)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>exprLong <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">gather</span>(expr, gene, expression, <span class="sc">-</span>sample)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>dataLong <span class="ot">&lt;-</span> <span class="fu">cbind</span>(genoLong, exprLong[<span class="st">&quot;expression&quot;</span>])</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>dataLong<span class="sc">$</span>genotype <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(dataLong<span class="sc">$</span>genotype) </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dataLong, <span class="fu">aes</span>(genotype, expression)) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_jitter</span>(<span class="at">colour=</span><span class="st">&quot;darkgrey&quot;</span>, </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">position=</span><span class="fu">position_jitter</span>(<span class="at">width=</span><span class="fl">0.25</span>)) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_boxplot</span>(<span class="at">outlier.size=</span><span class="dv">0</span>, <span class="at">alpha=</span><span class="fl">0.6</span>, <span class="at">fill=</span><span class="st">&quot;grey&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">facet_wrap</span>(<span class="sc">~</span>snp) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
 </aside>
-</section><section id="fitting-a-simple-linear-regression" class="slide level2">
-<h1>Fitting a simple linear regression</h1>
+</section>
+<section id="fitting-a-simple-linear-regression" class="slide level2">
+<h2>Fitting a simple linear regression</h2>
 <ol>
-<li>Fit a simple linear regression for the SNP/gene pair of your choice.</li>
+<li>Fit a simple linear regression for the SNP/gene pair of your
+choice.</li>
 <li>Compute the 95% confidence interval for the genotype effect.</li>
 </ol>
 <aside class="notes">
 <p>Collect results from participants into a file and load into R.</p>
 <p>Code fit all models is below.</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">mapply</span>(function(e, g) <span class="kw">lm</span>(e ~<span class="st"> </span>g), 
-        expr[-<span class="dv">1</span>], geno[-<span class="dv">1</span>], <span class="dt">SIMPLIFY=</span><span class="ot">FALSE</span>)
-betaHat &lt;-<span class="st"> </span><span class="kw">sapply</span>(fit, coef)[<span class="dv">2</span>,]
-
-ci &lt;-<span class="st"> </span><span class="kw">sapply</span>(fit, confint, <span class="st">&quot;g&quot;</span>)
-<span class="kw">rownames</span>(ci) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>)</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(e, g) <span class="fu">lm</span>(e <span class="sc">~</span> g), </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>        expr[<span class="sc">-</span><span class="dv">1</span>], geno[<span class="sc">-</span><span class="dv">1</span>], <span class="at">SIMPLIFY=</span><span class="cn">FALSE</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>betaHat <span class="ot">&lt;-</span> <span class="fu">sapply</span>(fit, coef)[<span class="dv">2</span>,]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>ci <span class="ot">&lt;-</span> <span class="fu">sapply</span>(fit, confint, <span class="st">&quot;g&quot;</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(ci) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>)</span></code></pre></div>
 </aside>
-</section><section id="examining-the-results" class="slide level2">
-<h1>Examining the results</h1>
+</section>
+<section id="examining-the-results" class="slide level2">
+<h2>Examining the results</h2>
 <ol>
 <li>Create diagnostic plots.</li>
 <li>Plot estimated genotype effects by minor allele frequency.</li>
 </ol>
 <aside class="notes">
-<p>Display R’s build-in diagnostics by plotting the <code>fit</code> object.</p>
+<p>Display R’s build-in diagnostics by plotting the <code>fit</code>
+object.</p>
 <p>The true SNP effect is 1.5</p>
-<pre class="sourceCode r"><code class="sourceCode r">estimates &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">estimate=</span>betaHat, <span class="kw">t</span>(ci), <span class="dt">maf=</span>maf)
-fig &lt;-<span class="st"> </span><span class="kw">ggplot</span>(estimates, <span class="kw">aes</span>(<span class="dt">x=</span>maf)) +<span class="st">  </span>
-<span class="st">        </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="dv">0</span>, <span class="dt">linetype=</span><span class="st">&quot;longdash&quot;</span>) +<span class="st"> </span>
-<span class="st">        </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin=</span>lower, <span class="dt">ymax=</span>upper)) +
-<span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>estimate))  +<span class="st"> </span><span class="kw">theme_bw</span>()
-fig &lt;-<span class="st"> </span>fig +<span class="st"> </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="fl">1.5</span>)</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">estimate=</span>betaHat, <span class="fu">t</span>(ci), <span class="at">maf=</span>maf)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>fig <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(estimates, <span class="fu">aes</span>(<span class="at">x=</span>maf)) <span class="sc">+</span>  </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">0</span>, <span class="at">linetype=</span><span class="st">&quot;longdash&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>lower, <span class="at">ymax=</span>upper)) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>estimate))  <span class="sc">+</span> <span class="fu">theme_bw</span>()</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>fig <span class="ot">&lt;-</span> fig <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="fl">1.5</span>)</span></code></pre></div>
 </aside>
-</section><section id="interlude-p-values" class="slide level2">
-<h1>Interlude: p-values</h1>
+</section>
+<section id="interlude-p-values" class="slide level2">
+<h2>Interlude: p-values</h2>
 <ul>
-<li>After estimating model coefficients we can test them for departure from 0.</li>
-<li>We are interested in identifying SNPs with non-zero coefficients.</li>
-<li>The strength of the evidence that the true coefficient is non-zero is often gauged by the resulting p-value.</li>
+<li>After estimating model coefficients we can test them for departure
+from 0.</li>
+<li>We are interested in identifying SNPs with non-zero
+coefficients.</li>
+<li>The strength of the evidence that the true coefficient is non-zero
+is often gauged by the resulting p-value.</li>
 <li>How should p-values be interpreted?</li>
 </ul>
 <aside class="notes">
-<p>The p-value is the probability of observing an effect at least as extreme as the one in the sample data if the null hypothesis is true.</p>
-<p>P-values relate to how likely it is to observe the data under pre-specified conditions <strong>not</strong> to how likely the null hypothesis is.</p>
-<p>Use p-values as a guide to identify potentially interesting results, not as a definitive statement of which findings are real.</p>
-Consider other evidence, especially estimates of effect sizes and their confidence intervals as well as domain knowledge.
+<p>The p-value is the probability of observing an effect at least as
+extreme as the one in the sample data if the null hypothesis is
+true.</p>
+<p>P-values relate to how likely it is to observe the data under
+pre-specified conditions <strong>not</strong> to how likely the null
+hypothesis is.</p>
+<p>Use p-values as a guide to identify potentially interesting results,
+not as a definitive statement of which findings are real.</p>
+<p>Consider other evidence, especially estimates of effect sizes and
+their confidence intervals as well as domain knowledge.</p>
 </aside>
 </section></section>
-<section><section id="detecting-eqtl-not-that-simple" class="titleslide slide level1"><h1>Detecting eQTL – Not <em>that</em> simple</h1></section><section id="additional-sources-of-variation" class="slide level2">
-<h1>Additional sources of variation</h1>
+<section>
+<section id="detecting-eqtl-not-that-simple"
+class="title-slide slide level1">
+<h1>Detecting eQTL – Not <em>that</em> simple</h1>
+
+</section>
+<section id="additional-sources-of-variation" class="slide level2">
+<h2>Additional sources of variation</h2>
 <ul>
 <li>Gene expression is subject to many sources of variation.</li>
-<li>A model with a single SNP as explanatory variable is unlikely to be sufficient.</li>
+<li>A model with a single SNP as explanatory variable is unlikely to be
+sufficient.</li>
 </ul>
 <div class="fragment">
-<p>Use multiple regression to obtain better estimates of SNP effects.</p>
+<p>Use multiple regression to obtain better estimates of SNP
+effects.</p>
 </div>
-</section><section id="multiple-regression" class="slide level2">
-<h1>Multiple regression</h1>
-<p><span class="math">\[Y = \beta_0 + \sum_{i=1}^n \beta_i X_i + \varepsilon\]</span></p>
+</section>
+<section id="multiple-regression" class="slide level2">
+<h2>Multiple regression</h2>
+<p><span class="math display">\[Y = \beta_0 + \sum_{i=1}^n \beta_i X_i +
+\varepsilon\]</span></p>
 <ul>
-<li>Similar to simple linear regression but incorporates multiple explanatory variables.</li>
-<li><span class="math">\(\beta_i\)</span> are interpreted as “change of <span class="math">\(Y\)</span> due to a unit change in <span class="math">\(X_i\)</span> when <em>all other explanatory variables are held constant</em>”.</li>
+<li>Similar to simple linear regression but incorporates multiple
+explanatory variables.</li>
+<li><span class="math inline">\(\beta_i\)</span> are interpreted as
+“change of <span class="math inline">\(Y\)</span> due to a unit change
+in <span class="math inline">\(X_i\)</span> when <em>all other
+explanatory variables are held constant</em>”.</li>
 </ul>
 <ul>
-<li class="fragment">Explanatory variables are assumed to be uncorrelated with each other.</li>
+<li class="fragment">Explanatory variables are assumed to be
+uncorrelated with each other.</li>
 </ul>
 </section></section>
-<section><section id="hands-on-covariates" class="titleslide slide level1"><h1><em>Hands-on</em> : Covariates</h1></section><section id="data-1" class="slide level2">
-<h1>Data</h1>
+<section>
+<section id="hands-on-covariates" class="title-slide slide level1">
+<h1><em>Hands-on</em> : Covariates</h1>
+
+</section>
+<section id="data-1" class="slide level2">
+<h2>Data</h2>
 <dl>
 <dt>Genotypes</dt>
-<dd><em>/data/simulated/sim_genotypes.tab</em>
+<dd>
+<em>/data/simulated/sim_genotypes.tab</em>
 </dd>
 <dt>Gene expression</dt>
-<dd><em>/data/simulated/sim_expression2.tab</em>
+<dd>
+<em>/data/simulated/sim_expression2.tab</em>
 </dd>
 <dt>Covariates</dt>
-<dd><em>/data/simulated/sim_covariates.tab</em>
+<dd>
+<em>/data/simulated/sim_covariates.tab</em>
 </dd>
 </dl>
 <aside class="notes">
-geno &lt;- readr::read_tsv(“/data/simulated/sim_genotypes.tab”) expr &lt;- readr::read_tsv(“/data/simulated/sim_expression2.tab”) covar &lt;- readr::read_tsv(“/data/simulated/sim_covariates.tab”)
+<p>geno &lt;- readr::read_tsv(“/data/simulated/sim_genotypes.tab”) expr
+&lt;- readr::read_tsv(“/data/simulated/sim_expression2.tab”) covar &lt;-
+readr::read_tsv(“/data/simulated/sim_covariates.tab”)</p>
 </aside>
-</section><section id="plotting-the-data-1" class="slide level2">
-<h1>Plotting the data</h1>
-<p>Create a plot of gene expression by genotype for you SNP/gene pair of choice.</p>
+</section>
+<section id="plotting-the-data-1" class="slide level2">
+<h2>Plotting the data</h2>
+<p>Create a plot of gene expression by genotype for you SNP/gene pair of
+choice.</p>
 <p>How does this compare to the plot from the previous exercise.</p>
 <aside class="notes">
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-genoLong &lt;-<span class="st"> </span>tidyr::<span class="kw">gather</span>(geno, snp, genotype, -sample)
-exprLong &lt;-<span class="st"> </span>tidyr::<span class="kw">gather</span>(expr, gene, expression, -sample)
-dataLong &lt;-<span class="st"> </span><span class="kw">cbind</span>(genoLong, exprLong[<span class="st">&quot;expression&quot;</span>])
-dataLong$genotype &lt;-<span class="st"> </span><span class="kw">as.factor</span>(dataLong$genotype) 
-<span class="kw">ggplot</span>(dataLong, <span class="kw">aes</span>(genotype, expression)) +
-<span class="st">        </span><span class="kw">geom_jitter</span>(<span class="dt">colour=</span><span class="st">&quot;darkgrey&quot;</span>, 
-                <span class="dt">position=</span><span class="kw">position_jitter</span>(<span class="dt">width=</span><span class="fl">0.25</span>)) +
-<span class="st">        </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.size=</span><span class="dv">0</span>, <span class="dt">alpha=</span><span class="fl">0.6</span>, <span class="dt">fill=</span><span class="st">&quot;grey&quot;</span>) +<span class="st"> </span>
-<span class="st">        </span><span class="kw">facet_wrap</span>(~snp) +<span class="st"> </span><span class="kw">theme_bw</span>()</code></pre>
-There is very little evidence of a SNP effect in these plots.
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>genoLong <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">gather</span>(geno, snp, genotype, <span class="sc">-</span>sample)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>exprLong <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">gather</span>(expr, gene, expression, <span class="sc">-</span>sample)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>dataLong <span class="ot">&lt;-</span> <span class="fu">cbind</span>(genoLong, exprLong[<span class="st">&quot;expression&quot;</span>])</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>dataLong<span class="sc">$</span>genotype <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(dataLong<span class="sc">$</span>genotype) </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dataLong, <span class="fu">aes</span>(genotype, expression)) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_jitter</span>(<span class="at">colour=</span><span class="st">&quot;darkgrey&quot;</span>, </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">position=</span><span class="fu">position_jitter</span>(<span class="at">width=</span><span class="fl">0.25</span>)) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_boxplot</span>(<span class="at">outlier.size=</span><span class="dv">0</span>, <span class="at">alpha=</span><span class="fl">0.6</span>, <span class="at">fill=</span><span class="st">&quot;grey&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">facet_wrap</span>(<span class="sc">~</span>snp) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p>There is very little evidence of a SNP effect in these plots.</p>
 </aside>
-</section><section id="simple-linear-regression" class="slide level2">
-<h1>Simple linear regression</h1>
+</section>
+<section id="simple-linear-regression" class="slide level2">
+<h2>Simple linear regression</h2>
 <p>Repeat the simple linear regession analysis with these data.</p>
 <ol>
 <li>Fit a model for one of the SNP/gene pairs</li>
@@ -570,60 +786,90 @@ There is very little evidence of a SNP effect in these plots.
 </ol>
 <p>How does this compare to the result from the previous analysis?</p>
 <aside class="notes">
-<pre class="sourceCode r"><code class="sourceCode r">simpleFit &lt;-<span class="st"> </span><span class="kw">mapply</span>(function(e, g) <span class="kw">lm</span>(e ~<span class="st"> </span>g), 
-        expr[-<span class="dv">1</span>], geno[-<span class="dv">1</span>], <span class="dt">SIMPLIFY=</span><span class="ot">FALSE</span>)
-simpleBetaHat &lt;-<span class="st"> </span><span class="kw">sapply</span>(simpleFit, coef)[<span class="dv">2</span>,]
-simpleCI &lt;-<span class="st"> </span><span class="kw">sapply</span>(simpleFit, confint, <span class="st">&quot;g&quot;</span>)
-<span class="kw">rownames</span>(simpleCI) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>)</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>simpleFit <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(e, g) <span class="fu">lm</span>(e <span class="sc">~</span> g), </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>        expr[<span class="sc">-</span><span class="dv">1</span>], geno[<span class="sc">-</span><span class="dv">1</span>], <span class="at">SIMPLIFY=</span><span class="cn">FALSE</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>simpleBetaHat <span class="ot">&lt;-</span> <span class="fu">sapply</span>(simpleFit, coef)[<span class="dv">2</span>,]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>simpleCI <span class="ot">&lt;-</span> <span class="fu">sapply</span>(simpleFit, confint, <span class="st">&quot;g&quot;</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(simpleCI) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>)</span></code></pre></div>
 <p>Plot all results:</p>
-<pre class="sourceCode r"><code class="sourceCode r">maf &lt;-<span class="st"> </span><span class="kw">colMeans</span>(geno[-<span class="dv">1</span>])/<span class="dv">2</span>
-estimates &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">estimate=</span>simpleBetaHat, <span class="kw">t</span>(simpleCI), <span class="dt">maf=</span>maf)
-<span class="kw">ggplot</span>(estimates, <span class="kw">aes</span>(<span class="dt">x=</span>maf)) +<span class="st"> </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="fl">1.5</span>) +<span class="st"> </span>
-<span class="st">        </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="dv">0</span>, <span class="dt">linetype=</span><span class="st">&quot;longdash&quot;</span>) +<span class="st"> </span>
-<span class="st">        </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin=</span>lower, <span class="dt">ymax=</span>upper)) +
-<span class="st">        </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>estimate))  +<span class="st"> </span><span class="kw">theme_bw</span>()</code></pre>
-Note that the true SNP coefficient is still 1.5 but estimates are considerably worse.
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(geno[<span class="sc">-</span><span class="dv">1</span>])<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>estimates <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">estimate=</span>simpleBetaHat, <span class="fu">t</span>(simpleCI), <span class="at">maf=</span>maf)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(estimates, <span class="fu">aes</span>(<span class="at">x=</span>maf)) <span class="sc">+</span> <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="fl">1.5</span>) <span class="sc">+</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">0</span>, <span class="at">linetype=</span><span class="st">&quot;longdash&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>lower, <span class="at">ymax=</span>upper)) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>estimate))  <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p>Note that the true SNP coefficient is still 1.5 but estimates are
+considerably worse.</p>
 </aside>
-</section><section id="multiple-linear-regression" class="slide level2">
-<h1>Multiple linear regression</h1>
+</section>
+<section id="multiple-linear-regression" class="slide level2">
+<h2>Multiple linear regression</h2>
 <ol>
-<li>Use the first five variables contained in the covariates file as covariates in your model.</li>
+<li>Use the first five variables contained in the covariates file as
+covariates in your model.</li>
 <li>Create diagnostic plots</li>
 <li>Compute the confidence interval for the coefficient</li>
 </ol>
 <aside class="notes">
-<pre class="sourceCode r"><code class="sourceCode r">covarFit &lt;-<span class="st"> </span><span class="kw">mapply</span>(function(e, g, var) <span class="kw">lm</span>(e ~<span class="st"> </span>g +<span class="st"> </span>var), 
-        expr[-<span class="dv">1</span>], geno[-<span class="dv">1</span>], 
-        <span class="dt">MoreArgs=</span><span class="kw">list</span>(<span class="kw">as.matrix</span>(covar[<span class="dv">2</span>:<span class="dv">6</span>])), <span class="dt">SIMPLIFY=</span><span class="ot">FALSE</span>)
-covarBetaHat &lt;-<span class="st"> </span><span class="kw">sapply</span>(covarFit, coef)[<span class="dv">2</span>,]
-covarCI &lt;-<span class="st"> </span><span class="kw">sapply</span>(covarFit, confint, <span class="st">&quot;g&quot;</span>)
-<span class="kw">rownames</span>(covarCI) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>)</code></pre>
-May also want to try including all 20 variables.
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>covarFit <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(e, g, var) <span class="fu">lm</span>(e <span class="sc">~</span> g <span class="sc">+</span> var), </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>        expr[<span class="sc">-</span><span class="dv">1</span>], geno[<span class="sc">-</span><span class="dv">1</span>], </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">MoreArgs=</span><span class="fu">list</span>(<span class="fu">as.matrix</span>(covar[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>])), <span class="at">SIMPLIFY=</span><span class="cn">FALSE</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>covarBetaHat <span class="ot">&lt;-</span> <span class="fu">sapply</span>(covarFit, coef)[<span class="dv">2</span>,]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>covarCI <span class="ot">&lt;-</span> <span class="fu">sapply</span>(covarFit, confint, <span class="st">&quot;g&quot;</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(covarCI) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lower&quot;</span>, <span class="st">&quot;upper&quot;</span>)</span></code></pre></div>
+<p>May also want to try including all 20 variables.</p>
 </aside>
 </section></section>
-<section><section id="covariates-choose-wisely" class="titleslide slide level1"><h1>Covariates – Choose wisely</h1></section><section id="multi-colinearity" class="slide level2">
-<h1>(Multi)-colinearity</h1>
-<p>If <span class="math">\(X_i\)</span> and <span class="math">\(X_j\)</span> are correlated the estimates of <span class="math">\(\beta_i\)</span> and <span class="math">\(\beta_j\)</span> will be biased. Several issues may occur:</p>
+<section>
+<section id="covariates-choose-wisely" class="title-slide slide level1">
+<h1>Covariates – Choose wisely</h1>
+
+</section>
+<section id="multi-colinearity" class="slide level2">
+<h2>(Multi)-colinearity</h2>
+<p>If <span class="math inline">\(X_i\)</span> and <span
+class="math inline">\(X_j\)</span> are correlated the estimates of <span
+class="math inline">\(\beta_i\)</span> and <span
+class="math inline">\(\beta_j\)</span> will be biased. Several issues
+may occur:</p>
 <ul>
-<li><p>All the variance in <span class="math">\(Y\)</span> due to <span class="math">\(X_i\)</span> and <span class="math">\(X_j\)</span> is wholly attributed to one of the variables (say, <span class="math">\(X_i\)</span>).</p>
+<li><p>All the variance in <span class="math inline">\(Y\)</span> due to
+<span class="math inline">\(X_i\)</span> and <span
+class="math inline">\(X_j\)</span> is wholly attributed to one of the
+variables (say, <span class="math inline">\(X_i\)</span>).</p>
 <ul>
-<li>Results in over estimation of <span class="math">\(\beta_i\)</span> and under estimation of <span class="math">\(\beta_j\)</span></li>
+<li>Results in over estimation of <span
+class="math inline">\(\beta_i\)</span> and under estimation of <span
+class="math inline">\(\beta_j\)</span></li>
 </ul></li>
-<li>Estimates for both <span class="math">\(\beta_i\)</span> and <span class="math">\(\beta_j\)</span> are too low because all of the variance is explained by the other variable that is <em>held constant</em>.</li>
-<li>No sensible interpretation for <span class="math">\(\beta_i\)</span> and <span class="math">\(\beta_j\)</span>.</li>
+<li><p>Estimates for both <span class="math inline">\(\beta_i\)</span>
+and <span class="math inline">\(\beta_j\)</span> are too low because all
+of the variance is explained by the other variable that is <em>held
+constant</em>.</p></li>
+<li><p>No sensible interpretation for <span
+class="math inline">\(\beta_i\)</span> and <span
+class="math inline">\(\beta_j\)</span>.</p></li>
 <li><p>Model fitting may fail.</p></li>
 </ul>
-</section><section id="dealing-with-colinearity" class="slide level2">
-<h1>Dealing with colinearity</h1>
+</section>
+<section id="dealing-with-colinearity" class="slide level2">
+<h2>Dealing with colinearity</h2>
 <ul>
 <li>Check correlation between explanatory variables.</li>
 <li>Check variance inflation factor (VIF).</li>
 <li>Choose only one from each group of correlated variables.</li>
 </ul>
-<p>Only really need to worry about variables of interest for downstream analysis.</p>
+<p>Only really need to worry about variables of interest for downstream
+analysis.</p>
 </section></section>
-<section><section id="if-only-we-knew-covariates-for-real-data" class="titleslide slide level1"><h1>If only we knew – Covariates for real data</h1></section><section id="limited-information" class="slide level2">
-<h1>Limited information</h1>
+<section>
+<section id="if-only-we-knew-covariates-for-real-data"
+class="title-slide slide level1">
+<h1>If only we knew – Covariates for real data</h1>
+
+</section>
+<section id="limited-information" class="slide level2">
+<h2>Limited information</h2>
 <ul>
 <li>Real data comes with varying amounts of additional information.
 <ul>
@@ -633,31 +879,44 @@ May also want to try including all 20 variables.
 <li>Some variables will have big impact on gene expression</li>
 <li>Won’t have information on all relevant variables.</li>
 </ul>
-</section><section id="use-the-data" class="slide level2">
-<h1>Use the data</h1>
+</section>
+<section id="use-the-data" class="slide level2">
+<h2>Use the data</h2>
 <ul>
-<li>We don’t have to know what the (non-genetic) sources of variation are as long as we can account for them.</li>
-<li>Dimensionality reduction techniques can identify major directions of variation from the data.</li>
+<li>We don’t have to know what the (non-genetic) sources of variation
+are as long as we can account for them.</li>
+<li>Dimensionality reduction techniques can identify major directions of
+variation from the data.</li>
 </ul>
-</section><section id="principle-component-analysis" class="slide level2">
-<h1>Principle component analysis</h1>
+</section>
+<section id="principle-component-analysis" class="slide level2">
+<h2>Principle component analysis</h2>
 <ul>
-<li>Transforms the data into set of (linearly) uncorrelated variables (principle components).</li>
-<li>Principle components (PCs) are ordered by the proportion of variance they explain.</li>
-<li>Can reduce the dimensionality of a dataset by considering only the first <span class="math">\(k\)</span> PCs.</li>
+<li>Transforms the data into set of (linearly) uncorrelated variables
+(principle components).</li>
+<li>Principle components (PCs) are ordered by the proportion of variance
+they explain.</li>
+<li>Can reduce the dimensionality of a dataset by considering only the
+first <span class="math inline">\(k\)</span> PCs.</li>
 </ul>
 <p>How does that help us?</p>
-</section><section id="accounting-for-unknown-sources-of-variation" class="slide level2">
-<h1>Accounting for unknown sources of variation</h1>
+</section>
+<section id="accounting-for-unknown-sources-of-variation"
+class="slide level2">
+<h2>Accounting for unknown sources of variation</h2>
 <ul>
-<li>The major sources of variation in gene expression data are (usually) not genetic.</li>
-<li>Can remove non-genetic sources of variation by including the3 first <span class="math">\(k\)</span> PCs into the model.</li>
+<li>The major sources of variation in gene expression data are (usually)
+not genetic.</li>
+<li>Can remove non-genetic sources of variation by including the3 first
+<span class="math inline">\(k\)</span> PCs into the model.</li>
 </ul>
-</section><section id="practical-considerations" class="slide level2">
-<h1>Practical considerations</h1>
+</section>
+<section id="practical-considerations" class="slide level2">
+<h2>Practical considerations</h2>
 <ul>
 <li>Not obvious how many PCs to include in model.</li>
-<li>Need to look out for PCs that <em>do</em> correlate with genotype.</li>
+<li>Need to look out for PCs that <em>do</em> correlate with
+genotype.</li>
 </ul>
 <div class="fragment">
 <ul>
@@ -666,76 +925,113 @@ May also want to try including all 20 variables.
 </ul>
 </div>
 </section></section>
-<section><section id="hands-on-dealing-with-real-data" class="titleslide slide level1"><h1><em>Hands-on</em> : Dealing with real data</h1></section><section id="data-2" class="slide level2">
-<h1>Data</h1>
+<section>
+<section id="hands-on-dealing-with-real-data"
+class="title-slide slide level1">
+<h1><em>Hands-on</em> : Dealing with real data</h1>
+
+</section>
+<section id="data-2" class="slide level2">
+<h2>Data</h2>
 <dl>
 <dt>Gene expression</dt>
-<dd><em>/data/monocytes/expression/ifn_expression.tab.gz</em>
+<dd>
+<em>/data/monocytes/expression/ifn_expression.tab.gz</em>
 </dd>
 <dt>Genotypes</dt>
-<dd><em>/data/genotypes/genotypes.tab.gz</em><br /> (downloaded earlier)
+<dd>
+<em>/data/genotypes/genotypes.tab.gz</em><br />
+(downloaded earlier)
 </dd>
 </dl>
-<p>Subset of data published in<br />Fairfax, Humburg, Makino, <em>et al.</em><br /><strong>Innate Immune Activity Conditions the Effect of Regulatory Variants upon Monocyte Gene Expression</strong>. Science (2014). doi:<a href="http://doi.org/10.1126/science.1246949">10.1126/science.1246949</a>.</p>
-</section><section id="brief-look-at-the-data" class="slide level2">
-<h1>Brief look at the data</h1>
+<p>Subset of data published in<br />
+Fairfax, Humburg, Makino, <em>et al.</em><br />
+<strong>Innate Immune Activity Conditions the Effect of Regulatory
+Variants upon Monocyte Gene Expression</strong>. Science (2014). doi:<a
+href="http://doi.org/10.1126/science.1246949">10.1126/science.1246949</a>.</p>
+</section>
+<section id="brief-look-at-the-data" class="slide level2">
+<h2>Brief look at the data</h2>
 <ul>
 <li>Load the data and examine it</li>
 </ul>
 <aside class="notes">
-<pre class="sourceCode r"><code class="sourceCode r">geno &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="kw">file</span>(<span class="st">&quot;/data/genotypes/genotypes.tab.gz&quot;</span>))
-expr &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="kw">file</span>(<span class="st">&quot;/data/monocytes/expression/ifn_expression.tab.gz&quot;</span>))</code></pre>
-Note that these files have variables in rows and samples in columns.<br />Look at the data.frames biefly, maybe plot some gene expression data if there is time.
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>geno <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="fu">file</span>(<span class="st">&quot;/data/genotypes/genotypes.tab.gz&quot;</span>))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>expr <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="fu">file</span>(<span class="st">&quot;/data/monocytes/expression/ifn_expression.tab.gz&quot;</span>))</span></code></pre></div>
+<p>Note that these files have variables in rows and samples in
+columns.<br />
+Look at the data.frames biefly, maybe plot some gene expression data if
+there is time.</p>
 </aside>
-</section><section id="interlude-data-processing" class="slide level2">
-<h1>Interlude: Data processing</h1>
+</section>
+<section id="interlude-data-processing" class="slide level2">
+<h2>Interlude: Data processing</h2>
 <ul>
 <li>These data have alredy been QC’d and processed.</li>
-<li>When dealing with raw data extensive QC is required for genotyping and expression data.</li>
-<li>Gene expression data also needs to be normalised across samples.</li>
-<li>Can be a lengthy process but is crucial for the quality of results.</li>
+<li>When dealing with raw data extensive QC is required for genotyping
+and expression data.</li>
+<li>Gene expression data also needs to be normalised across
+samples.</li>
+<li>Can be a lengthy process but is crucial for the quality of
+results.</li>
 </ul>
-</section><section id="pca-101" class="slide level2">
-<h1>PCA 101</h1>
+</section>
+<section id="pca-101" class="slide level2">
+<h2>PCA 101</h2>
 <ul>
 <li>Compute principle components of gene expression data.</li>
 <li>Create a plot of the variances for the first 10 PCs.</li>
-<li>How much of the total variance is explained by the first 10 PCs?</li>
+<li>How much of the total variance is explained by the first 10
+PCs?</li>
 </ul>
 <aside class="notes">
-<pre class="sourceCode r"><code class="sourceCode r">pca &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(expr[-<span class="dv">1</span>]), <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">scale =</span> <span class="ot">TRUE</span>)
-pc &lt;-<span class="st"> </span>pca$x</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(pca, <span class="dt">npcs=</span><span class="dv">10</span>)</code></pre>
-<p>Since the data were scaled prior to the PCA the total variance is the same as the number of probes. The variance accounted for by each component is available through the <code>sdev</code> field of the <code>prcomp</code> return value.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(pca$sdev[<span class="dv">1</span>:<span class="dv">10</span>]^<span class="dv">2</span>)/<span class="kw">nrow</span>(expr)</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pca <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(<span class="fu">t</span>(expr[<span class="sc">-</span><span class="dv">1</span>]), <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">scale =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> pca<span class="sc">$</span>x</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pca, <span class="at">npcs=</span><span class="dv">10</span>)</span></code></pre></div>
+<p>Since the data were scaled prior to the PCA the total variance is the
+same as the number of probes. The variance accounted for by each
+component is available through the <code>sdev</code> field of the
+<code>prcomp</code> return value.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pca<span class="sc">$</span>sdev[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">nrow</span>(expr)</span></code></pre></div>
 </aside>
-</section><section id="model-fitting-with-pca-covariates" class="slide level2">
-<h1>Model fitting with PCA covariates</h1>
+</section>
+<section id="model-fitting-with-pca-covariates" class="slide level2">
+<h2>Model fitting with PCA covariates</h2>
 <ul>
-<li>Model the expression measured by probe 3710685 as a function of SNP rs4077515 and the first 10 PCs.</li>
-<li>Create a plot of gene expression by genotype with the effect of the PCs removed.</li>
-<li>How does this compare to the simple linear regression model for this SNP/gene pair.</li>
+<li>Model the expression measured by probe 3710685 as a function of SNP
+rs4077515 and the first 10 PCs.</li>
+<li>Create a plot of gene expression by genotype with the effect of the
+PCs removed.</li>
+<li>How does this compare to the simple linear regression model for this
+SNP/gene pair.</li>
 </ul>
 <aside class="notes">
-<p>To make our life a bit easier we collect all the relevant data into a single data.frame.</p>
-<pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">probe=</span><span class="kw">unlist</span>(<span class="kw">subset</span>(expr, Probe==<span class="st">&quot;3710685&quot;</span>)[-<span class="dv">1</span>]), 
-        <span class="dt">rs4077515=</span><span class="kw">unlist</span>(<span class="kw">subset</span>(geno, id==<span class="st">&quot;rs4077515&quot;</span>)[-<span class="dv">1</span>]), pc[,<span class="dv">1</span>:<span class="dv">10</span>])</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">pcFit &lt;-<span class="st"> </span><span class="kw">lm</span>(probe ~<span class="st"> </span>., <span class="dt">data=</span>data)
-<span class="kw">summary</span>(pcFit)</code></pre>
+<p>To make our life a bit easier we collect all the relevant data into a
+single data.frame.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">probe=</span><span class="fu">unlist</span>(<span class="fu">subset</span>(expr, Probe<span class="sc">==</span><span class="st">&quot;3710685&quot;</span>)[<span class="sc">-</span><span class="dv">1</span>]), </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">rs4077515=</span><span class="fu">unlist</span>(<span class="fu">subset</span>(geno, id<span class="sc">==</span><span class="st">&quot;rs4077515&quot;</span>)[<span class="sc">-</span><span class="dv">1</span>]), pc[,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pcFit <span class="ot">&lt;-</span> <span class="fu">lm</span>(probe <span class="sc">~</span> ., <span class="at">data=</span>data)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pcFit)</span></code></pre></div>
 <p>Simple model:</p>
-<pre class="sourceCode r"><code class="sourceCode r">simpleFit &lt;-<span class="st"> </span><span class="kw">lm</span>(probe ~<span class="st"> </span>rs4077515, <span class="dt">data=</span>data)
-<span class="kw">summary</span>(simpleFit)</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>simpleFit <span class="ot">&lt;-</span> <span class="fu">lm</span>(probe <span class="sc">~</span> rs4077515, <span class="at">data=</span>data)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(simpleFit)</span></code></pre></div>
 <p>Plotting</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-corrected &lt;-<span class="st"> </span>data$probe -<span class="st"> </span><span class="kw">rowSums</span>(<span class="kw">coef</span>(pcFit)[-(<span class="dv">1</span>:<span class="dv">2</span>)]*data[, <span class="dv">3</span>:<span class="dv">12</span>])
-corrected &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">expression=</span>corrected, <span class="dt">genotype=</span><span class="kw">factor</span>(data$rs4077515))
-<span class="kw">ggplot</span>(corrected, <span class="kw">aes</span>(genotype, expression)) +
-<span class="st">        </span><span class="kw">geom_jitter</span>(<span class="dt">colour=</span><span class="st">&quot;darkgrey&quot;</span>, <span class="dt">position=</span><span class="kw">position_jitter</span>(<span class="dt">width=</span><span class="fl">0.25</span>)) +
-<span class="st">        </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.size=</span><span class="dv">0</span>, <span class="dt">alpha=</span><span class="fl">0.6</span>, <span class="dt">fill=</span><span class="st">&quot;grey&quot;</span>) +<span class="st"> </span><span class="kw">theme_bw</span>()</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>corrected <span class="ot">&lt;-</span> data<span class="sc">$</span>probe <span class="sc">-</span> <span class="fu">rowSums</span>(<span class="fu">coef</span>(pcFit)[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)]<span class="sc">*</span>data[, <span class="dv">3</span><span class="sc">:</span><span class="dv">12</span>])</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>corrected <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">expression=</span>corrected, <span class="at">genotype=</span><span class="fu">factor</span>(data<span class="sc">$</span>rs4077515))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(corrected, <span class="fu">aes</span>(genotype, expression)) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_jitter</span>(<span class="at">colour=</span><span class="st">&quot;darkgrey&quot;</span>, <span class="at">position=</span><span class="fu">position_jitter</span>(<span class="at">width=</span><span class="fl">0.25</span>)) <span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_boxplot</span>(<span class="at">outlier.size=</span><span class="dv">0</span>, <span class="at">alpha=</span><span class="fl">0.6</span>, <span class="at">fill=</span><span class="st">&quot;grey&quot;</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
 </aside>
 </section></section>
-<section><section id="large-scale-eqtl-analysis" class="titleslide slide level1"><h1>Large scale eQTL analysis</h1></section><section id="genome-wide-analysis" class="slide level2">
-<h1>Genome-wide analysis</h1>
+<section>
+<section id="large-scale-eqtl-analysis"
+class="title-slide slide level1">
+<h1>Large scale eQTL analysis</h1>
+
+</section>
+<section id="genome-wide-analysis" class="slide level2">
+<h2>Genome-wide analysis</h2>
 <ul>
 <li>We don’t just want to analyse a single SNP/gene pair</li>
 <li>or even all SNP associations with a single gene</li>
@@ -752,165 +1048,221 @@ corrected &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span
 <div class="fragment">
 <p>Need to be clever about how we do this.</p>
 </div>
-</section><section id="fast-model-fitting-with-matrix-eqtl" class="slide level2">
-<h1>Fast model fitting with Matrix-eQTL</h1>
-<a href="http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/">Matrix-eQTL</a> strategies to reduce run time:
+</section>
+<section id="fast-model-fitting-with-matrix-eqtl" class="slide level2">
+<h2>Fast model fitting with Matrix-eQTL</h2>
+<a
+href="http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/">Matrix-eQTL</a>
+strategies to reduce run time:
 <div class="multicolumn">
 <div>
 <ul>
-<li>Required test statistic can be expressed in terms of the correlation between SNP and gene expression.</li>
-<li>Use efficient matrix multiplications to compute the correlations.</li>
-<li>Computing p-values is expensive, only do this for SNP/gene pairs that are sufficiently interesting.</li>
+<li>Required test statistic can be expressed in terms of the correlation
+between SNP and gene expression.</li>
+<li>Use efficient matrix multiplications to compute the
+correlations.</li>
+<li>Computing p-values is expensive, only do this for SNP/gene pairs
+that are sufficiently interesting.</li>
 </ul>
 </div>
 <div>
-<img src="figure/matrix_mult.gif" />
+<p><img data-src="figure/matrix_mult.gif" /></p>
 </div>
 </div>
 <aside class="notes">
-For simple linear regression: <span class="math">\[
+<p>For simple linear regression: <span class="math display">\[
 t = \sqrt{n-2}\frac{r}{\sqrt{1-r^2}}
-\]</span> Can precompute p-value threshold based on <span class="math">\(r^2\)</span>
+\]</span> Can precompute p-value threshold based on <span
+class="math inline">\(r^2\)</span></p>
 </aside>
-</section><section id="correcting-for-multiple-testing" class="slide level2">
-<h1>Correcting for multiple testing</h1>
+</section>
+<section id="correcting-for-multiple-testing" class="slide level2">
+<h2>Correcting for multiple testing</h2>
 <ul>
-<li>A genome-wide analysis requires estimating millions of effect sizes.</li>
-<li>For an individual SNP/gene pair the p-value of the genotype coefficient may be a useful to gauge whether it is likely to be relevant.</li>
-<li>Interpreting p-values becomes more difficult if millions of them have to be considered.</li>
+<li>A genome-wide analysis requires estimating millions of effect
+sizes.</li>
+<li>For an individual SNP/gene pair the p-value of the genotype
+coefficient may be a useful to gauge whether it is likely to be
+relevant.</li>
+<li>Interpreting p-values becomes more difficult if millions of them
+have to be considered.</li>
 </ul>
-</section><section id="false-discovery-rate" class="slide level2">
-<h1>False discovery rate</h1>
+</section>
+<section id="false-discovery-rate" class="slide level2">
+<h2>False discovery rate</h2>
 <ul>
-<li>Instead of considering each test individually try to control the number of tests that are incorrectly interpreted as indicating a true departure from the null hypothesis.</li>
-<li>Adjust p-values such that the resulting value is an estimate of the proportion of false positives obtained at a given threshold.</li>
+<li>Instead of considering each test individually try to control the
+number of tests that are incorrectly interpreted as indicating a true
+departure from the null hypothesis.</li>
+<li>Adjust p-values such that the resulting value is an estimate of the
+proportion of false positives obtained at a given threshold.</li>
 <li>Matrix-eQTL uses the Benjamini-Hochberg procedure.</li>
 </ul>
 </section></section>
-<section><section id="hands-on-scaling-it-up" class="titleslide slide level1"><h1><em>Hands-on</em> : Scaling it up</h1></section><section id="data-3" class="slide level2">
-<h1>Data</h1>
+<section>
+<section id="hands-on-scaling-it-up" class="title-slide slide level1">
+<h1><em>Hands-on</em> : Scaling it up</h1>
+
+</section>
+<section id="data-3" class="slide level2">
+<h2>Data</h2>
 <dl>
 <dt>Gene expression</dt>
-<dd><em>/data/monocytes/expression/ifn_expression.tab.gz</em>
+<dd>
+<em>/data/monocytes/expression/ifn_expression.tab.gz</em>
 </dd>
 <dt>Genotypes</dt>
-<dd><em>/data/genotypes/genotypes.tab.gz</em><br /> (downloaded earlier)
+<dd>
+<em>/data/genotypes/genotypes.tab.gz</em><br />
+(downloaded earlier)
 </dd>
 </dl>
 <aside class="notes">
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MatrixEQTL)
-snps &lt;-<span class="st"> </span>SlicedData$<span class="kw">new</span>()
-snps$<span class="kw">LoadFile</span>(<span class="st">&quot;/data/genotypes/genotypes.tab.gz&quot;</span>)
-genes &lt;-<span class="st"> </span>SlicedData$<span class="kw">new</span>()
-genes$<span class="kw">LoadFile</span>(<span class="st">&quot;/data//monocytes/expression/ifn_expression.tab.gz&quot;</span>)</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MatrixEQTL)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>snps <span class="ot">&lt;-</span> SlicedData<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>snps<span class="sc">$</span><span class="fu">LoadFile</span>(<span class="st">&quot;/data/genotypes/genotypes.tab.gz&quot;</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> SlicedData<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>genes<span class="sc">$</span><span class="fu">LoadFile</span>(<span class="st">&quot;/data//monocytes/expression/ifn_expression.tab.gz&quot;</span>)</span></code></pre></div>
 </aside>
-</section><section id="annotation-data" class="slide level2">
-<h1>Annotation data</h1>
+</section>
+<section id="annotation-data" class="slide level2">
+<h2>Annotation data</h2>
 <p>Located in <em>/data/monocytes/annotation/</em></p>
 <dl>
 <dt>snp_loc_hg19.tab</dt>
-<dd>Genomic location of SNPs.
+<dd>
+Genomic location of SNPs.
 </dd>
 <dt>probe_loc_hg19.tab</dt>
-<dd>Genomic location of gene expression probes.
+<dd>
+Genomic location of gene expression probes.
 </dd>
 <dt>probeAnnotations.tab</dt>
-<dd>Further annotations for gene expression probes, including associated gene symbols.
+<dd>
+Further annotations for gene expression probes, including associated
+gene symbols.
 </dd>
 </dl>
 <aside class="notes">
-<pre class="sourceCode r"><code class="sourceCode r">probePos &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="st">&quot;/data/monocytes/annotation/probe_loc_hg19.tab&quot;</span>)
-snpPos &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="st">&quot;/data/monocytes/annotation/snp_loc_hg19.tab&quot;</span>)
-probeAnno &lt;-<span class="st"> </span>readr::<span class="kw">read_tsv</span>(<span class="st">&quot;/data/monocytes/annotation/probeAnnotations.tab&quot;</span>)</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>probePos <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="st">&quot;/data/monocytes/annotation/probe_loc_hg19.tab&quot;</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>snpPos <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="st">&quot;/data/monocytes/annotation/snp_loc_hg19.tab&quot;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>probeAnno <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="st">&quot;/data/monocytes/annotation/probeAnnotations.tab&quot;</span>)</span></code></pre></div>
 </aside>
-</section><section id="running-matrix-eqtl" class="slide level2">
-<h1>Running Matrix-eQTL</h1>
-<p>Use Matrix-eQTL to carry out a <em>cis</em>/<em>trans</em> eQTL analysis.</p>
+</section>
+<section id="running-matrix-eqtl" class="slide level2">
+<h2>Running Matrix-eQTL</h2>
+<p>Use Matrix-eQTL to carry out a <em>cis</em>/<em>trans</em> eQTL
+analysis.</p>
 <ul>
 <li>Use a 1MB window around probes as local association region</li>
-<li>Use a p-value threshold of <span class="math">\(10^{-3}\)</span> and <span class="math">\(10^{-5}\)</span> for <em>cis</em> and <em>trans</em> associations respectively</li>
+<li>Use a p-value threshold of <span
+class="math inline">\(10^{-3}\)</span> and <span
+class="math inline">\(10^{-5}\)</span> for <em>cis</em> and
+<em>trans</em> associations respectively</li>
 </ul>
 <div class="fragment">
 <ul>
-<li>Repeat the analysis with the first 10 PC included as covariates. How do results differ?</li>
+<li>Repeat the analysis with the first 10 PC included as covariates. How
+do results differ?</li>
 </ul>
 <aside class="notes">
-<pre class="sourceCode r"><code class="sourceCode r">chr9.eQTL &lt;-<span class="st"> </span><span class="kw">Matrix_eQTL_main</span>(snps, genes,
-        <span class="dt">output_file_name=</span><span class="st">&quot;./ifn_chr9_eQTL.trans&quot;</span>, 
-        <span class="dt">output_file_name.cis=</span><span class="st">&quot;./ifn_chr9_eQTL.cis&quot;</span>, 
-        <span class="dt">pvOutputThreshold.cis=</span><span class="fl">1e-3</span>, <span class="dt">snpspos=</span><span class="kw">as.data.frame</span>(snpPos), 
-        <span class="dt">genepos=</span><span class="kw">as.data.frame</span>(probePos))</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">pca &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(expr[-<span class="dv">1</span>]), <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">scale =</span> <span class="ot">TRUE</span>)
-pc &lt;-<span class="st"> </span>pca$x
-
-covar &lt;-<span class="st"> </span>SlicedData$<span class="kw">new</span>()
-covar$<span class="kw">CreateFromMatrix</span>(<span class="kw">t</span>(pc[,<span class="dv">1</span>:<span class="dv">10</span>]))
-
-chr9.eQTL.pc10 &lt;-<span class="st"> </span><span class="kw">Matrix_eQTL_main</span>(snps, genes, <span class="dt">cvrt=</span>covar, 
-        <span class="dt">output_file_name=</span><span class="st">&quot;./ifn_chr9_eQTL.pc10.trans&quot;</span>, 
-        <span class="dt">output_file_name.cis=</span><span class="st">&quot;./ifn_chr9_eQTL.pc10.cis&quot;</span>, 
-        <span class="dt">pvOutputThreshold.cis=</span><span class="fl">1e-3</span>, <span class="dt">snpspos=</span><span class="kw">as.data.frame</span>(snpPos), 
-        <span class="dt">genepos=</span><span class="kw">as.data.frame</span>(probePos))</code></pre>
-<p>Compare number of associations reported and take a look at p-values/FDR and effect sizes.<br />For trans associations in particular interesting results only start to appear after addition of PCs.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>chr9.eQTL <span class="ot">&lt;-</span> <span class="fu">Matrix_eQTL_main</span>(snps, genes,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">output_file_name=</span><span class="st">&quot;./ifn_chr9_eQTL.trans&quot;</span>, </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">output_file_name.cis=</span><span class="st">&quot;./ifn_chr9_eQTL.cis&quot;</span>, </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">pvOutputThreshold.cis=</span><span class="fl">1e-3</span>, <span class="at">snpspos=</span><span class="fu">as.data.frame</span>(snpPos), </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">genepos=</span><span class="fu">as.data.frame</span>(probePos))</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pca <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(<span class="fu">t</span>(expr[<span class="sc">-</span><span class="dv">1</span>]), <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">scale =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> pca<span class="sc">$</span>x</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>covar <span class="ot">&lt;-</span> SlicedData<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>covar<span class="sc">$</span><span class="fu">CreateFromMatrix</span>(<span class="fu">t</span>(pc[,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]))</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>chr9.eQTL.pc10 <span class="ot">&lt;-</span> <span class="fu">Matrix_eQTL_main</span>(snps, genes, <span class="at">cvrt=</span>covar, </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">output_file_name=</span><span class="st">&quot;./ifn_chr9_eQTL.pc10.trans&quot;</span>, </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">output_file_name.cis=</span><span class="st">&quot;./ifn_chr9_eQTL.pc10.cis&quot;</span>, </span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">pvOutputThreshold.cis=</span><span class="fl">1e-3</span>, <span class="at">snpspos=</span><span class="fu">as.data.frame</span>(snpPos), </span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">genepos=</span><span class="fu">as.data.frame</span>(probePos))</span></code></pre></div>
+<p>Compare number of associations reported and take a look at
+p-values/FDR and effect sizes.<br />
+For trans associations in particular interesting results only start to
+appear after addition of PCs.</p>
 </aside>
 </div>
 </section></section>
-<section><section id="interpreting-results" class="titleslide slide level1"><h1>Interpreting results</h1></section><section id="still-just-a-pile-of-data" class="slide level2">
-<h1>Still just a pile of data</h1>
+<section>
+<section id="interpreting-results" class="title-slide slide level1">
+<h1>Interpreting results</h1>
+
+</section>
+<section id="still-just-a-pile-of-data" class="slide level2">
+<h2>Still just a pile of data</h2>
 <ul>
-<li>The initial analysis can produce a long list of SNP/gene associations.</li>
+<li>The initial analysis can produce a long list of SNP/gene
+associations.</li>
 <li>Without further analysis these are not particularly helpful.</li>
 <li>How can we identify particularly interesting results?</li>
-<li>How can we assign biological meaning to the list of associations?</li>
+<li>How can we assign biological meaning to the list of
+associations?</li>
 </ul>
-</section><section id="external-data-sources" class="slide level2">
-<h1>External data sources</h1>
+</section>
+<section id="external-data-sources" class="slide level2">
+<h2>External data sources</h2>
 <ul>
-<li>A lot of genomic datasets and derived annotations are available.</li>
+<li>A lot of genomic datasets and derived annotations are
+available.</li>
 <li>Link SNPs to functional annotations using
 <ul>
 <li><a href="http://www.genome.gov/gwastudies/">GWAS catalogue</a></li>
 <li><a href="http://www.blueprint-epigenome.eu/">Blueprint</a></li>
 <li><a href="https://www.encodeproject.org/">ENCODE</a></li>
 </ul></li>
-<li>Visualise SNPs in genomic context, e.g. using <a href="http://genome-euro.ucsc.edu/index.html">UCSC genome browser</a></li>
+<li>Visualise SNPs in genomic context, e.g. using <a
+href="http://genome-euro.ucsc.edu/index.html">UCSC genome
+browser</a></li>
 </ul>
 </section></section>
-<section><section id="summary" class="titleslide slide level1"><h1>Summary</h1></section><section id="we-talked-about" class="slide level2">
-<h1>We talked about</h1>
+<section>
+<section id="summary" class="title-slide slide level1">
+<h1>Summary</h1>
+
+</section>
+<section id="we-talked-about" class="slide level2">
+<h2>We talked about</h2>
 <ul>
 <li>What eQTL are</li>
 <li>How linear models can be used to find them</li>
-<li>Complications that arise and possible approaches to deal with them</li>
+<li>Complications that arise and possible approaches to deal with
+them</li>
 <li>How to carry out large scale eQTL analyses</li>
 <li>Some ideas of how to follow up on findings</li>
 </ul>
-</section><section id="we-didnt-talk-about" class="slide level2">
-<h1>We didn’t talk about</h1>
+</section>
+<section id="we-didnt-talk-about" class="slide level2">
+<h2>We didn’t talk about</h2>
 <ul>
 <li>Details of data QC</li>
 <li>The role of linkage disequilibrium in interpreting results</li>
-<li>Comparison of eQTL between different conditions (tissues, treatments, …)</li>
+<li>Comparison of eQTL between different conditions (tissues,
+treatments, …)</li>
 <li>Other approaches to eQTL analysis (Bayesian, nonparametric)</li>
 </ul>
 <aside class="notes">
-<p>Things that may have come up in discussion but should be mentioned if they didn’t</p>
+<p>Things that may have come up in discussion but should be mentioned if
+they didn’t</p>
 <ul>
 <li>Conditioning on lead SNP to identify secondary peaks.</li>
 <li>How to choose the number of PCs to include in the model.</li>
-<li>Point out <a href="https://github.com/jknightlab/mePipe">mePipe</a> and its command-line interface to Matrix-eQTL</li>
+<li>Point out <a href="https://github.com/jknightlab/mePipe">mePipe</a>
+and its command-line interface to Matrix-eQTL</li>
 </ul>
 </aside>
-<div class="references">
-
-</div>
 </section></section>
     </div>
   </div>
 
 
-  <script src="reveal.js/lib/js/head.min.js"></script>
-  <script src="reveal.js/js/reveal.min.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//lib/js/head.min.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//js/reveal.min.js"></script>
 
   <script>
 
@@ -922,15 +1274,15 @@ chr9.eQTL.pc10 &lt;-<span class="st"> </span><span class="kw">Matrix_eQTL_main</
         history: true,
         center: true,
         theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+        transition: 'slide', // default/cube/page/concave/zoom/linear/fade/none
 
         // Optional libraries used to extend on reveal.js
         dependencies: [
-          { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-          { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-          { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
-//          { src: 'reveal.js/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; }, }
-//          { src: 'reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+          { src: 'https://unpkg.com/reveal.js@^4//lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'https://unpkg.com/reveal.js@^4//plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'https://unpkg.com/reveal.js@^4//plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+//          { src: 'https://unpkg.com/reveal.js@^4//plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; }, }
+//          { src: 'https://unpkg.com/reveal.js@^4//plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
 ]});
     </script>
     </body>
